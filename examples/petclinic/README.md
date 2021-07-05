@@ -39,6 +39,7 @@ Your migration journey consist of a number of steps:
 2. [Assess](2-assess/README.md) - In the assess step, you will run the Migrate for Anthos and GKE Linux Discovery Tool and assess whether or not your PostgreSQL and Tomcat workloads are fit for containerization.
 3. [Migrate](3-migrate/README.md) - In the migrate step you will migrate both of your VMs into containers and generate Day2 artifacts which can later be used in modern CI/CD pipelines.
 4. [Deploy](4-deploy/README.md) - In the deploy step you will deploy your migrated workloads into a GKE cluster and verify that your application is working as expected.
+5. [Optimize](5-optimize/README.md) - In the optimize step you will learn how to manually and automatically scale your migrated workloads and how to roll out application updated.
 
 ## Cleaning up
 The simplest way to avoid any unexpected billing charges is to delete your GCP project. You can do so by running the command below in cloud shell:

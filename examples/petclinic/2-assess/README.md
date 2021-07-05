@@ -12,7 +12,7 @@ For the PostgreSQL VM the discovery tool will discover the running PostreSQL ins
 
 ## Assessing your Tomcat VM for containerization
 In the same manner that you have assessed the PostgreSQL VM you should assess your Tomcat VM.
-To assess your VM for containerization using the LDT, you need to download and execute the script [assess_ldt.sh](../../../common/scripts/assess_ldt.sh) on your Tomcat VM instance.
+To assess your VM for containerization using the LDT, you need to download and execute the script [assess_ldt.sh](../../common/scripts/assess_ldt.sh) on your Tomcat VM instance.
 
 You can view the LDT analysis using the Cloud Console UI by following the instructions in the [official documentation](https://cloud.google.com/migrate/anthos/docs/linux-assessment-tool#ldt-console). Note that the JSON file should reside in ~/m4a directory.  
 

@@ -13,17 +13,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-mkdir m4a
-cd m4a
+apt update
 
-VERSION=`wget -O - https://anthos-migrate-release.storage.googleapis.com/latest`
+apt install -y postgresql postgresql-contrib
 
-wget https://anthos-migrate-release.storage.googleapis.com/${VERSION}/linux/amd64/m4a-fit-collect.sh
-chmod +x m4a-fit-collect.sh
+sudo -u postgres createdb petclinic
 
-wget https://anthos-migrate-release.storage.googleapis.com/${VERSION}/linux/amd64/m4a-fit-analysis
-chmod +x m4a-fit-analysis
+sudo -u postgres psql -U postgres -d petclinic -c "alter user postgres with password 'petclinic';"
 
-sudo ./m4a-fit-collect.sh
+echo "listen_addresses = '*'" >> /etc/postgresql/10/main/postgresql.conf
 
-./m4a-fit-analysis m4a-collect-*-*.tar
+echo "host petclinic postgres 0.0.0.0/0 md5" >> /etc/postgresql/10/main/pg_hba.conf
+service postgresql restart

@@ -69,8 +69,10 @@ curl http://localhost:8080/petclinic/ -I
 
 8. If you would like to enable public access to your Tomcat instance and access it from your browser you can do so by openning a firewall port to your Tomcat instance.  
 
-* Create firewall rule to allow Tomcat public access :
+* Create firewall rule to allow Tomcat public access:
+```
 gcloud compute firewall-rules create allow-tomcat --action allow --target-tags tomcat --source-ranges 0.0.0.0/0 --rules tcp:8080
+```
 
 * Find the Tomcat VM public URL and open it in your browser:
 ```
@@ -81,7 +83,7 @@ echo http://$TOMCAT_EXTERNAL_IP:8080/petclinic/
 **Note: Don't forget to remove the firewall rule when you no longer need it**
 
 ## Install Migrate for Anthos and GKE
-### Install Migrate for Anthos and GKE by running the script [install_m4a.sh](../../../common/scripts/install_m4a.sh). The script will do the following:  
+### Install Migrate for Anthos and GKE by running the script [install_m4a.sh](../../common/scripts/install_m4a.sh). The script will do the following:  
 * Create a GKE [processing cluster](https://cloud.google.com/migrate/anthos/docs/configuring-a-cluster)
 * Create a service account
 * Set the right permissions for the service account created above
@@ -98,7 +100,7 @@ $ migctl doctor
 [!] Source Status
 ```
 
-### Configure the GCE migration source you're migrating from by running the script [add_ce_source.sh](../../../common/scripts/add_ce_source.sh). The script will do the following:
+### Configure the GCE migration source you're migrating from by running the script [add_ce_source.sh](../../common/scripts/add_ce_source.sh). The script will do the following:
 * Create a service account
 * Set the right permissions for the service account created above
 * Download the service account key file
