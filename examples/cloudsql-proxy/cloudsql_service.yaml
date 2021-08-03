@@ -1,0 +1,11 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: sql-proxy-service
+spec:
+  selector:
+    app: sql-proxy
+  ports:
+    - protocol: TCP
+      port: 3306
+      targetPort: 3306
