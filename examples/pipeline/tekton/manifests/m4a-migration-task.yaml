@@ -1,0 +1,117 @@
+# Copyright 2021 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+---
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: m4a-migration
+spec:
+  workspaces:
+    - name: source
+  params:
+    - name: manifestTemplatePath
+      type: string
+      description: Path where manifest templates are mounted
+      default: /var/manifests
+    - name: planPatchPath
+      type: string
+      description: Path where plan patches are mounted
+      default: /var/patches
+    - name: planPatchConfigMapName
+      type: string
+      description: Path where plan patches are mounted
+      default: m4a-empty-patch-cm
+    - name: migrationName
+      type: string
+      description: Name of the migration.
+    - name: migrationVmId
+      type: string
+      description: VM ID of the migration.
+    - name: migrationSource
+      type: string
+      description: Source Provider of the migration.
+    - name: migrationOS
+      type: string
+      description: OS type of the migration.
+    - name: migrationIntent
+      type: string
+      description: Initial intent of the migration.
+    - name: migrationPlanPatchFile
+      type: string
+      description: The template file name for the migration plan.
+      default: default
+    - name: image
+      type: string
+      description: The image used to run the python steps. Requires Python 3.9 with PyYAML and jsonpatch packages and kubectl.
+  volumes:
+    - name: m4a-manifest-templates
+      configMap:
+        name: m4a-migration-cm
+    - name: m4a-plan-patches
+      configMap:
+        name: $(params.planPatchConfigMapName)
+  steps:
+    - name: migration-create
+      image: $(params.image)
+      args:
+        - $(params.manifestTemplatePath)/m4a-migration.yaml
+        - $(params.migrationName)
+        - $(params.migrationVmId)
+        - $(params.migrationSource)
+        - $(params.migrationOS)
+        - $(params.migrationIntent)
+      workingDir: "$(workspaces.source.path)"
+      script: ""
+      volumeMounts:
+        - name: m4a-manifest-templates
+          mountPath: "$(params.manifestTemplatePath)"
+
+    - name: wait-for-plan-generate
+      image: $(params.image)
+      args:
+        - $(params.migrationName)
+        - "GenerateMigrationPlan"
+      script: ""
+      timeout: 10m
+
+    - name: plan-merge-and-update
+      image: $(params.image)
+      args:
+        - $(params.migrationName)
+        - $(params.migrationPlanPatchFile)
+      workingDir: "$(params.planPatchPath)"
+      script: ""
+      volumeMounts:
+        - name: m4a-plan-patches
+          mountPath: "$(params.planPatchPath)"
+
+    - name: execute-migration
+      image: $(params.image)
+      args:
+        - $(params.manifestTemplatePath)/m4a-generateartifacts.yaml
+        - $(params.migrationName)
+        - $(params.migrationOS)
+      workingDir: "$(workspaces.source.path)"
+      script: ""
+      volumeMounts:
+        - name: m4a-manifest-templates
+          mountPath: "$(params.manifestTemplatePath)"
+
+    - name: monitor-execution
+      image: $(params.image)
+      args:
+        - $(params.migrationName)
+        - "GenerateArtifacts"
+      script: ""
+      timeout: 10m

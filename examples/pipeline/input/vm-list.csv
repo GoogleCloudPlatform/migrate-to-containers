@@ -1,0 +1,4 @@
+Name,VM ID,Source,OS,Intent,Template
+apache-server,apache-vm,my-ce-src,Linux,Image
+wordpress-server,wordpress-vm,my-ce-src,Linux,Image,sample.yaml
+nginx-server,nginx-vm,my-ce-src,Linux,Image,sample.json
