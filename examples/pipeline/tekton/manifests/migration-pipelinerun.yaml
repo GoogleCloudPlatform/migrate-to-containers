@@ -35,3 +35,5 @@ spec:
       value: __placeholder__
     - name: image
       value: __placeholder__
+    - name: migrationAppType
+      value: __placeholder__      

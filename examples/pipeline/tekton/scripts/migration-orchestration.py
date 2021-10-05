@@ -39,9 +39,14 @@ def verify_line(line):
         print(f"[ERROR] Intent not supported: {line[4]}")
         return False
 
+    # Check Intent is Supported
+    if line[5] not in ["system", "tomcat", "open-liberty"]:
+        print(f"[ERROR] AppType not supported: {line[5]}")
+        return False
+
     # Check Plan Patch File
-    if len(line) > 5:
-        plan_patch_file = Path(planPatchPath + '/' + line[5])
+    if len(line) > 6:
+        plan_patch_file = Path(planPatchPath + '/' + line[6])
 
         if plan_patch_file.is_file() is False:
             print(f"[ERROR] Plan Patch File doesn't exist: {plan_patch_file} ")
@@ -68,6 +73,8 @@ def run_migration(line):
     for param in pipelinerun_yaml["spec"]["params"]:
         if param["name"] == "migrationName":
             param["value"] = line[0]
+        if param["name"] == "migrationAppType":
+            param["value"] = line[5]
         if param["name"] == "migrationIntent":
             param["value"] = line[4]
         if param["name"] == "migrationOS":
@@ -80,8 +87,8 @@ def run_migration(line):
             param["value"] = image
 
     # Add Plan Patch Params if needed
-    if len(line) > 5:
-        patch_name = line[5]
+    if len(line) > 6:
+        patch_name = line[6]
         file_param = dict()
         file_param["name"] = "migrationPlanPatchFile"
         file_param["value"] = patch_name

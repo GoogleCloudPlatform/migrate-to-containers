@@ -22,7 +22,14 @@ import yaml
 
 migrationName = sys.argv[1]
 migrationTemplateFile = sys.argv[2]
+migrationAppType = sys.argv[3]
 
+class literal(str):
+    pass
+
+def literal_presenter(dumper, data):
+    return dumper.represent_scalar('tag:yaml.org,2002:str', data, style='|')
+yaml.add_representer(literal, literal_presenter)
 
 def dict_deep_merge(target, customization):
     """Merges customizations into a dictionary in place"""
@@ -56,18 +63,29 @@ def execute_command(command):
 
 
 # Get generated plan
-plan_name_cmd = ['kubectl', 'get', 'migrations.anthos-migrate.cloud.google.com', '-n', 'v2k-system',
+if migrationAppType == "system":
+    plan_name_cmd = ['kubectl', 'get', 'migrations.anthos-migrate.cloud.google.com', '-n', 'v2k-system',
                  migrationName, '-o', 'jsonpath={.status.resources.generateArtifacts.name}']
-plan_name = execute_command(plan_name_cmd).stdout
-print(f"Plan Name: {plan_name}")
+    plan_name = execute_command(plan_name_cmd).stdout
+    print(f"Plan Name: {plan_name}")
 
-plan_get_cmd = ['kubectl', 'get', 'generateartifactsflows.anthos-migrate.cloud.google.com', '-n', 'v2k-system',
+    plan_get_cmd = ['kubectl', 'get', 'generateartifactsflows.anthos-migrate.cloud.google.com', '-n', 'v2k-system',
                 plan_name, '-o', 'yaml']
+else: # must be appx type
+    plan_get_cmd = ['kubectl', 'get', 'appxgenerateartifactsflows.anthos-migrate.cloud.google.com', '-n', 'v2k-system',
+                 f'appx-generateartifactsflow-{migrationName}', '-o', 'jsonpath={.spec.appXGenerateArtifactsConfig}']
+
 plan_output = execute_command(plan_get_cmd)
 full_plan_yaml = yaml.load(plan_output.stdout, Loader=yaml.FullLoader)
 
-plan_raw = full_plan_yaml["metadata"]["annotations"].pop("anthos-migrate.cloud.google.com/raw-content")
-plan_yaml = yaml.load(plan_raw, Loader=yaml.FullLoader)
+if migrationAppType == "system":
+    plan_raw = full_plan_yaml["metadata"]["annotations"].pop("anthos-migrate.cloud.google.com/raw-content")
+    plan_yaml = yaml.load(plan_raw, Loader=yaml.FullLoader)
+else:
+    plan_yaml = full_plan_yaml
+    print(f"Plan yaml: {yaml.dump(plan_yaml)}")
+
+
 
 # Customize Plan
 if migrationTemplateFile.endswith(".yaml") or \
@@ -88,14 +106,31 @@ else:
     print("Using Default Plan")
 
 # Change Names to match
-name_patch = jsonpatch.JsonPatch([
-    {'op': 'replace', 'path': '/spec/image/base', 'value': f'{migrationName}-non-runnable-base'},
-    {'op': 'replace', 'path': '/spec/image/name', 'value': migrationName},
-    {'op': 'replace', 'path': '/spec/deployment/appName', 'value': migrationName},
-])
-name_patch.apply(plan_yaml, in_place=True)
+if migrationAppType == "system":
+    name_patch = jsonpatch.JsonPatch([
+        {'op': 'replace', 'path': '/spec/image/base', 'value': f'{migrationName}-non-runnable-base'},
+        {'op': 'replace', 'path': '/spec/image/name', 'value': migrationName},
+        {'op': 'replace', 'path': '/spec/deployment/appName', 'value': migrationName},
+    ])
+    name_patch.apply(plan_yaml, in_place=True)
+elif migrationAppType == "tomcat":
+    name_patch = jsonpatch.JsonPatch([
+        {'op': 'replace', 'path': '/tomcatServers/0/imageName', 'value': f'{migrationName}-tomcat'},
+        {'op': 'replace', 'path': '/tomcatServers/0/name', 'value': migrationName},
+    ])
+    name_patch.apply(plan_yaml, in_place=True)
 
 # Apply customized plan
+if migrationAppType != "system":
+    # handle appx update
+    appx_generateartifactsflow_get_cmd = ['kubectl', 'get', 'appxgenerateartifactsflows.anthos-migrate.cloud.google.com', '-n', 'v2k-system',
+                 f'appx-generateartifactsflow-{migrationName}', '-o', 'yaml']
+    appx_plan_output = execute_command(appx_generateartifactsflow_get_cmd)
+    full_appx_plan_yaml = yaml.load(appx_plan_output.stdout, Loader=yaml.FullLoader)
+    full_appx_plan_yaml["spec"]["appXGenerateArtifactsConfig"] = literal(yaml.dump(plan_yaml))
+    plan_yaml = full_appx_plan_yaml
+    print(f'{yaml.dump(plan_yaml)}')
+
 plan_yaml_path = "/plan.yaml"
 with open(plan_yaml_path, "w") as m:
     yaml.dump(plan_yaml, m)

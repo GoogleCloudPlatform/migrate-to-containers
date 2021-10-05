@@ -24,6 +24,8 @@ rules:
   - migrations
   - generateartifactstasks
   - generateartifactsflows
+  - appxgenerateartifactstasks
+  - appxgenerateartifactsflows
   - windowsgenerateartifactstasks
   - windowsgenerateartifacts
   verbs:

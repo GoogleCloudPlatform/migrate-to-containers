@@ -1,0 +1,3 @@
+[
+    {"op": "replace", "path": "/tomcatServers/0/fromImageTag", "value": "8.5.65-jdk16-openjdk-slim-buster"}
+]

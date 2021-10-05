@@ -34,6 +34,9 @@ spec:
     - name: migrationVmId
       type: string
       description: VM ID of the migration.
+    - name: migrationAppType
+      type: string
+      description: The application type to migrate, any one of system, tomcat or open-liberty.
     - name: migrationPlanPatchFile
       type: string
       description: The template file name for the migration plan.
@@ -63,6 +66,8 @@ spec:
           value: $(params.migrationSource)
         - name: migrationVmId
           value: $(params.migrationVmId)
+        - name: migrationAppType
+          value: $(params.migrationAppType)
         - name: migrationPlanPatchFile
           value: $(params.migrationPlanPatchFile)
         - name: planPatchConfigMapName

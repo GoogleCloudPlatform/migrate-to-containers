@@ -19,6 +19,7 @@ metadata:
  annotations:
    anthos-migrate.cloud.google.com/initial-intent: __placeholder__
 spec:
+ appType: __placeholder__
  osType: __placeholder__
  sourceSnapshot:
   sourceProvider: __placeholder__
