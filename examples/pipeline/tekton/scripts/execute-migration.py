@@ -21,6 +21,7 @@ import subprocess
 templateYAMLPath = sys.argv[1]
 migrationName = sys.argv[2]
 migrationOS = sys.argv[3]
+migrationAppType = sys.argv[4]
 
 execution_name = migrationName + "-exec"
 
@@ -28,10 +29,20 @@ execution_name = migrationName + "-exec"
 with open(templateYAMLPath) as m:
     execution_yaml = yaml.load(m, Loader=yaml.FullLoader)
 
+
+
 # Configure YAML
-execution_yaml["kind"] = "GenerateArtifactsTask" if migrationOS == "Linux" else "WindowsGenerateArtifactsTask"
 execution_yaml["metadata"]["name"] = execution_name
 execution_yaml["spec"]["migration"]["name"] = migrationName
+
+if migrationAppType == "system":
+    execution_yaml["kind"] = "GenerateArtifactsTask" if migrationOS == "Linux" else "WindowsGenerateArtifactsTask"
+    # Remove flow placeholder as its only used for appx
+    execution_yaml["spec"].pop("flow")
+else:
+    execution_yaml["kind"] = "AppXGenerateArtifactsTask"
+    # set the flow name
+    execution_yaml["spec"]["flow"]["name"] = f'appx-generateartifactsflow-{migrationName}'
 
 # Write Configured YAML
 execution_manifest = "/" + execution_name + ".yaml"

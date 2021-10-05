@@ -19,3 +19,5 @@ metadata:
 spec:
  migration:
    name: __placeholder__
+ flow:
+   name: __placeholder__

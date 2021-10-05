@@ -51,6 +51,9 @@ spec:
       type: string
       description: The template file name for the migration plan.
       default: default
+    - name: migrationAppType
+      type: string
+      description: The application type to migrate, any one of system, tomcat or open-liberty.
     - name: image
       type: string
       description: The image used to run the python steps. Requires Python 3.9 with PyYAML and jsonpatch packages and kubectl.
@@ -71,6 +74,7 @@ spec:
         - $(params.migrationSource)
         - $(params.migrationOS)
         - $(params.migrationIntent)
+        - $(params.migrationAppType)
       workingDir: "$(workspaces.source.path)"
       script: ""
       volumeMounts:
@@ -90,6 +94,7 @@ spec:
       args:
         - $(params.migrationName)
         - $(params.migrationPlanPatchFile)
+        - $(params.migrationAppType)
       workingDir: "$(params.planPatchPath)"
       script: ""
       volumeMounts:
@@ -102,6 +107,7 @@ spec:
         - $(params.manifestTemplatePath)/m4a-generateartifacts.yaml
         - $(params.migrationName)
         - $(params.migrationOS)
+        - $(params.migrationAppType)
       workingDir: "$(workspaces.source.path)"
       script: ""
       volumeMounts:
