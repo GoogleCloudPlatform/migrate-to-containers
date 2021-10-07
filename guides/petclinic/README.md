@@ -13,7 +13,7 @@ In this tutorial you’ll do the following:
 * Prepare your Google Cloud environment
 * Create a PostgreSQL Ubuntu VM on GCE  and prepare the Petclinic database
 * Build and deploy Petclinic application into Tomcat on a GCE vm
-* Install anc configure M4A
+* Install and configure M4A
 * Qualify the workloads for migration using the M4A [Linux discovery tool (LDT)](https://cloud.google.com/migrate/anthos/docs/linux-assessment-tool)
 * Migrate Petclinic database vm to a container
 * Migrate Petclinic vm to a container
