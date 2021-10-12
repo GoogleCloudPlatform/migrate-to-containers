@@ -20,7 +20,7 @@ gcloud compute instances stop petclinic-postgres --project $PROJECT_ID --zone $Z
 
 2. Create a migration plan using 'migctl' command line interface (this should take a couple of minutes to finish):
 ```
-migctl migration create petclinic-db-migration --source my-ce-src --vm-id petclinic-postgres --intent ImaImageAndDatage
+migctl migration create petclinic-db-migration --source my-ce-src --vm-id petclinic-postgres --intent ImageAndData
 ```
 **Note that we are using the ImageAndData intent to migrate the VM and also create a persistent volume for the database data folder**
 
