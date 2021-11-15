@@ -50,10 +50,17 @@ while operation != targetOperation:
     time.sleep(15)
     operation = get_operation(migrationName)
 
-# Wait for the status to become completed
+# Wait for the status to become completed and allow 3 retries if migration goes in to Retrying status
+retries = 0
 status = get_status(migrationName)
 while status != 'Completed':
-    if status != 'Running':
+    if status == 'Running':
+        time.sleep(15)
+    elif status == 'Retrying':
+        if retries == 3:
+            exit("Migration reached maximum retries attempts: " + retries)
+        retries+=1
+        time.sleep(60)
+    else:
         exit("Unexpected Migration Status: " + status)
-    time.sleep(15)
     status = get_status(migrationName)
