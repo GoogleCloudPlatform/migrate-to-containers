@@ -1,5 +1,9 @@
 # Migrating Spring Boot Petclinic application tutorial 
 
+---
+**NOTE**
+This tutorial is relevant to Migrate for Anthos and GKE version 1.10 or newer
+---
 [Spring Boot Petclinic application](https://github.com/spring-projects/spring-petclinic) is a Java application built with [Spring Boot](https://spring.io/projects/spring-boot) and [Maven](https://maven.apache.org/).
 
 In this tutorial you will deploy this application into a Tomcat server running on a [Google Compute Engine (GCE)](https://cloud.google.com/compute) VM and connect it to a [MySQL](https://www.mysql.com/) database running on a GCE VM.

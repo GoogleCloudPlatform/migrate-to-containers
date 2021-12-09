@@ -1,4 +1,4 @@
-# Continuosly building your migrated Tomcat application
+# Continuously building your migrated Tomcat application
 One of the main benefits of using Migrate for Anthos and GKE to modernize your workloads is that it generates artifacts which are readily usable for day2 operations, namely continuous integration (CI ) and continuous deployment (CD). In this step we will showcase how you can use Cloud Source Repositories and Cloud Build to automatically trigger a new image build on every code change pushed to the repository and then manually deploy it.
  
 ## Cloud Source Repositories
@@ -26,48 +26,32 @@ cd ~/cloudshell_open/spring-petclinic/
 git init
 git remote add google https://source.developers.google.com/p/$PROJECT_ID/r/m4a-petclinic
 ```
-3. Add a Cloud Build yaml file to build and push a new docker image to your container registry
+3. Copy the Cloud Build yaml file(tomcat/tomcat-petclinic/cloudbuild.yaml) to build and push a new docker image to your container registry
 ``` bash
-cat <<'EOF' >> cloudbuild.yaml
+cp ~/m4a-petclinic/tomcat/tomcat-petclinic/cloudbuild.yaml .
+```
+The Cloud Build yaml should look as below:
+``` yaml
 steps:
- - name: maven:3-jdk-8
-   entrypoint: mvn
-   args: ["package", "-Dmaven.test.skip=true", "-Dcheckstyle.skip"]
- - name: gcr.io/cloud-builders/docker
-   args: ["build", "-t", "gcr.io/$PROJECT_ID/tomcat-petclinic:$COMMIT_SHA", "-t", "gcr.io/$PROJECT_ID/tomcat-petclinic:latest", "--build-arg=WAR_FILE=target/petclinic.war", "."]
+  - name: maven:3-jdk-8
+    entrypoint: mvn
+    args: ["clean", "package"]
+  - name: gcr.io/cloud-builders/docker
+    args: ["build", "-t", "gcr.io/${PROJECT_ID}/tomcat-petclinic:$COMMIT_SHA", "-t", "gcr.io/${PROJECT_ID}/tomcat-petclinic:latest", "--build-arg=PETCLINIC_WAR_APP=apps/petclinic.war", "."]
 images:
- - 'gcr.io/$PROJECT_ID/tomcat-petclinic:$COMMIT_SHA'
- - 'gcr.io/$PROJECT_ID/tomcat-petclinic:latest'
-EOF
+  - "gcr.io/${PROJECT_ID}/tomcat-petclinic:$COMMIT_SHA"
+  - "gcr.io/${PROJECT_ID}/tomcat-petclinic:latest"
 ```
-4. Modify the Dockerfile that was generated during the migration to take the war file as input and only deploy the specific war in the Docker image:
+4. Modify the application war path in cloudbuild.yaml to use the newly built war file from the `target` directory instead of the `apps` directory by running the command:
 ``` bash
-cat <<'EOF' >> Dockerfile
-FROM tomcat:8.5.65-jdk16-openjdk
- 
-# cloud build will supply the newly built WAR file at build time
-ARG WAR_FILE=WAR_FILE_MUST_BE_SPECIFIED_AS_BUILD_ARG
- 
-# Copy all relevant files from the directory tree of the CATALINA_HOME
-ADD --chown=root:root catalinaHome.tar.gz /usr/local/tomcat
- 
-# Copy all relevant applications from the directory tree of the CATALINA_HOME
-#ADD --chown=root:root applications.tar.gz /usr/local/tomcat
-# We only want to update the modified application
-COPY --chown=root:root ${WAR_FILE} /usr/local/tomcat/webapps/
- 
-# Copy external resources and configurations
-ADD --chown=root:root additionalFiles.tar.gz /
- 
-# Copy modified log configurations
-ADD --chown=root:root logConfigs.tar.gz /usr/local/tomcat
-EOF
+sed -i 's/apps\/petclinic.war/target\/petclinic.war/' cloudbuild.yaml
 ```
+
 5. Copy the Tomcat configuration, logging config and additional files archives that were generated during the migration:
 ``` bash
-cp ~/m4a-petclinic/tomcat/tomcat/catalinaHome.tar.gz .
-cp ~/m4a-petclinic/tomcat/tomcat/logConfigs.tar.gz .
-cp ~/m4a-petclinic/tomcat/tomcat/additionalFiles.tar.gz .
+cp ~/m4a-petclinic/tomcat/tomcat-petclinic/catalinaHome.tar.gz .
+cp ~/m4a-petclinic/tomcat/tomcat-petclinic/logConfigs.tar.gz .
+cp ~/m4a-petclinic/tomcat/tomcat-petclinic/additionalFiles.tar.gz .
 ```
 ### Commit and push your changes
 1. Stage all files to be added to your git repository
@@ -118,24 +102,20 @@ gcloud builds list --limit 1
 ### Roll the deployment of your newly built image
 1. Store the newly built image tag in an environment variable
 ``` bash
-NEW_IMAGE=$(gcloud builds list --limit 1 | grep IMAGES | cut -d ' ' -f 2)
+VERSION=$(gcloud builds list --limit 1 | grep IMAGES | cut -d ' ' -f 2)
 ```
-2. Update the image in your deployment_spec.yaml
+2. Roll out the new image to your GKE cluster
 ``` bash
-sed -i -e "s|gcr.io/$PROJECT_ID/tomcat-tomcat:v1.0.0|$NEW_IMAGE|g" deployment_spec.yaml
+sed -e "s/\${PROJECT_ID}/${PROJECT_ID}/g" -e "s/\${VERSION}/${VERSION}/g" ~/m4a-petclinic/tomcat/tomcat-petclinic/deployment_spec.yaml | kubectl apply -f -
 ```
-3. Roll out the new image to your GKE cluster
-``` bash
-kubectl apply -f ~/m4a-petclinic/tomcat/tomcat/deployment_spec.yaml
-```
-4. Monitor the rollout using the command:
+3. Monitor the rollout using the command:
 ``` bash
 kubectl get pods
 ```
 ### Verify that your new image is served
-1. Get the exteranl IP address for the tomcat service
+1. Get the external IP address for the tomcat service
 ``` bash
-kubectl get svc tomcat
+kubectl get svc tomcat-petclinic
 ```
 2. Open the application url in your browser by going to the below url:
 ```

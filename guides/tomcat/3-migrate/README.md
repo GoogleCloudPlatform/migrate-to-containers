@@ -131,55 +131,77 @@ migctl migration get petclinic-migration
 It will create a file on your local file system called **petclinic-migration.yaml**. You can now open it in cloud shell editor by running the command `edit petclinic-migration.yaml`. The migration plan should look like below:
 ``` yaml
 tomcatServers:
-  - # External paths required for running the Tomcat server or apps.
-    additionalFiles: []
-    # Edit this list of application paths to define migrated applications.
-    applications:
-      - /opt/tomcat/webapps/ROOT
-      - /opt/tomcat/webapps/docs
-      - /opt/tomcat/webapps/examples
-      - /opt/tomcat/webapps/host-manager
-      - /opt/tomcat/webapps/manager
-      - /opt/tomcat/webapps/petclinic
-      - /opt/tomcat/webapps/petclinic.war
+  - name: tomcat-xxxxxxxx
     catalinaBase: /opt/tomcat
     catalinaHome: /opt/tomcat
-    # Parent image for the generated container image.
-    fromImage: tomcat:8.5.65-jdk16-openjdk
-    imageName: tomcat-tomcat
-    # Log Configuration paths for the Tomcat apps.
-    logConfigPaths: []
-    name: tomcat
-    ports:
-      - 8080
+    # Files to extract from the server container images into secrets
+    secrets:
+      - files: []
+        name: ""
+        path: ""
+    images:
+      - name: tomcat-petclinic-tomcat-xxxxxxxx
+        # Edit this list of application paths to define migrated applications.
+        applications:
+          - /opt/tomcat/webapps/petclinic.war
+        # Parent image for the generated container image.
+        fromImage: tomcat:8.5.65-jdk16-openjdk
+        # External paths required for running the Tomcat server or apps.
+        additionalFiles: []
+        ports:
+          - 8080
+        # Log Configuration paths for the Tomcat apps.
+        logConfigPaths: []
+        # Secrets to mount in the container image
+        secrets: []
+        resources:
+          # Define the container’s initial and maximum memory.
+          # 'limit' sets Tomcat Java initial and max heap sizes using the RAMPercentage flags shown on the generated Dockerfile artifact.
+          memory:
+            limit: 2048M
+            requests: 1280M
 ```
 
-4. You can now change your migration plan to only migrate the petclinic application by removing ROOT, docs, examples, host-manager and manager applications from the `applications` list. You modified migration plan should now look like this:
+4. Since there is just a single Tomcat application that you are containerizing, we can update the migration plan to remove the unique identifier attached to both the tomcat and image names. Once removed, your migration plan yaml should look like below:
 ``` yaml
 tomcatServers:
-  - # External paths required for running the Tomcat server or apps.
-    additionalFiles: []
-    # Edit this list of application paths to define migrated applications.
-    applications:
-      - /opt/tomcat/webapps/petclinic.war
+  - name: tomcat
     catalinaBase: /opt/tomcat
     catalinaHome: /opt/tomcat
-    # Parent image for the generated container image.
-    fromImage: tomcat:8.5.65-jdk16-openjdk
-    imageName: tomcat-tomcat
-    # Log Configuration paths for the Tomcat apps.
-    logConfigPaths: []
-    name: tomcat
-    ports:
-      - 8080
+    # Files to extract from the server container images into secrets
+    secrets:
+      - files: []
+        name: ""
+        path: ""
+    images:
+      - name: tomcat-petclinic
+        # Edit this list of application paths to define migrated applications.
+        applications:
+          - /opt/tomcat/webapps/petclinic.war
+        # Parent image for the generated container image.
+        fromImage: tomcat:8.5.65-jdk16-openjdk
+        # External paths required for running the Tomcat server or apps.
+        additionalFiles: []
+        ports:
+          - 8080
+        # Log Configuration paths for the Tomcat apps.
+        logConfigPaths: []
+        # Secrets to mount in the container image
+        secrets: []
+        resources:
+          # Define the container’s initial and maximum memory.
+          # 'limit' sets Tomcat Java initial and max heap sizes using the RAMPercentage flags shown on the generated Dockerfile artifact.
+          memory:
+            limit: 2048M
+            requests: 1280M
 ```
 
-5. You need to update the migration plan by uploading the modified yaml file. You do so by running the command:
+5. You can now update the migration by running the command:
 ``` bash
-migctl migration update petclinic-migration --file petclinic-migration.yaml
+migctl migration update petclinic-migration --main-config petclinic-migration.yaml
 ```
 
-5. Once you are satisfied with the migration plan, you may start generating the migration artifacts. You do so by running the command:
+4. Once you are satisfied with the migration plan, you may start generating the migration artifacts. You do so by running the command:
 ``` bash
 migctl migration generate-artifacts petclinic-migration
 ```
@@ -189,21 +211,23 @@ migctl migration status petclinic-migration
 ```
 For a more verbose output you add the flag `-v` to the command above. 
 
-6. When the artifacts generation is finished. You can download the generated artifacts using the get-artifacts command below:
+5. When the artifacts generation is finished. You can download the generated artifacts using the get-artifacts command below:
 ``` bash
 migctl migration get-artifacts petclinic-migration
 ```
-The downloaded artifacts will be downloaded into `tomcat` directory and include the following files:
+The downloaded artifacts will be downloaded into `tomcat/tomcat-petclinic` directory which you can access by running the command `cd tomcat/tomcat-petclinic/` and it includes the following files:
 * **Dockerfile** - The Dockerfile is used to build the container image for your Tomcat applications by leveraging the community Tomcat Docker image. The default image may be changed during migration by modifying `fromImage` or by modifying the `FROM` string in the Dockerfile.
-* **build.sh** - The build.sh script is used to build the container image for your Tomcat by leveraging [Cloud Build](https://cloud.google.com/build). You **MUST** replace *<my_project>* with the project id which is going to store the image. Once changed, you can build your container image by running the command
+* **build.sh** - The build.sh script is used to build the container image for your Tomcat by leveraging [Cloud Build](https://cloud.google.com/build). You **MUST** set an environment variable named *PROJECT_ID* with the project id which is going to store the image and optionally supply a VERSION environment variable to give your build a specific version. Once changed, you can build your container image by running the commands
 ``` bash
+export VERSION=latest
 bash build.sh
 ```
 * **deployment_spec.yaml** - The deployment_spec.yaml file contains a Kubernetes [Deployment](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/) and a matching [Service](https://kubernetes.io/docs/concepts/services-networking/service/) which are used to deploy your newly migrated Tomcat container and expose it via a service. **Note** that the service will be exposed via **ClusterIP** by default and you may change this to a LoadBalancer in-order to make your Tomcat application available externally. Before applying the deployment yaml you **MUST** replace *<my_project>* with the project id that was used in your `build.sh` script.
 * **additionalFiles.tar.gz** - An archive containing any additional files that are needed by Tomcat and were specified in the migration plan.
-* **applications.tar.gz** - An archive containing all the applications that were selected to be migrated in the migration plan.
+* **apps/petclinic.war** - An directory containing the Petclinic application that was selected to be migrated in the migration plan.
 * **catalinaHome.tar.gz** - An archive containing the original CATALINA_HOME content and it is used in the Dockerfile to override the default Tomcat settings.
 * **logConfigs.tar.gz** - An archive containing log files (log4j2, log4j and logback) that were modified from logging to local filesystem to log to a console appender.
+* **cloudbuild.yaml** - A sample Cloud Build yaml that can be used to continously build the application from source, build a new docker image and push it to GCR.  
 
 If you would like to expose your Tomcat via a load balancer you can modify the service definition in `deployment_spec.yaml` by adding the LoadBalancer type to the service:
 <pre>

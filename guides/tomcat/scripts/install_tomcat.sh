@@ -35,6 +35,9 @@ chmod g+x conf
 
 chown -R tomcat webapps/ work/ temp/ logs/
 
+# Delete all the default applications
+rm -rf /opt/tomcat/webapps/*
+
 if [ $# -eq 1 ]
   then
     sudo chown tomcat:tomcat $pwd/$1
