@@ -65,7 +65,10 @@ chmod +x ./install_tomcat.sh
 sudo ./install_tomcat.sh petclinic.war
 ```
 
-5. You should now verify that your Tomcat had started without issues by vhecking the logfile **/opt/tomcat/logs/catalina.out**
+5. You should now verify that your Tomcat had started without issues by checking the logfile **/opt/tomcat/logs/catalina.out**
+```
+sudo cat /opt/tomcat/logs/catalina.out
+```
 
 6. Verify that the application started by running the command below and that you receive a 200 HTTP status code:  
 ```
