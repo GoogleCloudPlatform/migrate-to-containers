@@ -108,12 +108,17 @@ curl https://raw.githubusercontent.com/GoogleCloudPlatform/migrate-for-anthos-gk
 
 To verify that M4A installation was sucessfull, run the `migctl doctor` command:
 ```
-$ migctl doctor
 [✓] Deployment
-[✓] Docker registry
-[✓] Artifacts repo
-[!] Source Status
+[✓] Docker Registry
+[✓] Artifacts Repository
+[✗] Source Status
+    No source was configured. Use 'migctl source create' to define one.
+[!] Default storage class
+    Warning: the default storage class is: standard.
+    - We recommend to use one of the following storage classes instead: premium-rwo, standard-rwo.
 ```
+
+**Note:** You can safely ignore the last two warnings. You will add a source in the subsequent step, and for a demo environment the standard storage class is fine. 
 
 Check that you are running Migrate for Anthos and GKE version 1.9.0 or newer by running the command:
 ```
