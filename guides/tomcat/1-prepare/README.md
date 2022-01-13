@@ -56,9 +56,13 @@ gcloud compute scp ~/cloudshell_open/spring-petclinic/target/petclinic.war tomca
 gcloud compute ssh tomcat-petclinic --project $PROJECT_ID --zone $ZONE_ID
 ```
 
-4. Install tomcat by running the script [install_tomcat.sh *APP_WAR*](../scripts/install_tomcat.sh). Tomcat will install into `/opt/tomcat`, create a systemd service named **tomcat** and will deploy the war file specified as *APP_WAR* into Tomcat. Run the installation script using the below command:  
+4. Install tomcat by running the script [install_tomcat.sh petclinic.war](../scripts/install_tomcat.sh). Tomcat will install into `/opt/tomcat`, create a systemd service named **tomcat** and will deploy the war file specified as *APP_WAR* into Tomcat. Run the installation script using the commands below:  
 ```
-sudo install_tomcat.sh petclinic.war
+curl -O https://raw.githubusercontent.com/GoogleCloudPlatform/migrate-for-anthos-gke/main/guides/tomcat/scripts/install_tomcat.sh
+
+chmod +x ./install_tomcat.sh
+
+sudo ./install_tomcat.sh petclinic.war
 ```
 
 5. You should now verify that your Tomcat had started without issues by vhecking the logfile **/opt/tomcat/logs/catalina.out**
