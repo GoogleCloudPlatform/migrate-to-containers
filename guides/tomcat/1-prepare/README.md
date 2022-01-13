@@ -32,6 +32,11 @@ curl https://raw.githubusercontent.com/GoogleCloudPlatform/migrate-for-anthos-gk
 ```
 **Important note:** The data folder for MySQL is `/var/lib/mysql`. We will use it when we migrate the database to container.
 
+4. Exit out of the MySQL VM
+```
+exit
+```
+
 ## Install your Tomcat VM
 1. Create a new GCE instance  
 ```
