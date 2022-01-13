@@ -38,6 +38,9 @@ exit
 ```
 
 ## Install your Tomcat VM
+
+**Note:** You should have exited your MySQL VM be back in Cloud Shell as you start this section
+
 1. Create a new GCE instance  
 ```
 gcloud compute instances create tomcat-petclinic --zone=$ZONE_ID --image-family=ubuntu-1804-lts --image-project=ubuntu-os-cloud --machine-type=e2-medium --boot-disk-size=10GB --tags=tomcat --project=$PROJECT_ID
