@@ -95,13 +95,16 @@ echo http://$TOMCAT_EXTERNAL_IP:8080/petclinic/
 **Note: Don't forget to remove the firewall rule when you no longer need it**
 
 ## Install Migrate for Anthos and GKE
-### Install Migrate for Anthos and GKE by running the script [install_m4a.sh](../../../scripts/install_m4a.sh). The script will do the following:  
+1. Install Migrate for Anthos and GKE by running the script [install_m4a.sh](../../../scripts/install_m4a.sh). The script will do the following:  
 * Create a GKE [processing cluster](https://cloud.google.com/migrate/anthos/docs/configuring-a-cluster)
 * Create a service account
 * Set the right permissions for the service account created above
 * Download the service account key file
 * Connect to the newly created cluster.
 * Install M4A on the processing cluster
+```
+curl https://raw.githubusercontent.com/GoogleCloudPlatform/migrate-for-anthos-gke/main/scripts/install_m4a.sh | bash
+```
 
 To verify that M4A installation was sucessfull, run the `migctl doctor` command:
 ```
