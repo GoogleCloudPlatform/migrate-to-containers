@@ -83,7 +83,7 @@ curl http://localhost:8080/petclinic/ -I
 
 * Create firewall rule to allow Tomcat public access:
 ```
-gcloud compute firewall-rules create allow-tomcat --action allow --target-tags tomcat --source-ranges 0.0.0.0/0 --rules tcp:8080
+gcloud compute firewall-rules create allow-tomcat --project $PROJECT_ID --action allow --target-tags tomcat --source-ranges 0.0.0.0/0 --rules tcp:8080
 ```
 
 * Find the Tomcat VM public URL and open it in your browser:
