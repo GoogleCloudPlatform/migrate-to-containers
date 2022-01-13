@@ -5,7 +5,7 @@
 
 * Prepare and build the application by running the command:
 ``` sh
-curl -s https://raw.githubusercontent.com/GoogleCloudPlatform/migrate-for-anthos-gke/tree/main/guides/tomcat/scripts/prepare_and_build_petclinic.sh | bash
+curl -s https://raw.githubusercontent.com/GoogleCloudPlatform/migrate-for-anthos-gke/main/guides/tomcat/scripts/prepare_and_build_petclinic.sh | bash
 ```
 
 ## Set environment variables to have your GCP project id, region and zone 
