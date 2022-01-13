@@ -65,6 +65,8 @@ chmod +x ./install_tomcat.sh
 sudo ./install_tomcat.sh petclinic.war
 ```
 
+**Note:** You will need to press `Q` to exit the install script
+
 5. You should now verify that your Tomcat had started without issues by checking the logfile **/opt/tomcat/logs/catalina.out**
 ```
 sudo cat /opt/tomcat/logs/catalina.out
