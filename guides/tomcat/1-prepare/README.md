@@ -26,9 +26,9 @@ gcloud compute instances create petclinic-mysql --zone=$ZONE_ID --image-family=u
 gcloud compute ssh petclinic-mysql --project $PROJECT_ID --zone $ZONE_ID
 ```
 
-3. Install MySQL by running the script [install_mysql.sh](../scripts/install_mysql.sh). Note that this script will require sudo access for installing and configuring MySQL.
+3. Install MySQL by running the script [install_mysql.sh](../scripts/install_mysql.sh). This script will crate a PetClinic database and user, assign priviliges to that user, and allow access to the database by external IPs
 ```
-sudo ./install_mysql.sh
+curl https://raw.githubusercontent.com/GoogleCloudPlatform/migrate-for-anthos-gke/main/guides/tomcat/scripts/install_mysql.sh | bash
 ```
 **Important note:** The data folder for MySQL is `/var/lib/mysql`. We will use it when we migrate the database to container.
 
