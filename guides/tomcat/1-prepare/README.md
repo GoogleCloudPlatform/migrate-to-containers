@@ -53,7 +53,7 @@ gcloud compute ssh tomcat-petclinic --project $PROJECT_ID --zone $ZONE_ID
 sudo install_tomcat.sh petclinic.war
 ```
 
-5. You should now verify that your Tomcat had started without issues by vhecking the logfile **/opt/tomcat/logs/catalina.out**
+5. You should now verify that your Tomcat had started without issues by checking the logfile **/opt/tomcat/logs/catalina.out**
 
 6. Verify that the application started by running the command below and that you receive a 200 HTTP status code:  
 ```
@@ -95,14 +95,14 @@ $ migctl doctor
 [!] Source Status
 ```
 
-Check that you are running Migrate for Anthos and GKE version 1.9.0 or newer by running the command:
+Check that you are running Migrate for Anthos and GKE version 1.10.0 or newer by running the command:
 ```
 migctl version
 ```
 and the output should look like:
 ```
-migctl version: 1.9.0
-Migrate for Anthos version: 1.9.0
+migctl version: 1.10.0
+Migrate for Anthos version: 1.10.0
 ```
 If you are running an older version, please refer to the [official documentation](https://cloud.google.com/migrate/anthos/docs/installing-migrate-components) in-order to install the latest version.
 
