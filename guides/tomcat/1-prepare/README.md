@@ -137,7 +137,12 @@ If you are running an older version, please refer to the [official documentation
 * Download the service account key file
 * Create a source for migration using the `migctl source create` command
 
-To verify that M4A configuration is completed, run the `migctl doctor` command again. This time the output should show that all the components are ready:
+1) Download and run the script
+```
+curl https://raw.githubusercontent.com/GoogleCloudPlatform/migrate-for-anthos-gke/main/scripts/add_ce_source.sh | bash
+```
+
+2) To verify that M4A configuration is completed, run the `migctl doctor` command again. This time the output should show that all the components are ready:
 ```
 $ migctl doctor
 [✓] Deployment
