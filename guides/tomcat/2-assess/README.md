@@ -26,9 +26,25 @@ exit
 
 ## Assessing your Tomcat VM for containerization
 In the same manner that you have assessed the MySQL VM you should assess your Tomcat VM.
-To assess your VM for containerization using the mFIT, you need to ssh into your Tomcat VM instance and run the following command:
+
+1) To assess your VM for containerization using the mFIT, you need to ssh into your Tomcat VM instance 
+```
+gcloud compute ssh tomcat-petclinic --project $PROJECT_ID --zone $ZONE_ID
+```
+
+2) Run the following command to collect the assessment data:
 ``` bash
-curl -s https://raw.githubusercontent.com/GoogleCloudPlatform/migrate-for-anthos-gke/main/scripts/assess_ldt.sh | bash
+curl -s https://raw.githubusercontent.com/GoogleCloudPlatform/migrate-for-anthos-gke/main/scripts/assess_mfit.sh | bash
+```
+
+3) Verify that the mfit output file exists
+```
+ls /var/m4a
+```
+
+4) Log out of the MySQL VM
+```
+exit
 ```
 
 You can view the mFIT analysis report using the Cloud Console UI by following the instructions in the [official documentation](https://cloud.google.com/migrate/anthos/docs/fit-assessment#ldt-console). Note that the JSON file should reside in ~/m4a directory.  
