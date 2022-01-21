@@ -176,7 +176,7 @@ tomcatServers:
             requests: 1280M
 ```
 
-Since there is just a single Tomcat application that you are containerizing, we can update the migration plan to remove the unique identifier (shown as `-xxxxxxxx` above but in your file it will actuallly be a string of nubmers and letters) attached to both the tomcat server and image names. Once removed, your migration plan yaml should look like below:
+Since there is just a single Tomcat application that you are containerizing, we can update the migration plan to remove the unique identifier (shown as `-xxxxxxxx` above but in your file it will actuallly be a string of numbers and letters) attached to both the tomcat server and image names. Once removed, your migration plan yaml should look like below:
 ``` yaml
 tomcatServers:
   - name: tomcat
