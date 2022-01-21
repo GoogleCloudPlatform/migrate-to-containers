@@ -42,7 +42,7 @@ curl -s https://raw.githubusercontent.com/GoogleCloudPlatform/migrate-for-anthos
 ls /var/m4a
 ```
 
-4) Log out of the MySQL VM
+4) Log out of the Tomcat VM
 ```
 exit
 ```
