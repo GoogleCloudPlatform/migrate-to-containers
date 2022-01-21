@@ -3,7 +3,9 @@
 ## Assessing your MySQL VM for containerization
 Migrate for Anthos and GKE comes with an assessement tool that assesses whether or not a VM is a good candidate for migration. This tool is called [Migration Fit Assessement Tool (mFIT)](https://cloud.google.com/migrate/anthos/docs/fit-assessment) and it is used to collect details about your running VM (collected output is stored on local file system) and then analyze the collected data and assess if the VM is a good candidate for migration.
 
-In order to assess your VM for containerization using the mFIT, you need to ssh into your MySQL VM instance and run the following command:
+1) In order to assess your VM for containerization using the mFIT, you need to ssh into your MySQL VM instance 
+
+2) After you are SSH'd into the VM run the following command:
 ``` bash
 curl -s https://raw.githubusercontent.com/GoogleCloudPlatform/migrate-for-anthos-gke/main/scripts/assess_ldt.sh | bash
 ```
@@ -12,6 +14,15 @@ curl -s https://raw.githubusercontent.com/GoogleCloudPlatform/migrate-for-anthos
 
 The collection script will leave a file on the running VM, in the directory /var/m4a which will be used be Migrate for Anthos and GKE during the migration phase and will allow automated discovery of services, network ports, etc...  
 For the MySQL VM the discovery tool will discover the running MySQL instance and the port that it is using.
+
+3) Verify that the mfit output file exists
+```
+ls /var/m4a
+```
+4) Log out of the MySQL VM
+```
+exit
+```
 
 ## Assessing your Tomcat VM for containerization
 In the same manner that you have assessed the MySQL VM you should assess your Tomcat VM.
