@@ -5,7 +5,7 @@
 
 * Prepare and build the application by running the command:
 ``` sh
-curl -s https://raw.githubusercontent.com/GoogleCloudPlatform/migrate-for-anthos-gke/tree/main/guides/tomcat/scripts/prepare_and_build_petclinic.sh | bash
+curl -s https://raw.githubusercontent.com/GoogleCloudPlatform/migrate-for-anthos-gke/main/guides/tomcat/scripts/prepare_and_build_petclinic.sh | bash
 ```
 
 ## Set environment variables to have your GCP project id, region and zone 
@@ -26,13 +26,21 @@ gcloud compute instances create petclinic-mysql --zone=$ZONE_ID --image-family=u
 gcloud compute ssh petclinic-mysql --project $PROJECT_ID --zone $ZONE_ID
 ```
 
-3. Install MySQL by running the script [install_mysql.sh](../scripts/install_mysql.sh). Note that this script will require sudo access for installing and configuring MySQL.
+3. Install MySQL by running the script [install_mysql.sh](../scripts/install_mysql.sh). This script will crate a PetClinic database and user, assign priviliges to that user, and allow access to the database by external IPs
 ```
-sudo ./install_mysql.sh
+curl https://raw.githubusercontent.com/GoogleCloudPlatform/migrate-for-anthos-gke/main/guides/tomcat/scripts/install_mysql.sh | bash
 ```
 **Important note:** The data folder for MySQL is `/var/lib/mysql`. We will use it when we migrate the database to container.
 
+4. Exit out of the MySQL VM
+```
+exit
+```
+
 ## Install your Tomcat VM
+
+**Note:** You should have exited your MySQL VM be back in Cloud Shell as you start this section
+
 1. Create a new GCE instance  
 ```
 gcloud compute instances create tomcat-petclinic --zone=$ZONE_ID --image-family=ubuntu-1804-lts --image-project=ubuntu-os-cloud --machine-type=e2-medium --boot-disk-size=10GB --tags=tomcat --project=$PROJECT_ID
@@ -48,12 +56,21 @@ gcloud compute scp ~/cloudshell_open/spring-petclinic/target/petclinic.war tomca
 gcloud compute ssh tomcat-petclinic --project $PROJECT_ID --zone $ZONE_ID
 ```
 
-4. Install tomcat by running the script [install_tomcat.sh *APP_WAR*](../scripts/install_tomcat.sh). Tomcat will install into `/opt/tomcat`, create a systemd service named **tomcat** and will deploy the war file specified as *APP_WAR* into Tomcat. Run the installation script using the below command:  
+4. Install tomcat by running the script [install_tomcat.sh petclinic.war](../scripts/install_tomcat.sh). Tomcat will install into `/opt/tomcat`, create a systemd service named **tomcat** and will deploy the war file specified as *APP_WAR* into Tomcat. Run the installation script using the commands below:  
 ```
-sudo install_tomcat.sh petclinic.war
+curl -O https://raw.githubusercontent.com/GoogleCloudPlatform/migrate-for-anthos-gke/main/guides/tomcat/scripts/install_tomcat.sh
+
+chmod +x ./install_tomcat.sh
+
+sudo ./install_tomcat.sh petclinic.war
 ```
 
+**Note:** You will need to press `Q` to exit the install script
+
 5. You should now verify that your Tomcat had started without issues by checking the logfile **/opt/tomcat/logs/catalina.out**
+```
+sudo cat /opt/tomcat/logs/catalina.out
+```
 
 6. Verify that the application started by running the command below and that you receive a 200 HTTP status code:  
 ```
@@ -66,7 +83,7 @@ curl http://localhost:8080/petclinic/ -I
 
 * Create firewall rule to allow Tomcat public access:
 ```
-gcloud compute firewall-rules create allow-tomcat --action allow --target-tags tomcat --source-ranges 0.0.0.0/0 --rules tcp:8080
+gcloud compute firewall-rules create allow-tomcat --project $PROJECT_ID --action allow --target-tags tomcat --source-ranges 0.0.0.0/0 --rules tcp:8080
 ```
 
 * Find the Tomcat VM public URL and open it in your browser:
@@ -78,22 +95,30 @@ echo http://$TOMCAT_EXTERNAL_IP:8080/petclinic/
 **Note: Don't forget to remove the firewall rule when you no longer need it**
 
 ## Install Migrate for Anthos and GKE
-### Install Migrate for Anthos and GKE by running the script [install_m4a.sh](../../../scripts/install_m4a.sh). The script will do the following:  
+1. Install Migrate for Anthos and GKE by running the script [install_m4a.sh](../../../scripts/install_m4a.sh). The script will do the following:  
 * Create a GKE [processing cluster](https://cloud.google.com/migrate/anthos/docs/configuring-a-cluster)
 * Create a service account
 * Set the right permissions for the service account created above
 * Download the service account key file
 * Connect to the newly created cluster.
 * Install M4A on the processing cluster
+```
+curl https://raw.githubusercontent.com/GoogleCloudPlatform/migrate-for-anthos-gke/main/scripts/install_m4a.sh | bash
+```
 
 To verify that M4A installation was sucessfull, run the `migctl doctor` command:
 ```
-$ migctl doctor
 [✓] Deployment
-[✓] Docker registry
-[✓] Artifacts repo
-[!] Source Status
+[✓] Docker Registry
+[✓] Artifacts Repository
+[✗] Source Status
+    No source was configured. Use 'migctl source create' to define one.
+[!] Default storage class
+    Warning: the default storage class is: standard.
+    - We recommend to use one of the following storage classes instead: premium-rwo, standard-rwo.
 ```
+
+**Note:** You can safely ignore the last two warnings. You will add a source in the subsequent step, and for a demo environment the standard storage class is fine. 
 
 Check that you are running Migrate for Anthos and GKE version 1.10.0 or newer by running the command:
 ```
@@ -112,7 +137,12 @@ If you are running an older version, please refer to the [official documentation
 * Download the service account key file
 * Create a source for migration using the `migctl source create` command
 
-To verify that M4A configuration is completed, run the `migctl doctor` command again. This time the output should show that all the components are ready:
+1) Download and run the script
+```
+curl https://raw.githubusercontent.com/GoogleCloudPlatform/migrate-for-anthos-gke/main/scripts/add_ce_source.sh | bash
+```
+
+2) To verify that M4A configuration is completed, run the `migctl doctor` command again. This time the output should show that all the components are ready:
 ```
 $ migctl doctor
 [✓] Deployment

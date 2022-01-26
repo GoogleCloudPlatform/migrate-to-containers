@@ -24,12 +24,18 @@ migctl migration create petclinic-db-migration --source my-ce-src --vm-id petcli
 ```
 **Note that we are using the ImageAndData intent to migrate the VM and also create a persistent volume for the database data folder**
 
-**Note:** You can check the migration plan generation using the command:
+3) Check the migration plan generation using the command:
 ``` bash
 migctl migration status petclinic-db-migration
 ```
 
-3. Download and review the migration plan by running the command:
+**Note:** It will take several minutes for this step to complete, keep checking using the above command until you see the following
+```
+NAME                    WORKLOAD-TYPE   CURRENT-OPERATION       PROGRESS        STEP            STATUS          AGE
+petclinic-db-migration  system          GenerateMigrationPlan   [3/3]           Discovery       Completed       2m6s
+````
+
+4. Download and review the migration plan by running the command:
 ``` bash
 migctl migration get petclinic-db-migration
 ```
@@ -73,7 +79,7 @@ You then need to replace `- <folder>` with `- /var/lib/mysql` and save the file.
             storage: 10G
 </pre>
 
-4. To update the migration plan with the folder modification you need to upload the modified yaml file. You do so by running the command:
+4. To update the migration plan with the folder modification you need to upload the modified yaml file. You do so by returning to cloud shell running the command:
 ``` bash
 migctl migration update petclinic-db-migration --file petclinic-db-migration.yaml
 ```
@@ -87,6 +93,12 @@ migctl migration generate-artifacts petclinic-db-migration
 migctl migration status petclinic-db-migration
 ```
 For a more verbose output you add the flag `-v` to the command above. 
+
+**Note:** This step takes several minutes, keep issuing periodically the above command until you see:
+```
+NAME                    WORKLOAD-TYPE   CURRENT-OPERATION       PROGRESS        STEP                    STATUS          AGE
+petclinic-db-migration  system          GenerateArtifacts       [4/4]           GenerateDeploymentFiles Completed       15m27s
+```
 
 6. When the artifacts generation is finished. You can download the generated artifacts using the get-artifacts command:
 ``` bash
@@ -119,16 +131,18 @@ gcloud compute instances stop tomcat-petclinic --project $PROJECT_ID --zone $ZON
 migctl migration create petclinic-migration --source my-ce-src --vm-id tomcat-petclinic --intent Image --workload-type tomcat
 ```
 
-**Note:** You can check the migration plan generation using the command:
+3. Check the migration plan generation using the command:
 ``` bash
 migctl migration status petclinic-migration
 ```
+As with the MySQL step above, wait a few minutes until you see the command has succeeded before continuing. 
 
 3. Download and review the migration plan by running the command:
 ``` bash
 migctl migration get petclinic-migration
 ```
-It will create a file on your local file system called **petclinic-migration.yaml**. You can now open it in cloud shell editor by running the command `edit petclinic-migration.yaml`. The migration plan should look like below:
+
+4. Migrate to Containers will create a file on your local file system called **petclinic-migration.yaml**. You can now open it in cloud shell editor by running the command `edit petclinic-migration.yaml`. The migration plan should look like below:
 ``` yaml
 tomcatServers:
   - name: tomcat-xxxxxxxx
@@ -162,7 +176,7 @@ tomcatServers:
             requests: 1280M
 ```
 
-4. Since there is just a single Tomcat application that you are containerizing, we can update the migration plan to remove the unique identifier attached to both the tomcat and image names. Once removed, your migration plan yaml should look like below:
+Since there is just a single Tomcat application that you are containerizing, we can update the migration plan to remove the unique identifier (shown as `-xxxxxxxx` above but in your file it will actuallly be a string of numbers and letters) attached to both the tomcat server and image names. Once removed, your migration plan yaml should look like below:
 ``` yaml
 tomcatServers:
   - name: tomcat
@@ -205,11 +219,15 @@ migctl migration update petclinic-migration --main-config petclinic-migration.ya
 ``` bash
 migctl migration generate-artifacts petclinic-migration
 ```
-**Note:** Artifacts generation duration may vary depending on the size of the source VM disk. You can check the progress of your migration by running the command:
+**Note:** Artifacts generation duration may vary depending on the size of the source VM disk. You can 
+
+5. Check the progress of your migration by running the command:
 ``` bash
 migctl migration status petclinic-migration
 ```
 For a more verbose output you add the flag `-v` to the command above. 
+
+When the above command shows the artifact creation has finished, move on to the next step.
 
 5. When the artifacts generation is finished. You can download the generated artifacts using the get-artifacts command below:
 ``` bash
@@ -229,6 +247,7 @@ bash build.sh
 * **logConfigs.tar.gz** - An archive containing log files (log4j2, log4j and logback) that were modified from logging to local filesystem to log to a console appender.
 * **cloudbuild.yaml** - A sample Cloud Build yaml that can be used to continously build the application from source, build a new docker image and push it to GCR.  
 
+**RECOMMENDED**
 If you would like to expose your Tomcat via a load balancer you can modify the service definition in `deployment_spec.yaml` by adding the LoadBalancer type to the service:
 <pre>
 apiVersion: v1
