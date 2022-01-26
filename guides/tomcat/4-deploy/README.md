@@ -9,7 +9,7 @@ Once the MySQL artifacts were reviewed and modified to your satisfaction, you ar
 ```
 kubectl apply -f mysql/deployment_spec.yaml
 ```
-This command will create your petclinic-postgres pod and will create a service to expose it within the GKE cluster. You can check the status of the service by running the command:
+This command will create your petclinic-mysql pod and will create a service to expose it within the GKE cluster. You can check the status of the service by running the command:
 ```
 kubectl get service
 ```
