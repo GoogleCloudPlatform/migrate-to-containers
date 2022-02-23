@@ -27,7 +27,7 @@ execution_name = migrationName + "-exec"
 
 # Load Migration Manifest YAML Template
 with open(templateYAMLPath) as m:
-    execution_yaml = yaml.load(m, Loader=yaml.FullLoader)
+    execution_yaml = yaml.load(m, Loader=yaml.SafeLoader)
 
 
 
