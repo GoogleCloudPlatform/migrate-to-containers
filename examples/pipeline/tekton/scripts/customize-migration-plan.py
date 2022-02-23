@@ -76,11 +76,11 @@ else: # must be appx type
                  f'appx-generateartifactsflow-{migrationName}', '-o', 'jsonpath={.spec.appXGenerateArtifactsConfig}']
 
 plan_output = execute_command(plan_get_cmd)
-full_plan_yaml = yaml.load(plan_output.stdout, Loader=yaml.FullLoader)
+full_plan_yaml = yaml.load(plan_output.stdout, Loader=yaml.SafeLoader)
 
 if migrationAppType == "system":
     plan_raw = full_plan_yaml["metadata"]["annotations"].pop("anthos-migrate.cloud.google.com/raw-content")
-    plan_yaml = yaml.load(plan_raw, Loader=yaml.FullLoader)
+    plan_yaml = yaml.load(plan_raw, Loader=yaml.SafeLoader)
 else:
     plan_yaml = full_plan_yaml
     print(f"Plan yaml: {yaml.dump(plan_yaml)}")
@@ -93,7 +93,7 @@ if migrationTemplateFile.endswith(".yaml") or \
         migrationTemplateFile.endswith(".yml") or \
         migrationTemplateFile.endswith(".YML"):
     with open(migrationTemplateFile) as m:
-        customization_yaml = yaml.load(m, Loader=yaml.FullLoader)
+        customization_yaml = yaml.load(m, Loader=yaml.SafeLoader)
 
     dict_deep_merge(plan_yaml, customization_yaml)
 elif migrationTemplateFile.endswith(".json") or \
@@ -115,7 +115,7 @@ if migrationAppType == "system":
     name_patch.apply(plan_yaml, in_place=True)
 elif migrationAppType == "tomcat":
     name_patch = jsonpatch.JsonPatch([
-        {'op': 'replace', 'path': '/tomcatServers/0/imageName', 'value': f'{migrationName}-tomcat'},
+        #{'op': 'replace', 'path': '/tomcatServers/0/imageName', 'value': f'{migrationName}-tomcat'},
         {'op': 'replace', 'path': '/tomcatServers/0/name', 'value': migrationName},
     ])
     name_patch.apply(plan_yaml, in_place=True)
@@ -126,7 +126,7 @@ if migrationAppType != "system":
     appx_generateartifactsflow_get_cmd = ['kubectl', 'get', 'appxgenerateartifactsflows.anthos-migrate.cloud.google.com', '-n', 'v2k-system',
                  f'appx-generateartifactsflow-{migrationName}', '-o', 'yaml']
     appx_plan_output = execute_command(appx_generateartifactsflow_get_cmd)
-    full_appx_plan_yaml = yaml.load(appx_plan_output.stdout, Loader=yaml.FullLoader)
+    full_appx_plan_yaml = yaml.load(appx_plan_output.stdout, Loader=yaml.SafeLoader)
     full_appx_plan_yaml["spec"]["appXGenerateArtifactsConfig"] = literal(yaml.dump(plan_yaml))
     plan_yaml = full_appx_plan_yaml
     print(f'{yaml.dump(plan_yaml)}')
