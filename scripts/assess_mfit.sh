@@ -16,23 +16,23 @@
 mkdir m4a
 cd m4a
 
-VERSION=`wget -O - https://anthos-migrate-release.storage.googleapis.com/latest`
+VERSION=`wget -O - https://mfit-release.storage.googleapis.com/latest`
 
-wget https://anthos-migrate-release.storage.googleapis.com/${VERSION}/linux/amd64/m4a-fit-collect.sh
+wget https://mfit-release.storage.googleapis.com/${VERSION}/mfit-linux-collect.sh
 chmod +x m4a-fit-collect.sh
 
-wget https://anthos-migrate-release.storage.googleapis.com/${VERSION}/linux/amd64/mfit
+wget https://mfit-release.storage.googleapis.com/${VERSION}/mfit
 chmod +x mfit
 
 # Run collection script locally
-sudo ./m4a-fit-collect.sh
+sudo ./mfit-linux-collect.sh
 
 # Import the VM collection details to mFIT DB
 ./mfit discover import m4a-collect-*-*.tar
 
 # Assess the discovered VMs
 ./mfit assess
-# Generate an HTML report
-./mfit report --format html > mfit-report.html
+# Generate a detailed HTML report
+./mfit report --full --format html > mfit-report.html
 # Generate a JSON report
 ./mfit report --format json > mfit-report.json
