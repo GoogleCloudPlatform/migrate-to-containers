@@ -28,7 +28,7 @@ migrationAppType = sys.argv[7]
 
 # Load Migration Manifest YAML Template
 with open(templateYAMLPath) as m:
-    migration_yaml = yaml.load(m, Loader=yaml.FullLoader)
+    migration_yaml = yaml.load(m, Loader=yaml.SafeLoader)
 
 # Configure YAML
 migration_yaml["metadata"]["name"] = migrationName
