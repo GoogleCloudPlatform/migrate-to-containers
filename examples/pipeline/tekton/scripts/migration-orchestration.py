@@ -66,7 +66,7 @@ def run_migration(line):
     """Runs the Migration Pipeline for the Line"""
     # Load PipelineRun Manifest YAML Template
     with open(m4aPipelineTemplateFile) as m:
-        pipelinerun_yaml = yaml.load(m, Loader=yaml.FullLoader)
+        pipelinerun_yaml = yaml.load(m, Loader=yaml.SafeLoader)
 
     # Configure Basic YAML Params
     pipelinerun_yaml["metadata"]["name"] = line[0]
