@@ -19,7 +19,7 @@ cd m4a
 VERSION=`wget -O - https://mfit-release.storage.googleapis.com/latest`
 
 wget https://mfit-release.storage.googleapis.com/${VERSION}/mfit-linux-collect.sh
-chmod +x m4a-fit-collect.sh
+chmod +x mfit-linux-collect.sh
 
 wget https://mfit-release.storage.googleapis.com/${VERSION}/mfit
 chmod +x mfit
