@@ -13,6 +13,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+# This script depends on the existence of govc CLI. You can download govc from https://github.com/vmware/govmomi/releases
+#
 # This script reads the input CSV_FILE and iterates over all VMs, running guest
 # collection on all Windows VMs via VMWare guest tools and authenticating to the VMs using
 # username and password. The default USER and PASSWORD arguments will be used
@@ -20,15 +22,24 @@
 #
 err=$(mktemp --tmpdir mfit-guest-err-XXXX)
 
-read -r -p "CSV file name: " CSV_FILE
 read -r -p "VSphere URL: " VSPHERE_URL
 read -r -p "VSphere username: " VSPHERE_USER
 read -r -s -p "VSphere password: " VSPHERE_PASSWORD
 echo ""
-read -r -p "Default username: " DEFAULT_USER
-read -r -s -p "Default password: " DEFAULT_PASSWORD
+read -r -p "VM username: " VM_USER
+read -r -s -p "VM password: " VM_PASSWORD
 
 echo ""
+
+export GOVC_URL=$VSPHERE_URL
+export GOVC_USERNAME=$VSPHERE_USER
+export GOVC_PASSWORD=$VSPHERE_PASSWORD
+export MFIT_VSPHERE_PASSWORD=$VSPHERE_PASSWORD
+
+export MFIT_GUEST_VM_USER=$VM_USER
+export MFIT_GUEST_VM_PASSWORD=$VM_PASSWORD
+
+govc find . -type m -runtime.powerState poweredOn -guest.toolsRunningStatus guestToolsRunning | gawk -F '/' '{print $NF}' | xargs -I{} mfit discover vsphere --url $URL -u root -i guest {}
 
 # CSV fields
 #NAME;PLATFORM VM ID;COLLECTED DATA;OS;IP;USERNAME;PASSWORD
