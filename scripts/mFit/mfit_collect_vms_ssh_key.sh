@@ -24,6 +24,11 @@ if [[ -z "${MFIT_SSH_IDENTITY_FILE}" ]]; then
 fi
 
 read -r -p "CSV file name: " CSV_FILE
+if [[ ! -r "$CSV_FILE" ]]; then
+    echo "The file  $CSV_FILE does not exist or can not be accessed."
+    exit 1
+fi
+
 read -r -p "Default username: " DEFAULT_USER
 
 echo ""
@@ -34,12 +39,6 @@ do
     then
       username=$DEFAULT_USER
     fi
-
-    echo "VM name is : $vm_name"
-    echo "VM OS is : $os"
-    echo "VM IP is : $ip"
-    echo "Username : $username"
-
 
     if [ "$os" = "Linux" ]
     then
