@@ -1,5 +1,5 @@
-NAME;PLATFORM VM ID;COLLECTED DATA;OS;IP;USERNAME;PASSWORD
-centos7;10.1.1.10/vm-25;vSphere;Linux;172.20.20.13;my_centos_user;my_centos_password
-ubuntu-16.04;10.1.1.10/vm-27;vSphere;Linux;172.20.20.12;my_ubuntu_user,my_ubuntu_password
-win12core-1;10.1.1.10/vm-13;vSphere;Windows;172.20.20.11;;
-win2008;10.1.1.10/vm-21;vSphere;Windows;172.20.20.10;my_win_admin;my_win_password
+NAME;PLATFORM VM ID;OS Family;IP;USERNAME;PASSWORD
+centos7;10.1.1.10/vm-25;Linux;172.20.20.13;my_centos_user;my_centos_password
+ubuntu-16.04;10.1.1.10/vm-27;Linux;172.20.20.12;my_ubuntu_user,my_ubuntu_password
+win12core-1;10.1.1.10/vm-13;Windows;172.20.20.11;;
+win2008;10.1.1.10/vm-21;Windows;172.20.20.10;my_win_admin;my_win_password

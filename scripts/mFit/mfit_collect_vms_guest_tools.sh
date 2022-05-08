@@ -14,16 +14,27 @@
 # limitations under the License.
 #
 # This script reads the input CSV_FILE and iterates over all VMs, running guest
-# collection on all Windows VMs via VMWare guest tools and authenticating to the VMs using
+# collection on all VMs via VMWare guest tools and authenticating to the VMs using
 # username and password. The default USER and PASSWORD arguments will be used
 # unless either of them is overriden for a specific VM.
 #
 err=$(mktemp --tmpdir mfit-guest-err-XXXX)
 
+url_regex='^https?://[-A-Za-z0-9\+&@#/%?=~_|!:,.;]*[-A-Za-z0-9\+&@#/%=~_|]\.[-A-Za-z0-9\+&@#/%?=~_|!:,.;]*[-A-Za-z0-9\+&@#/%=~_|]$'
+
 read -r -p "CSV file name: " CSV_FILE
-read -r -p "VSphere URL: " VSPHERE_URL
-read -r -p "VSphere username: " VSPHERE_USER
-read -r -s -p "VSphere password: " VSPHERE_PASSWORD
+if [[ ! -r "$CSV_FILE" ]]; then
+    echo "The file $CSV_FILE does not exist or can not be accessed."
+    exit 1
+fi
+
+read -r -p "vSphere URL: " VSPHERE_URL
+if ! [[ $VSPHERE_URL =~ $url_regex ]]; then
+    echo "vSphere URL $VSPHERE_URL IS not a valid URL"
+    exit 1
+fi
+read -r -p "vSphere username: " VSPHERE_USER
+read -r -s -p "vSphere password: " VSPHERE_PASSWORD
 echo ""
 read -r -p "Default username: " DEFAULT_USER
 read -r -s -p "Default password: " DEFAULT_PASSWORD
@@ -31,8 +42,8 @@ read -r -s -p "Default password: " DEFAULT_PASSWORD
 echo ""
 
 # CSV fields
-#NAME;PLATFORM VM ID;COLLECTED DATA;OS;IP;USERNAME;PASSWORD
-while IFS=";" read -r vm_name vm_id collected_data os ip username password
+#NAME;PLATFORM VM ID;OS;IP;USERNAME;PASSWORD
+while IFS=";" read -r vm_name vm_id os ip username password
 do
    if [ -z "$username" ]
     then
@@ -43,24 +54,14 @@ do
           password=$DEFAULT_PASSWORD
     fi
 
-    #echo "VM name is : $vm_name"
-    #echo "VM ID is : $vm_id"
-    #echo "VM OS is : $os"
-    #echo "Username : $username"
-
-
-    if [ "$os" = "Windows" ]
+    if [ ! -z "$vm_id" ]
     then
-      if [ ! -z "$vm_id" ]
-      then
-        # vm_id after the last slash if prefixed by vsphere IP:
-        mod_vm_id=$(echo "$vm_id" | sed 's/.*\///')
-        mfit discover vsphere guest --url $VSPHERE_URL -u $VSPHERE_USER -p $VSPHERE_PASSWORD --vm-user $username --vm-password $password $mod_vm_id
-      else
-        echo "Skipping VM: $vm_name because it has no VM ID"
-      fi
+      # Note that the below only works for VMWare VMs
+      # vm_id after the last slash if prefixed by vSphere IP
+      mod_vm_id=$(echo "$vm_id" | sed 's/.*\///')
+      mfit discover vsphere guest --url $VSPHERE_URL -u $VSPHERE_USER -p $VSPHERE_PASSWORD --vm-user $username --vm-password $password $mod_vm_id
     else
-      echo "Skipping $os VM: $vm_name"
+      echo "Skipping VM: $vm_name because it has no VM ID"
     fi
  done < <(tail -n +1 $CSV_FILE)
 
