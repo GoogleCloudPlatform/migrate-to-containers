@@ -29,24 +29,28 @@ image = sys.argv[4]
 
 def verify_line(line):
     """Makes sure the line is formatted correctly, and the contents are valid"""
-    # Check the OS is Supported
-    if line[3] not in ["Linux"]:
-        print(f"[ERROR] OS not supported: {line[3]}")
+
+    # Check appType is Supported
+    if line[3] not in ["linux-system-container", "tomcat-container", "windows-iis-container", "websphere-container"]:
+        print(f"[ERROR] AppType not supported: {line[3]}")
         return False
 
-    # Check Intent is Supported
-    if line[4] not in ["Image", "ImageAndData", "Data"]:
-        print(f"[ERROR] Intent not supported: {line[4]}")
-        return False
+    # Check Data Config
+    if len(line) > 4:
+        if line[4] != "":
+            data_config_file = Path(planPatchPath + '/' + line[4])
 
-    # Check Intent is Supported
-    if line[5] not in ["system", "tomcat", "open-liberty"]:
-        print(f"[ERROR] AppType not supported: {line[5]}")
-        return False
+            if data_config_file.is_file() is False:
+                print(f"[ERROR] Data Config File doesn't exist: {data_config_file} ")
+                return False
+
+            if data_config_file.suffix not in [".yaml", ".YAML", ".yml", ".YML"]:
+                print(f"[ERROR] Data Config File suffix not supported: {data_config_file}")
+                return False
 
     # Check Plan Patch File
-    if len(line) > 6:
-        plan_patch_file = Path(planPatchPath + '/' + line[6])
+    if len(line) > 5:
+        plan_patch_file = Path(planPatchPath + '/' + line[5])
 
         if plan_patch_file.is_file() is False:
             print(f"[ERROR] Plan Patch File doesn't exist: {plan_patch_file} ")
@@ -74,10 +78,6 @@ def run_migration(line):
         if param["name"] == "migrationName":
             param["value"] = line[0]
         if param["name"] == "migrationAppType":
-            param["value"] = line[5]
-        if param["name"] == "migrationIntent":
-            param["value"] = line[4]
-        if param["name"] == "migrationOS":
             param["value"] = line[3]
         if param["name"] == "migrationSource":
             param["value"] = line[2]
@@ -86,26 +86,48 @@ def run_migration(line):
         if param["name"] == "image":
             param["value"] = image
 
-    # Add Plan Patch Params if needed
-    if len(line) > 6:
-        patch_name = line[6]
-        file_param = dict()
-        file_param["name"] = "migrationPlanPatchFile"
-        file_param["value"] = patch_name
-        pipelinerun_yaml["spec"]["params"].append(file_param)
-
+    # Add Data Config Params if needed
+    if len(line) > 4:
         plan_patch_cm_name = line[0] + "-plan-patch-cm"
 
         os.system("kubectl delete configmap " + plan_patch_cm_name)
-        cm_create_cmd = ['kubectl', 'create', 'configmap', plan_patch_cm_name,
-                         '--from-file=' + patch_name + '=' + planPatchPath + '/' + patch_name]
-        execute_command(cm_create_cmd)
+
+        cm_create_cmd = ['kubectl', 'create', 'configmap', plan_patch_cm_name]
 
         cm_param = dict()
         cm_param["name"] = "planPatchConfigMapName"
         cm_param["value"] = plan_patch_cm_name
         pipelinerun_yaml["spec"]["params"].append(cm_param)
 
+        if line[4] != "":
+            data_config_name = line[4]
+            file_param = dict()
+            file_param["name"] = "migrationDataConfigFile"
+            file_param["value"] = data_config_name
+            pipelinerun_yaml["spec"]["params"].append(file_param)
+
+            cm_create_cmd.append('--from-file=' + data_config_name + '=' + planPatchPath + '/' + data_config_name)
+        # Add Plan Patch Params if needed
+        if len(line) > 5:
+            if line[5] != "":
+                patch_name = line[5]
+                file_param = dict()
+                file_param["name"] = "migrationPlanPatchFile"
+                file_param["value"] = patch_name
+                pipelinerun_yaml["spec"]["params"].append(file_param)
+
+#                plan_patch_cm_name = line[0] + "-plan-patch-cm"
+
+#                os.system("kubectl delete configmap " + plan_patch_cm_name)
+#                cm_create_cmd = ['kubectl', 'create', 'configmap', plan_patch_cm_name,
+#                                '--from-file=' + patch_name + '=' + planPatchPath + '/' + patch_name]
+                cm_create_cmd.append('--from-file=' + patch_name + '=' + planPatchPath + '/' + patch_name)
+
+#                cm_param = dict()
+#                cm_param["name"] = "planPatchConfigMapName"
+#                cm_param["value"] = plan_patch_cm_name
+#                pipelinerun_yaml["spec"]["params"].append(cm_param)
+        execute_command(cm_create_cmd)
     # Write Configured YAML
     pipelinerun_manifest = "/" + line[0] + ".yaml"
     with open(pipelinerun_manifest, "w") as m:

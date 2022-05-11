@@ -22,12 +22,6 @@ spec:
     - name: migrationName
       type: string
       description: Name of the migration.
-    - name: migrationIntent
-      type: string
-      description: Initial intent of the migration.
-    - name: migrationOS
-      type: string
-      description: OS type of the migration.
     - name: migrationSource
       type: string
       description: Source Provider of the migration.
@@ -36,7 +30,7 @@ spec:
       description: VM ID of the migration.
     - name: migrationAppType
       type: string
-      description: The application type to migrate, any one of system, tomcat or open-liberty.
+      description: The application type to migrate, any one of linux-system-container, windows-iis-container, tomcat-container or websphere-container.
     - name: migrationPlanPatchFile
       type: string
       description: The template file name for the migration plan.
@@ -45,6 +39,10 @@ spec:
       type: string
       description: Path where plan patches are mounted
       default: m4a-empty-patch-cm
+    - name: migrationDataConfigFile
+      type: string
+      description: The data config file name for the migration plan.
+      default: default
     - name: image
       type: string
       description: The image used to run the python steps. Requires Python 3.9 with PyYAML and jsonpatch packages and kubectl.
@@ -58,10 +56,6 @@ spec:
       params:
         - name: migrationName
           value: $(params.migrationName)
-        - name: migrationIntent
-          value: $(params.migrationIntent)
-        - name: migrationOS
-          value: $(params.migrationOS)
         - name: migrationSource
           value: $(params.migrationSource)
         - name: migrationVmId
@@ -72,5 +66,7 @@ spec:
           value: $(params.migrationPlanPatchFile)
         - name: planPatchConfigMapName
           value: $(params.planPatchConfigMapName)
+        - name: migrationDataConfigFile
+          value: $(params.migrationDataConfigFile)
         - name: image
           value: $(params.image)

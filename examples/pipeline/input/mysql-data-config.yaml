@@ -1,0 +1,11 @@
+volumes:
+- deploymentPvcName: mysql-pvc
+  folders:
+  - /var/lib/mysql
+  newPvc:
+    spec:
+      accessModes:
+      - ReadWriteOnce
+      resources:
+        requests:
+          storage: 10G

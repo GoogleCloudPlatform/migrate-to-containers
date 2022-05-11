@@ -22,7 +22,8 @@ import yaml
 
 migrationName = sys.argv[1]
 migrationTemplateFile = sys.argv[2]
-migrationAppType = sys.argv[3]
+migrationDataConfigFile = sys.argv[3]
+migrationAppType = sys.argv[4]
 
 class literal(str):
     pass
@@ -62,30 +63,15 @@ def execute_command(command):
     return output
 
 
-# Get generated plan
-if migrationAppType == "system":
-    plan_name_cmd = ['kubectl', 'get', 'migrations.anthos-migrate.cloud.google.com', '-n', 'v2k-system',
-                 migrationName, '-o', 'jsonpath={.status.resources.generateArtifacts.name}']
-    plan_name = execute_command(plan_name_cmd).stdout
-    print(f"Plan Name: {plan_name}")
-
-    plan_get_cmd = ['kubectl', 'get', 'generateartifactsflows.anthos-migrate.cloud.google.com', '-n', 'v2k-system',
-                plan_name, '-o', 'yaml']
-else: # must be appx type
-    plan_get_cmd = ['kubectl', 'get', 'appxgenerateartifactsflows.anthos-migrate.cloud.google.com', '-n', 'v2k-system',
-                 f'appx-generateartifactsflow-{migrationName}', '-o', 'jsonpath={.spec.appXGenerateArtifactsConfig}']
+# Get generated plan only supports appx plugins
+plan_get_cmd = ['kubectl', 'get', 'appxgenerateartifactsflows.anthos-migrate.cloud.google.com', '-n', 'v2k-system',
+            f'appx-generateartifactsflow-{migrationName}', '-o', 'jsonpath={.spec.appXGenerateArtifactsConfig}']
 
 plan_output = execute_command(plan_get_cmd)
 full_plan_yaml = yaml.load(plan_output.stdout, Loader=yaml.SafeLoader)
 
-if migrationAppType == "system":
-    plan_raw = full_plan_yaml["metadata"]["annotations"].pop("anthos-migrate.cloud.google.com/raw-content")
-    plan_yaml = yaml.load(plan_raw, Loader=yaml.SafeLoader)
-else:
-    plan_yaml = full_plan_yaml
-    print(f"Plan yaml: {yaml.dump(plan_yaml)}")
-
-
+plan_yaml = full_plan_yaml
+print(f"Plan yaml: {yaml.dump(plan_yaml)}")
 
 # Customize Plan
 if migrationTemplateFile.endswith(".yaml") or \
@@ -106,30 +92,43 @@ else:
     print("Using Default Plan")
 
 # Change Names to match
-if migrationAppType == "system":
-    name_patch = jsonpatch.JsonPatch([
-        {'op': 'replace', 'path': '/spec/image/base', 'value': f'{migrationName}-non-runnable-base'},
-        {'op': 'replace', 'path': '/spec/image/name', 'value': migrationName},
-        {'op': 'replace', 'path': '/spec/deployment/appName', 'value': migrationName},
-    ])
-    name_patch.apply(plan_yaml, in_place=True)
-elif migrationAppType == "tomcat":
-    name_patch = jsonpatch.JsonPatch([
-        #{'op': 'replace', 'path': '/tomcatServers/0/imageName', 'value': f'{migrationName}-tomcat'},
-        {'op': 'replace', 'path': '/tomcatServers/0/name', 'value': migrationName},
-    ])
-    name_patch.apply(plan_yaml, in_place=True)
+#if migrationAppType == "system":
+#    name_patch = jsonpatch.JsonPatch([
+#        {'op': 'replace', 'path': '/spec/image/base', 'value': f'{migrationName}-non-runnable-base'},
+#        {'op': 'replace', 'path': '/spec/image/name', 'value': migrationName},
+#        {'op': 'replace', 'path': '/spec/deployment/appName', 'value': migrationName},
+#    ])
+#    name_patch.apply(plan_yaml, in_place=True)
+#elif migrationAppType == "tomcat-container":
+#    name_patch = jsonpatch.JsonPatch([
+#        #{'op': 'replace', 'path': '/tomcatServers/0/imageName', 'value': f'{migrationName}-tomcat'},
+#        {'op': 'replace', 'path': '/tomcatServers/0/name', 'value': migrationName},
+#    ])
+#    name_patch.apply(plan_yaml, in_place=True)
 
 # Apply customized plan
-if migrationAppType != "system":
-    # handle appx update
-    appx_generateartifactsflow_get_cmd = ['kubectl', 'get', 'appxgenerateartifactsflows.anthos-migrate.cloud.google.com', '-n', 'v2k-system',
-                 f'appx-generateartifactsflow-{migrationName}', '-o', 'yaml']
-    appx_plan_output = execute_command(appx_generateartifactsflow_get_cmd)
-    full_appx_plan_yaml = yaml.load(appx_plan_output.stdout, Loader=yaml.SafeLoader)
-    full_appx_plan_yaml["spec"]["appXGenerateArtifactsConfig"] = literal(yaml.dump(plan_yaml))
-    plan_yaml = full_appx_plan_yaml
-    print(f'{yaml.dump(plan_yaml)}')
+#if migrationAppType != "system":
+# handle appx update
+appx_generateartifactsflow_get_cmd = ['kubectl', 'get', 'appxgenerateartifactsflows.anthos-migrate.cloud.google.com', '-n', 'v2k-system',
+                f'appx-generateartifactsflow-{migrationName}', '-o', 'yaml']
+appx_plan_output = execute_command(appx_generateartifactsflow_get_cmd)
+full_appx_plan_yaml = yaml.load(appx_plan_output.stdout, Loader=yaml.SafeLoader)
+full_appx_plan_yaml["spec"]["appXGenerateArtifactsConfig"] = yaml.dump(plan_yaml)
+
+if migrationDataConfigFile.endswith(".yaml") or \
+        migrationDataConfigFile.endswith(".YAML") or \
+        migrationDataConfigFile.endswith(".yml") or \
+        migrationDataConfigFile.endswith(".YML"):
+    with open(migrationDataConfigFile) as m:
+        data_config_yaml = yaml.load(m, Loader=yaml.SafeLoader)
+
+        for i in range(len(data_config_yaml["volumes"])):
+            print(data_config_yaml["volumes"][i])
+            data_config_yaml["volumes"][i]["deploymentPvcName"] = migrationName + "-" + data_config_yaml["volumes"][i]["deploymentPvcName"]
+        full_appx_plan_yaml["spec"]["dataConfig"] = data_config_yaml
+
+plan_yaml = full_appx_plan_yaml
+print(f'{yaml.dump(plan_yaml)}')
 
 plan_yaml_path = "/plan.yaml"
 with open(plan_yaml_path, "w") as m:
