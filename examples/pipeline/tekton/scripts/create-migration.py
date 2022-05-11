@@ -22,19 +22,16 @@ templateYAMLPath = sys.argv[1]
 migrationName = sys.argv[2]
 migrationVmId = sys.argv[3]
 migrationSource = sys.argv[4]
-migrationOS = sys.argv[5]
-migrationIntent = sys.argv[6]
-migrationAppType = sys.argv[7]
+migrationAppType = sys.argv[5]
 
 # Load Migration Manifest YAML Template
 with open(templateYAMLPath) as m:
     migration_yaml = yaml.load(m, Loader=yaml.SafeLoader)
 
 # Configure YAML
+migration_yaml["metadata"]["labels"]["migration-name"] = migrationName
 migration_yaml["metadata"]["name"] = migrationName
-migration_yaml["metadata"]["annotations"]["anthos-migrate.cloud.google.com/initial-intent"] = migrationIntent
 migration_yaml["spec"]["appType"] = migrationAppType
-migration_yaml["spec"]["osType"] = migrationOS
 migration_yaml["spec"]["sourceSnapshot"]["sourceProvider"] = migrationSource
 migration_yaml["spec"]["sourceSnapshot"]["sourceId"] = migrationVmId
 

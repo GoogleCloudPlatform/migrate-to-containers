@@ -25,10 +25,6 @@ spec:
   params:
     - name: migrationName
       value: __placeholder__
-    - name: migrationIntent
-      value: __placeholder__
-    - name: migrationOS
-      value: __placeholder__
     - name: migrationSource
       value: __placeholder__
     - name: migrationVmId

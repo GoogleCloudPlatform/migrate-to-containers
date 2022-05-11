@@ -14,13 +14,13 @@
 apiVersion: anthos-migrate.cloud.google.com/v1beta2
 kind: Migration
 metadata:
+ labels:
+   migration-name: __placeholder__
  name: __placeholder__
  namespace: v2k-system
- annotations:
-   anthos-migrate.cloud.google.com/initial-intent: __placeholder__
 spec:
  appType: __placeholder__
- osType: __placeholder__
+ configs: {}
  sourceSnapshot:
   sourceProvider: __placeholder__
   sourceId: __placeholder__
