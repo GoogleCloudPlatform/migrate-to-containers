@@ -1,29 +1,27 @@
 # Deploying your migrated workloads to GKE
-Prior to deploying your migrated workloads, make sure that you are in your workspace folder by running the command:
-```
-cd ~/m4a-apps
-```
+The simplest way to build and deploy your migrated workloads is by using [Skaffold](https://skaffold.dev/). At the root folder of each migration artifacts you will find a **skaffold.yaml** file which can be used to build and deploy the migrated workloads.
 
 ## Deploy your containerized MySQL
 Once the MySQL artifacts were reviewed and modified to your satisfaction, you are ready to deploy MySQL on your GKE cluster. You can do so by running the command:
-```
-kubectl apply -f mysql/deployment_spec.yaml
+``` bash
+cd ~/m4a-apps/mysql
+skaffold run -d gcr.io/${PROJECT_ID}
 ```
 This command will create your apps-mysql pod and will create a service to expose it within the GKE cluster. You can check the status of the service by running the command:
-```
+``` bash
 kubectl get service
 ```
 
 Now that your MySQL is running in a container you can deploy your Tomcat containers
 
 ## Deploy your containerized Tomcat applications
-Now that you have downloaded and reviewd your artifacts, you are almost ready to deploy your FlowCRM and Petclinic Tomcat applications on your GKE cluster. The deployment_spec.yaml includes two environment variables, PROJECT_ID and VERSION which should be changed prior to applying the yaml. You can update and deploy by running the command:
+Now that you have downloaded and reviewd your artifacts, you are almost ready to deploy your FlowCRM and Petclinic Tomcat applications on your GKE cluster. You can do so by running the commands:
 ``` bash
-sed -e "s/\${PROJECT_ID}/${PROJECT_ID}/g" -e "s/\${VERSION}/${VERSION}/g" tomcat/tomcat-*/tomcat-petclinic/deployment_spec.yaml | kubectl apply -f -
-sed -e "s/\${PROJECT_ID}/${PROJECT_ID}/g" -e "s/\${VERSION}/${VERSION}/g" tomcat/tomcat-*/tomcat-flowcrm/deployment_spec.yaml | kubectl apply -f -
+cd ~/m4a-apps/tomcat
+skaffold run -d gcr.io/${PROJECT_ID}
 ```
 This command will create your FlowCRM and Petclinic deployments with 1 pod each and will create 2 services to expose them both internally to the cluster. You can check the status of the service by running the command:
-```
+``` bash
 kubectl get service
 ```
 

@@ -11,7 +11,7 @@ metadata:
   labels:
     app: tomcat-petclinic
     migrate-for-anthos-optimization: "true"
-    migrate-for-anthos-version: v1.10.0
+    migrate-for-anthos-version: v1.11.1
   name: tomcat-petclinic
 spec:
   replicas: 1
@@ -19,7 +19,7 @@ spec:
     matchLabels:
       app: tomcat-petclinic
       migrate-for-anthos-optimization: "true"
-      migrate-for-anthos-version: v1.10.0
+      migrate-for-anthos-version: v1.11.1
   strategy: {}
   template:
     metadata:
@@ -27,10 +27,10 @@ spec:
       labels:
         app: tomcat-petclinic
         migrate-for-anthos-optimization: "true"
-        migrate-for-anthos-version: v1.10.0
+        migrate-for-anthos-version: v1.11.1
     spec:
       containers:
-      - image: gcr.io/${PROJECT_ID}/tomcat-petclinic:${VERSION}
+      - image: tomcat-petclinic-image
         name: tomcat-petclinic
         <b>ports:
         - containerPort: 8080
@@ -48,7 +48,7 @@ metadata:
   creationTimestamp: null
   labels:
     migrate-for-anthos-optimization: "true"
-    migrate-for-anthos-version: v1.10.0
+    migrate-for-anthos-version: v1.11.1
   name: tomcat-petclinic
 spec:
   <b>type: NodePort</b>
@@ -78,7 +78,7 @@ metadata:
   labels:
     app: tomcat-flowcrm
     migrate-for-anthos-optimization: "true"
-    migrate-for-anthos-version: v1.10.0
+    migrate-for-anthos-version: v1.11.1
   name: tomcat-flowcrm
 spec:
   replicas: 1
@@ -86,7 +86,7 @@ spec:
     matchLabels:
       app: tomcat-flowcrm
       migrate-for-anthos-optimization: "true"
-      migrate-for-anthos-version: v1.10.0
+      migrate-for-anthos-version: v1.11.1
   strategy: {}
   template:
     metadata:
@@ -94,10 +94,10 @@ spec:
       labels:
         app: tomcat-flowcrm
         migrate-for-anthos-optimization: "true"
-        migrate-for-anthos-version: v1.10.0
+        migrate-for-anthos-version: v1.11.1
     spec:
       containers:
-      - image: gcr.io/${PROJECT_ID}/tomcat-flowcrm:${VERSION}
+      - image: tomcat-flowcrm-image
         name: tomcat-flowcrm
         <b>ports:
         - containerPort: 8080
@@ -115,7 +115,7 @@ metadata:
   creationTimestamp: null
   labels:
     migrate-for-anthos-optimization: "true"
-    migrate-for-anthos-version: v1.10.0
+    migrate-for-anthos-version: v1.11.1
   name: tomcat-flowcrm
 spec:
   <b>type: NodePort</b>
@@ -131,9 +131,10 @@ status:
 </code>
 </pre>
 
-and apply these changes to your cluster by running the command:
+and apply these changes to your cluster by running the commands:
 ``` bash
-sed -e "s/\${PROJECT_ID}/${PROJECT_ID}/g" -e "s/\${VERSION}/${VERSION}/g" ~/m4a-apps/tomcat/tomcat-*/tomcat-flowcrm/deployment_spec.yaml | kubectl apply -f -
+cd ~/m4a-apps/tomcat
+skaffold run -d gcr.io/${PROJECT_ID}
 ```
 
 Your Tomcat applications can now be exposed by an Ingress

@@ -118,14 +118,14 @@ $ migctl doctor
 [!] Source Status
 ```
 
-Check that you are running Migrate for Anthos and GKE version 1.10.1 or newer by running the command:
+Check that you are running Migrate for Anthos and GKE version 1.11.1 or newer by running the command:
 ```
 migctl version
 ```
 and the output should look like:
 ```
-migctl version: 1.10.1
-Migrate for Anthos version: 1.10.1
+migctl version: 1.11.1
+Migrate for Anthos version: 1.11.1
 ```
 If you are running an older version, please refer to the [official documentation](https://cloud.google.com/migrate/anthos/docs/installing-migrate-components) in-order to install the latest version.
 
