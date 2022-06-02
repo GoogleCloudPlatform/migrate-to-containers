@@ -2,7 +2,7 @@
 
 ---
 **NOTE**
-This tutorial is relevant to Migrate for Anthos and GKE version 1.10 or newer
+This tutorial is relevant to Migrate for Anthos and GKE version 1.11.1 or newer
 ---
 [Spring Boot Petclinic application](https://github.com/spring-projects/spring-petclinic) is a Java application built with [Spring Boot](https://spring.io/projects/spring-boot) and [Maven](https://maven.apache.org/).
 

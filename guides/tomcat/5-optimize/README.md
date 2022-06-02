@@ -13,8 +13,9 @@ to
 replicas: 3
 ``  
 then run the command below to apply the changes:
-```
-kubectl apply -f tomcat/tomcat-petclinic/deployment_spec.yaml
+``` bash
+cd ~/m4a-petclinic/tomcat
+skaffold run -d gcr.io/${PROJECT_ID}
 ```
 
 Now run the command ``kubectl get pods`` and see 2 additional pods were added.
@@ -41,7 +42,7 @@ This will cause any applied changes to only allow 1 pod to be unavailable at any
 
 You can then roll out a change by updating the image value in deployment_spec.yaml and apply the changes using the command:
 ``` bash
-kubectl apply -f tomcat/tomcat-petclinic/deployment_spec.yaml
+skaffold run -d gcr.io/${PROJECT_ID}
 ```
 You can then monitor the rollout of your pods using the command:
 ``` bash

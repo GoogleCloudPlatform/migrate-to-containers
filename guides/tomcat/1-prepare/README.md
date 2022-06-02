@@ -120,14 +120,14 @@ To verify that M4A installation was sucessfull, run the `migctl doctor` command:
 
 **Note:** You can safely ignore the last two warnings. You will add a source in the subsequent step, and for a demo environment the standard storage class is fine. 
 
-Check that you are running Migrate for Anthos and GKE version 1.10.0 or newer by running the command:
+Check that you are running Migrate for Anthos and GKE version 1.11.1 or newer by running the command:
 ```
 migctl version
 ```
 and the output should look like:
 ```
-migctl version: 1.10.0
-Migrate for Anthos version: 1.10.0
+migctl version: 1.11.1
+Migrate for Anthos version: 1.11.1
 ```
 If you are running an older version, please refer to the [official documentation](https://cloud.google.com/migrate/anthos/docs/installing-migrate-components) in-order to install the latest version.
 

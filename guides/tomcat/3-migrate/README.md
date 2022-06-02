@@ -20,71 +20,49 @@ gcloud compute instances stop petclinic-mysql --project $PROJECT_ID --zone $ZONE
 
 2. Create a migration plan using 'migctl' command line interface (this should take a couple of minutes to finish):
 ``` bash
-migctl migration create petclinic-db-migration --source my-ce-src --vm-id petclinic-mysql --intent ImageAndData
+migctl migration create petclinic-db-migration --source my-ce-src --vm-id petclinic-mysql --type linux-system-container
 ```
-**Note that we are using the ImageAndData intent to migrate the VM and also create a persistent volume for the database data folder**
+**Note that we are using the linux-system-container type to migrate the VM and also create a persistent volume for the database data folder**
 
-3) Check the migration plan generation using the command:
+3. Check the migration plan generation using the command:
 ``` bash
 migctl migration status petclinic-db-migration
 ```
 
-**Note:** It will take several minutes for this step to complete, keep checking using the above command until you see the following
-```
-NAME                    WORKLOAD-TYPE   CURRENT-OPERATION       PROGRESS        STEP            STATUS          AGE
-petclinic-db-migration  system          GenerateMigrationPlan   [3/3]           Discovery       Completed       2m6s
-````
+**Note:** It will take several minutes for this step to complete, keep checking using the above command until you see the status changed to `Completed`.
 
 4. Download and review the migration plan by running the command:
 ``` bash
 migctl migration get petclinic-db-migration
 ```
-It will create a file on your local file system called **petclinic-db-migration.yaml**. You can now open it in cloud shell editor by running the command `edit petclinic-db-migration.yaml`.
+It will create two file on your local file system called **petclinic-db-migration.yaml** and **petclinic-db-migration.data.yaml**.
 
-4. Modify petclinic-db-migration.yaml to create a persistent volume for the database data folder. You do so by finding the *- \<folder\>* section in the yaml file:   
+5. Modify petclinic-db-migration.data.yaml to create a persistent volume for the database data folder. You do so by pasting the below into the yaml file:   
 ``` yaml
-  dataVolumes:
-
-  # Folders to include in the data volume, e.g. "/var/lib/mysql"
-  # Included folders contain data and state, and therefore are automatically excluded from a generated container image
-  # Replace the placeholder with the relevant path and add more items if needed
-  - folders:
-      - <folder>
-    pvc:
-      spec:
-        accessModes:
-        - ReadWriteOnce
-        resources:
-          requests:
-          # Modify the required disk size on the storage field below based on the capacity needed
-            storage: 10G
+volumes:
+- deploymentPvcName: petclinic-db-pvc
+  folders:
+  - /var/lib/mysql
+  newPvc:
+    spec:
+      accessModes:
+      - ReadWriteOnce
+      resources:
+        requests:
+          storage: 10G
 ```
 
-You then need to replace `- <folder>` with `- /var/lib/mysql` and save the file. Your modified file should look like below:
-<pre>
-  dataVolumes:
-
-  # Folders to include in the data volume, e.g. "/var/lib/mysql"
-  # Included folders contain data and state, and therefore are automatically excluded from a generated container image
-  # Replace the placeholder with the relevant path and add more items if needed
-  - folders:
-      <b>- /var/lib/mysql</b>
-    pvc:
-      spec:
-        accessModes:
-        - ReadWriteOnce
-        resources:
-          requests:
-          # Modify the required disk size on the storage field below based on the capacity needed
-            storage: 10G
-</pre>
-
-4. To update the migration plan with the folder modification you need to upload the modified yaml file. You do so by returning to cloud shell running the command:
+6. Enable M4A enhanced runtime by running the below command:
 ``` bash
-migctl migration update petclinic-db-migration --file petclinic-db-migration.yaml
+sed -i 's/v2kServiceManager: false/v2kServiceManager: true/g' petclinic-db-migration.yaml
 ```
 
-5. Once you are satisfied with the migration plan, you may start generating the migration artifacts. You do so by running the command:
+7. To update the migration plan with the folder modification you need to upload the modified yaml files. You do so by returning to cloud shell and running the command:
+``` bash
+migctl migration update petclinic-db-migration --main-config petclinic-db-migration.yaml --data-config petclinic-db-migration.data.yaml
+```
+
+8. Once you are satisfied with the migration plan, you may start generating the migration artifacts. You do so by running the command:
 ``` bash
 migctl migration generate-artifacts petclinic-db-migration
 ```
@@ -94,22 +72,18 @@ migctl migration status petclinic-db-migration
 ```
 For a more verbose output you add the flag `-v` to the command above. 
 
-**Note:** This step takes several minutes, keep issuing periodically the above command until you see:
-```
-NAME                    WORKLOAD-TYPE   CURRENT-OPERATION       PROGRESS        STEP                    STATUS          AGE
-petclinic-db-migration  system          GenerateArtifacts       [4/4]           GenerateDeploymentFiles Completed       15m27s
-```
+**Note:** This step takes several minutes, keep running the above command periodically until the status is `Completed`.
 
-6. When the artifacts generation is finished. You can download the generated artifacts using the get-artifacts command:
+9. When the artifacts generation is finished. You can download the generated artifacts using the get-artifacts command:
 ``` bash
 migctl migration get-artifacts petclinic-db-migration
 ```
 The downloaded artifacts includes the following files:
 * **Dockerfile** - The Dockerfile is used to build the container image from your VM and make it executable by leveraging the Migrate for Anthos and GKE container runtime.
 * **deployment_spec.yaml** - The deployment_spec.yaml file contains a working Kubernetes [StatefulSet](https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/) a matching [Service](https://kubernetes.io/docs/concepts/services-networking/service/) which are used to deploy your newly migrated MySQL container and expose it via a service. It also includes a [PersistentVolume](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) and a [PersistentVolumeClaim](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#reserving-a-persistentvolume) for the database data folder.
-* **blocklist.yaml** - The blocklist.yaml file allows you to enable/disable services that were discovered during the migration discovery phase.
+* **services-config.yaml** - The services-config.yaml file allows you to easily enable or disable services that were being used in the source VM.
 
-7. One change that we would make to keep the service name consistent with the one expected by the Tomcat instance is to change the service name from `petclinic-mysql-mysqld` to `petclinic-mysql` in the `deployment_spec.yaml` file. First run the command:
+10. One change that we would make to keep the service name consistent with the one expected by the Tomcat instance is to change the service name from `petclinic-mysql-mysqld` to `petclinic-mysql` in the `deployment_spec.yaml` file. First run the command:
 ``` bash
 edit deployment_spec.yaml
 ```
@@ -126,9 +100,9 @@ cd ~/m4a-petclinic/tomcat
 gcloud compute instances stop tomcat-petclinic --project $PROJECT_ID --zone $ZONE_ID
 ```
 
-2. Create a migration plan using 'migctl' command line interface. This time you will use the `Image` intent and the `tomcat` workload-type which will only migrate the Tomcat configuration and the applications deployed on it:
+2. Create a migration plan using 'migctl' command line interface. This time you will use the `tomcat-container` type which will only migrate the Tomcat configuration and the applications deployed on it:
 ``` bash
-migctl migration create petclinic-migration --source my-ce-src --vm-id tomcat-petclinic --intent Image --workload-type tomcat
+migctl migration create petclinic-migration --source my-ce-src --vm-id tomcat-petclinic --type tomcat-container
 ```
 
 3. Check the migration plan generation using the command:
@@ -144,70 +118,66 @@ migctl migration get petclinic-migration
 
 4. Migrate to Containers will create a file on your local file system called **petclinic-migration.yaml**. You can now open it in cloud shell editor by running the command `edit petclinic-migration.yaml`. The migration plan should look like below:
 ``` yaml
+# If set to true, sensitive data specified in sensitiveDataPaths will be uploaded to the artifacts repository.
+includeSensitiveData: false
 tomcatServers:
-  - name: tomcat-xxxxxxxx
-    catalinaBase: /opt/tomcat
-    catalinaHome: /opt/tomcat
-    # Files to extract from the server container images into secrets
-    secrets:
-      - files: []
-        name: ""
-        path: ""
-    images:
-      - name: tomcat-petclinic-tomcat-xxxxxxxx
-        # Edit this list of application paths to define migrated applications.
-        applications:
-          - /opt/tomcat/webapps/petclinic.war
-        # Parent image for the generated container image.
-        fromImage: tomcat:8.5.65-jdk16-openjdk
-        # External paths required for running the Tomcat server or apps.
-        additionalFiles: []
-        ports:
-          - 8080
-        # Log Configuration paths for the Tomcat apps.
-        logConfigPaths: []
-        # Secrets to mount in the container image
-        secrets: []
-        resources:
-          # Define the container’s initial and maximum memory.
-          # 'limit' sets Tomcat Java initial and max heap sizes using the RAMPercentage flags shown on the generated Dockerfile artifact.
-          memory:
-            limit: 2048M
-            requests: 1280M
+- name: tomcat-bdfea8a2
+  catalinaBase: /opt/tomcat
+  catalinaHome: /opt/tomcat
+  images:
+  - name: tomcat-petclinic-tomcat-bdfea8a2
+    # Edit this list of application paths to define migrated applications.
+    applications:
+    - /opt/tomcat/webapps/petclinic.war
+    # Parent image for the generated container image.
+    fromImage: tomcat:8.5-jre11-openjdk
+    # External paths required for running the Tomcat server or apps.
+    additionalFiles: []
+    ports:
+    - 8080
+    # Log Configuration paths for the Tomcat apps.
+    logConfigPaths: []
+    resources:
+      # Define the container’s initial and maximum memory.
+      # 'limit' sets Tomcat Java initial and max heap sizes using the RAMPercentage flags shown on the generated Dockerfile artifact.
+      memory:
+        limits: 2048M
+        requests: 1280M
+    # Sensitive data which will be filtered out of the container image.
+    # If includeSensitiveData is set to true the sensitive data will be mounted on the container.
+    sensitiveDataPaths: []
 ```
 
 Since there is just a single Tomcat application that you are containerizing, we can update the migration plan to remove the unique identifier (shown as `-xxxxxxxx` above but in your file it will actuallly be a string of numbers and letters) attached to both the tomcat server and image names. Once removed, your migration plan yaml should look like below:
 ``` yaml
+# If set to true, sensitive data specified in sensitiveDataPaths will be uploaded to the artifacts repository.
+includeSensitiveData: false
 tomcatServers:
-  - name: tomcat
-    catalinaBase: /opt/tomcat
-    catalinaHome: /opt/tomcat
-    # Files to extract from the server container images into secrets
-    secrets:
-      - files: []
-        name: ""
-        path: ""
-    images:
-      - name: tomcat-petclinic
-        # Edit this list of application paths to define migrated applications.
-        applications:
-          - /opt/tomcat/webapps/petclinic.war
-        # Parent image for the generated container image.
-        fromImage: tomcat:8.5.65-jdk16-openjdk
-        # External paths required for running the Tomcat server or apps.
-        additionalFiles: []
-        ports:
-          - 8080
-        # Log Configuration paths for the Tomcat apps.
-        logConfigPaths: []
-        # Secrets to mount in the container image
-        secrets: []
-        resources:
-          # Define the container’s initial and maximum memory.
-          # 'limit' sets Tomcat Java initial and max heap sizes using the RAMPercentage flags shown on the generated Dockerfile artifact.
-          memory:
-            limit: 2048M
-            requests: 1280M
+- name: tomcat
+  catalinaBase: /opt/tomcat
+  catalinaHome: /opt/tomcat
+  images:
+  - name: tomcat-petclinic
+    # Edit this list of application paths to define migrated applications.
+    applications:
+    - /opt/tomcat/webapps/petclinic.war
+    # Parent image for the generated container image.
+    fromImage: tomcat:8.5-jre11-openjdk
+    # External paths required for running the Tomcat server or apps.
+    additionalFiles: []
+    ports:
+    - 8080
+    # Log Configuration paths for the Tomcat apps.
+    logConfigPaths: []
+    resources:
+      # Define the container’s initial and maximum memory.
+      # 'limit' sets Tomcat Java initial and max heap sizes using the RAMPercentage flags shown on the generated Dockerfile artifact.
+      memory:
+        limits: 2048M
+        requests: 1280M
+    # Sensitive data which will be filtered out of the container image.
+    # If includeSensitiveData is set to true the sensitive data will be mounted on the container.
+    sensitiveDataPaths: []
 ```
 
 5. You can now update the migration by running the command:
@@ -231,9 +201,9 @@ When the above command shows the artifact creation has finished, move on to the 
 
 5. When the artifacts generation is finished. You can download the generated artifacts using the get-artifacts command below:
 ``` bash
-migctl migration get-artifacts petclinic-migration
 ```
-The downloaded artifacts will be downloaded into `tomcat/tomcat-petclinic` directory which you can access by running the command `cd tomcat/tomcat-petclinic/` and it includes the following files:
+migctl migration get-artifacts petclinic-migration
+The artifacts will be downloaded into `tomcat/tomcat-petclinic` directory which you can access by running the command `cd tomcat/tomcat-petclinic/` and it includes the following files:
 * **Dockerfile** - The Dockerfile is used to build the container image for your Tomcat applications by leveraging the community Tomcat Docker image. The default image may be changed during migration by modifying `fromImage` or by modifying the `FROM` string in the Dockerfile.
 * **build.sh** - The build.sh script is used to build the container image for your Tomcat by leveraging [Cloud Build](https://cloud.google.com/build). You **MUST** set an environment variable named *PROJECT_ID* with the project id which is going to store the image and optionally supply a VERSION environment variable to give your build a specific version. Once changed, you can build your container image by running the commands
 ``` bash
@@ -243,7 +213,7 @@ bash build.sh
 * **deployment_spec.yaml** - The deployment_spec.yaml file contains a Kubernetes [Deployment](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/) and a matching [Service](https://kubernetes.io/docs/concepts/services-networking/service/) which are used to deploy your newly migrated Tomcat container and expose it via a service. **Note** that the service will be exposed via **ClusterIP** by default and you may change this to a LoadBalancer in-order to make your Tomcat application available externally. Before applying the deployment yaml you **MUST** replace *<my_project>* with the project id that was used in your `build.sh` script.
 * **additionalFiles.tar.gz** - An archive containing any additional files that are needed by Tomcat and were specified in the migration plan.
 * **apps/petclinic.war** - An directory containing the Petclinic application that was selected to be migrated in the migration plan.
-* **catalinaHome.tar.gz** - An archive containing the original CATALINA_HOME content and it is used in the Dockerfile to override the default Tomcat settings.
+* **tomcatServer.tar.gz** - An archive containing the original CATALINA_HOME content and it is used in the Dockerfile to override the default Tomcat settings.
 * **logConfigs.tar.gz** - An archive containing log files (log4j2, log4j and logback) that were modified from logging to local filesystem to log to a console appender.
 * **cloudbuild.yaml** - A sample Cloud Build yaml that can be used to continously build the application from source, build a new docker image and push it to GCR.  
 
@@ -256,8 +226,8 @@ metadata:
   creationTimestamp: null
   labels:
     migrate-for-anthos-optimization: "true"
-    migrate-for-anthos-version: v1.9
-  name: tomcat
+    migrate-for-anthos-version: v1.11.1
+  name: tomcat-petclinic
 spec:
   ports:
   - port: 8080
@@ -265,7 +235,7 @@ spec:
     targetPort: 8080
   <b>type: LoadBalancer</b>
   selector:
-    app: tomcat
+    app: tomcat-petclinic
 status:
   loadBalancer: {}
 </pre>

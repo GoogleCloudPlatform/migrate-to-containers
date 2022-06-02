@@ -100,15 +100,11 @@ gcloud builds list --limit 1
 ```
 
 ### Roll the deployment of your newly built image
-1. Store the newly built image tag in an environment variable
+1. Roll out the new image to your GKE cluster
 ``` bash
-VERSION=$(gcloud builds list --limit 1 | grep IMAGES | cut -d ' ' -f 2)
+skaffold deploy -d gcr.io/${PROJECT_ID}/tomcat-petclinic
 ```
-2. Roll out the new image to your GKE cluster
-``` bash
-sed -e "s/\${PROJECT_ID}/${PROJECT_ID}/g" -e "s/\${VERSION}/${VERSION}/g" ~/m4a-petclinic/tomcat/tomcat-petclinic/deployment_spec.yaml | kubectl apply -f -
-```
-3. Monitor the rollout using the command:
+2. Monitor the rollout using the command:
 ``` bash
 kubectl get pods
 ```
