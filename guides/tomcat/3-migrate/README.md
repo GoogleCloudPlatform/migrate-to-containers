@@ -13,7 +13,7 @@ mkdir mysql
 cd mysql
 ```
 
-1. Before migrating a GCE VM using Migrate for Anthos and GKE you must turn off the VM. Turn it off by running the command:  
+1. Before migrating a GCE VM using Migrate to Containers you must turn off the VM. Turn it off by running the command:  
 ``` bash
 gcloud compute instances stop petclinic-mysql --project $PROJECT_ID --zone $ZONE_ID
 ```
@@ -79,7 +79,7 @@ For a more verbose output you add the flag `-v` to the command above.
 migctl migration get-artifacts petclinic-db-migration
 ```
 The downloaded artifacts includes the following files:
-* **Dockerfile** - The Dockerfile is used to build the container image from your VM and make it executable by leveraging the Migrate for Anthos and GKE container runtime.
+* **Dockerfile** - The Dockerfile is used to build the container image from your VM and make it executable by leveraging the Migrate to Containers container runtime.
 * **deployment_spec.yaml** - The deployment_spec.yaml file contains a working Kubernetes [StatefulSet](https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/) a matching [Service](https://kubernetes.io/docs/concepts/services-networking/service/) which are used to deploy your newly migrated MySQL container and expose it via a service. It also includes a [PersistentVolume](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) and a [PersistentVolumeClaim](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#reserving-a-persistentvolume) for the database data folder.
 * **services-config.yaml** - The services-config.yaml file allows you to easily enable or disable services that were being used in the source VM.
 
@@ -95,7 +95,7 @@ Start by creating a folder for your Tomcat migration artifacts:
 mkdir ~/m4a-petclinic/tomcat
 cd ~/m4a-petclinic/tomcat
 ```
-1. Before migrating a GCE VM using Migrate for Anthos and GKE you must turn off the VM. Turn it off by running the command:  
+1. Before migrating a GCE VM using Migrate to Containers you must turn off the VM. Turn it off by running the command:  
 ``` bash
 gcloud compute instances stop tomcat-petclinic --project $PROJECT_ID --zone $ZONE_ID
 ```

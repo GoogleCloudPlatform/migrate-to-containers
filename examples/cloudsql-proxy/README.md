@@ -1,6 +1,6 @@
 # Connecting to Cloud SQL instance from a migrated workload using the Cloud SQL Auth Proxy 
 
-Oftentimes when migrating legacy workloads using Migrate for Anthos and GKE they consume SQL database services which are normally migrated to [Cloud SQL](https://cloud.google.com/sql). Cloud SQL is a fully managed relational database service for MySQL, PostgreSQL and SQLServer.
+Oftentimes when migrating legacy workloads using Migrate to Containers they consume SQL database services which are normally migrated to [Cloud SQL](https://cloud.google.com/sql). Cloud SQL is a fully managed relational database service for MySQL, PostgreSQL and SQLServer.
 
 Connecting from an application running on GKE to a Cloud SQL instance, you can use either the [Cloud SQL Auth Proxy](https://cloud.google.com/sql/docs/mysql/sql-proxy) or connect directly via private IP address. The recommended way of doing so is via the Cloud SQL Auth Proxy because it provides strong encryption and authentication using IAM, which can help keep your database more secure.
 

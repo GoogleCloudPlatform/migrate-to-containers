@@ -2,13 +2,13 @@
 
 ---
 **NOTE**
-This tutorial is relevant to Migrate for Anthos and GKE version 1.11.1 or newer
+This tutorial is relevant to Migrate to Containers version 1.11.1 or newer
 ---
 [Spring Boot Petclinic application](https://github.com/spring-projects/spring-petclinic) is a Java application built with [Spring Boot](https://spring.io/projects/spring-boot) and [Maven](https://maven.apache.org/).
 
 In this tutorial you will deploy this application into a Tomcat server running on a [Google Compute Engine (GCE)](https://cloud.google.com/compute) VM and connect it to a [MySQL](https://www.mysql.com/) database running on a GCE VM.
 
-You'll then modernize this application by using [Migrate for Anthos and GKE (M4A)](https://cloud.google.com/migrate/anthos) to migrate it to run in a Tomcat app container on a [Google Kubernetes Engine (GKE)](https://cloud.google.com/kubernetes-engine) cluster and generate Day2 artifacts to support modern CI/CD operations for your application. Unlike the [petclinic](../petclinic) guide, where we migrated the Tomcat into a Linux system container, in this guide we will extract the applications and Tomcat specific configuration and create a Tomcat Docker image for it.
+You'll then modernize this application by using [Migrate to Containers (M4A)](https://cloud.google.com/migrate/containers) to migrate it to run in a Tomcat app container on a [Google Kubernetes Engine (GKE)](https://cloud.google.com/kubernetes-engine) cluster and generate Day2 artifacts to support modern CI/CD operations for your application. Unlike the [petclinic](../petclinic) guide, where we migrated the Tomcat into a Linux system container, in this guide we will extract the applications and Tomcat specific configuration and create a Tomcat Docker image for it.
 
 ## What you'll do
 
@@ -18,7 +18,7 @@ In this tutorial you’ll do the following:
 * Create a MySQL Ubuntu VM on GCE  and prepare the Petclinic database
 * Build and deploy Petclinic application into Tomcat on a GCE vm
 * Install and configure M4A
-* Qualify the workloads for migration using the M4A [Migration Fit Assessemenet (mFIT)](https://cloud.google.com/migrate/anthos/docs/fit-assessment)
+* Qualify the workloads for migration using the M4A [Migration Fit Assessemenet (mFIT)](https://cloud.google.com/migrate/containers/docs/fit-assessment)
 * Migrate Petclinic database vm to a container
 * Migrate Petclinic application to a Tomcat container
 * Deploy the migrated database and application to your GKE cluster
@@ -41,8 +41,8 @@ For this reference guide, you need a Google Cloud project. You can create a new 
 
 ## Begin your migration journey
 Your migration journey consist of a number of steps:  
-1. [Prepare](1-prepare/README.md) - In this step you will prepare your environment by installing MySQL and Tomcat VMs, building and deploying the application and then installing Migrate for Anthos and GKE.
-2. [Assess](2-assess/README.md) - In the assess step, you will run the Migrate for Anthos and GKE fit assessement and assess whether or not your MySQL and Tomcat workloads are good fit for containerization.
+1. [Prepare](1-prepare/README.md) - In this step you will prepare your environment by installing MySQL and Tomcat VMs, building and deploying the application and then installing Migrate to Containers.
+2. [Assess](2-assess/README.md) - In the assess step, you will run the Migrate to Containers fit assessement and assess whether or not your MySQL and Tomcat workloads are good fit for containerization.
 3. [Migrate](3-migrate/README.md) - In the migrate step you will migrate both of your VMs into containers and generate Day2 artifacts which can later be used in modern CI/CD pipelines.
 4. [Deploy](4-deploy/README.md) - In the deploy step you will deploy your migrated workloads into a GKE cluster and verify that your application is working as expected.
 5. [Optimize](5-optimize/README.md) - In the optimize step you will learn how to manually and automatically scale your migrated workloads and how to roll out application updated.

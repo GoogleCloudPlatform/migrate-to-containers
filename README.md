@@ -1,6 +1,6 @@
-# Migrate for Anthos and GKE
+# Migrate to Containers
 
-Welcome to the [Migrate for Anthos and GKE](https://cloud.google.com/migrate/anthos) sample code repository. This repository contains example, scripts and guides to showcase best practices for using Migrate for Anthos and GKE to migrate legacy workloads from virtual machines to containers running on [GKE](https://cloud.google.com/kubernetes-engine) and [Anthos](https://cloud.google.com/anthos/gke).
+Welcome to the [Migrate to Containers](https://cloud.google.com/migrate/containers) sample code repository. This repository contains example, scripts and guides to showcase best practices for using Migrate to Containers to migrate legacy workloads from virtual machines to containers running on [GKE](https://cloud.google.com/kubernetes-engine) and [Anthos](https://cloud.google.com/anthos/gke).
 
 # Repository Content
 This repository is split into three categories:

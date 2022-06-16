@@ -5,7 +5,7 @@
 
 * Prepare and build the application by running the command:
 ``` sh
-curl -s https://raw.githubusercontent.com/GoogleCloudPlatform/migrate-for-anthos-gke/tree/main/guides/tomcat-multi-apps-with-httpd-proxy/scripts/prepare_and_build_petclinic.sh | bash
+curl -s https://raw.githubusercontent.com/GoogleCloudPlatform/migrate-to-containers/tree/main/guides/tomcat-multi-apps-with-httpd-proxy/scripts/prepare_and_build_petclinic.sh | bash
 ```
 
 * Clone the [Flow CRM Github](https://github.com/eitaneib/flow-crm-tutorial) repository by running the below commands in cloud shell:  
@@ -100,9 +100,9 @@ echo http://$TOMCAT_EXTERNAL_IP/flowcrm/
 ```
 **Note** that the credentials to login to the CRM application is *user/userpass*
 
-## Install Migrate for Anthos and GKE
-### Install Migrate for Anthos and GKE by running the script [install_m4a.sh](../../../scripts/install_m4a.sh). The script will do the following:  
-* Create a GKE [processing cluster](https://cloud.google.com/migrate/anthos/docs/configuring-a-cluster)
+## Install Migrate to Containers
+### Install Migrate to Containers by running the script [install_m4a.sh](../../../scripts/install_m4a.sh). The script will do the following:  
+* Create a GKE [processing cluster](https://cloud.google.com/migrate/containers/docs/configuring-a-cluster)
 * Create a service account
 * Set the right permissions for the service account created above
 * Download the service account key file
@@ -118,16 +118,16 @@ $ migctl doctor
 [!] Source Status
 ```
 
-Check that you are running Migrate for Anthos and GKE version 1.11.1 or newer by running the command:
+Check that you are running Migrate to Containers version 1.11.1 or newer by running the command:
 ```
 migctl version
 ```
 and the output should look like:
 ```
 migctl version: 1.11.1
-Migrate for Anthos version: 1.11.1
+Migrate to Containers version: 1.11.1
 ```
-If you are running an older version, please refer to the [official documentation](https://cloud.google.com/migrate/anthos/docs/installing-migrate-components) in-order to install the latest version.
+If you are running an older version, please refer to the [official documentation](https://cloud.google.com/migrate/containers/docs/installing-migrate-components) in-order to install the latest version.
 
 ### Configure the GCE migration source you're migrating from by running the script [add_ce_source.sh](../../../scripts/add_ce_source.sh). The script will do the following:
 * Create a service account

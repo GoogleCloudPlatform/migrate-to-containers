@@ -1,4 +1,4 @@
-# Migrate for Anthos and GKE walkthroughs
+# Migrate to Containers walkthroughs
 
 Each walkthrough is a self contained guide, showcasing best practices for a particular migration scenario.
 
