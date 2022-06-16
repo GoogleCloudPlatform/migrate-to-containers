@@ -1,4 +1,4 @@
-# Migrate for Anthos and GKE integrations
+# Migrate to Containers integrations
 
 There are many integrations with other GCP/GKE/Anthos components which are common for many migrated workloads. This will be a collection of such comon patterns and allow you to quickly configure such integrations. 
 
@@ -8,3 +8,5 @@ There are many integrations with other GCP/GKE/Anthos components which are commo
 * [Migration at Scale](./pipeline) - Powered by [Tekton](https://tekton.dev/), it allowes you to define templates for similar workloads and orchestrate the automation of migrating 10s to 100s of workloads without manual intervention. 
 
 * [Setting up CI/CD from migrated workload](./cloud-deploy-pipeline/) - Powered by [Cloud Deploy](https://cloud.google.com/deploy), and [Cloud Source](https://cloud.google.com/source-repositories) will allow you to continously deploy to your clusters based on commits in a git repository 
+
+* [Fit Assessment](./fit-assessment) - Sample Day0 and Day1 reports and useful scripts for running guest level collection on a large number of VMs. 

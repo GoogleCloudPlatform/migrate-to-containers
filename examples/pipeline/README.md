@@ -1,6 +1,6 @@
-# Google Migrate for Anthos Pipeline
+# Google Migrate to Containers Pipeline
 
-Documentation and code for the Google Migrate for Anthos Pipeline. The pipeline's purpose is to automate the migration process with support for doing bulk migrations of similar machines.
+Documentation and code for the Google Migrate to Containers Pipeline. The pipeline's purpose is to automate the migration process with support for doing bulk migrations of similar machines.
 
 ## Architecture
 

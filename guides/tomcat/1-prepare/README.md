@@ -5,7 +5,7 @@
 
 * Prepare and build the application by running the command:
 ``` sh
-curl -s https://raw.githubusercontent.com/GoogleCloudPlatform/migrate-for-anthos-gke/main/guides/tomcat/scripts/prepare_and_build_petclinic.sh | bash
+curl -s https://raw.githubusercontent.com/GoogleCloudPlatform/migrate-to-containers/main/guides/tomcat/scripts/prepare_and_build_petclinic.sh | bash
 ```
 
 ## Set environment variables to have your GCP project id, region and zone 
@@ -28,7 +28,7 @@ gcloud compute ssh petclinic-mysql --project $PROJECT_ID --zone $ZONE_ID
 
 3. Install MySQL by running the script [install_mysql.sh](../scripts/install_mysql.sh). This script will crate a PetClinic database and user, assign priviliges to that user, and allow access to the database by external IPs
 ```
-curl https://raw.githubusercontent.com/GoogleCloudPlatform/migrate-for-anthos-gke/main/guides/tomcat/scripts/install_mysql.sh | bash
+curl https://raw.githubusercontent.com/GoogleCloudPlatform/migrate-to-containers/main/guides/tomcat/scripts/install_mysql.sh | bash
 ```
 **Important note:** The data folder for MySQL is `/var/lib/mysql`. We will use it when we migrate the database to container.
 
@@ -58,7 +58,7 @@ gcloud compute ssh tomcat-petclinic --project $PROJECT_ID --zone $ZONE_ID
 
 4. Install tomcat by running the script [install_tomcat.sh petclinic.war](../scripts/install_tomcat.sh). Tomcat will install into `/opt/tomcat`, create a systemd service named **tomcat** and will deploy the war file specified as *APP_WAR* into Tomcat. Run the installation script using the commands below:  
 ```
-curl -O https://raw.githubusercontent.com/GoogleCloudPlatform/migrate-for-anthos-gke/main/guides/tomcat/scripts/install_tomcat.sh
+curl -O https://raw.githubusercontent.com/GoogleCloudPlatform/migrate-to-containers/main/guides/tomcat/scripts/install_tomcat.sh
 
 chmod +x ./install_tomcat.sh
 
@@ -94,16 +94,16 @@ echo http://$TOMCAT_EXTERNAL_IP:8080/petclinic/
 ```
 **Note: Don't forget to remove the firewall rule when you no longer need it**
 
-## Install Migrate for Anthos and GKE
-1. Install Migrate for Anthos and GKE by running the script [install_m4a.sh](../../../scripts/install_m4a.sh). The script will do the following:  
-* Create a GKE [processing cluster](https://cloud.google.com/migrate/anthos/docs/configuring-a-cluster)
+## Install Migrate to Containers
+1. Install Migrate to Containers by running the script [install_m4a.sh](../../../scripts/install_m4a.sh). The script will do the following:  
+* Create a GKE [processing cluster](https://cloud.google.com/migrate/containers/docs/configuring-a-cluster)
 * Create a service account
 * Set the right permissions for the service account created above
 * Download the service account key file
 * Connect to the newly created cluster.
 * Install M4A on the processing cluster
 ```
-curl https://raw.githubusercontent.com/GoogleCloudPlatform/migrate-for-anthos-gke/main/scripts/install_m4a.sh | bash
+curl https://raw.githubusercontent.com/GoogleCloudPlatform/migrate-to-containers/main/scripts/install_m4a.sh | bash
 ```
 
 To verify that M4A installation was sucessfull, run the `migctl doctor` command:
@@ -120,16 +120,16 @@ To verify that M4A installation was sucessfull, run the `migctl doctor` command:
 
 **Note:** You can safely ignore the last two warnings. You will add a source in the subsequent step, and for a demo environment the standard storage class is fine. 
 
-Check that you are running Migrate for Anthos and GKE version 1.11.1 or newer by running the command:
+Check that you are running Migrate to Containers version 1.11.1 or newer by running the command:
 ```
 migctl version
 ```
 and the output should look like:
 ```
 migctl version: 1.11.1
-Migrate for Anthos version: 1.11.1
+Migrate to Containers version: 1.11.1
 ```
-If you are running an older version, please refer to the [official documentation](https://cloud.google.com/migrate/anthos/docs/installing-migrate-components) in-order to install the latest version.
+If you are running an older version, please refer to the [official documentation](https://cloud.google.com/migrate/containers/docs/installing-migrate-components) in-order to install the latest version.
 
 ### Configure the GCE migration source you're migrating from by running the script [add_ce_source.sh](../../../scripts/add_ce_source.sh). The script will do the following:
 * Create a service account
@@ -139,7 +139,7 @@ If you are running an older version, please refer to the [official documentation
 
 1) Download and run the script
 ```
-curl https://raw.githubusercontent.com/GoogleCloudPlatform/migrate-for-anthos-gke/main/scripts/add_ce_source.sh | bash
+curl https://raw.githubusercontent.com/GoogleCloudPlatform/migrate-to-containers/main/scripts/add_ce_source.sh | bash
 ```
 
 2) To verify that M4A configuration is completed, run the `migctl doctor` command again. This time the output should show that all the components are ready:

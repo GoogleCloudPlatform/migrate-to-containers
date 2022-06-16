@@ -22,7 +22,7 @@ spec:
     name: m4a-orchestration
   params:
     - name: gitURL
-      value: git@github.com:GoogleCloudPlatform/migrate-for-anthos-gke.git
+      value: git@github.com:GoogleCloudPlatform/migrate-to-containers.git
     - name: gitRevision
       value: main
     - name: cvsFile

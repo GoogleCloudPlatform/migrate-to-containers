@@ -4,7 +4,7 @@ Start by creating a folder for your Tomcat migration artifacts:
 mkdir ~/m4a-apps/tomcat
 cd ~/m4a-apps/tomcat
 ```
-1. Before migrating a GCE VM using Migrate for Anthos and GKE you must turn off the VM. Turn it off by running the command:  
+1. Before migrating a GCE VM using Migrate to Containers you must turn off the VM. Turn it off by running the command:  
 ``` bash
 gcloud compute instances stop tomcat-httpd --project $PROJECT_ID --zone $ZONE_ID
 ```

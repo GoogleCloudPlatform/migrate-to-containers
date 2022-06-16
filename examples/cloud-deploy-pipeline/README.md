@@ -12,7 +12,7 @@ You will run a script that will setup the following parts in a project of your c
 
 1. Clone this repository and cd into this tutorial folder
 ```bash
-git clone https://github.com/GoogleCloudPlatform/migrate-for-anthos-gke
+git clone https://github.com/GoogleCloudPlatform/migrate-to-containers
 cd migrate-for-anthos-gke/examples/cloud-deploy-pipeline
 ```
 2. Ensure gcloud is correctly configured

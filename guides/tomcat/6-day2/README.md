@@ -1,5 +1,5 @@
 # Continuously building your migrated Tomcat application
-One of the main benefits of using Migrate for Anthos and GKE to modernize your workloads is that it generates artifacts which are readily usable for day2 operations, namely continuous integration (CI ) and continuous deployment (CD). In this step we will showcase how you can use Cloud Source Repositories and Cloud Build to automatically trigger a new image build on every code change pushed to the repository and then manually deploy it.
+One of the main benefits of using Migrate to Containers to modernize your workloads is that it generates artifacts which are readily usable for day2 operations, namely continuous integration (CI ) and continuous deployment (CD). In this step we will showcase how you can use Cloud Source Repositories and Cloud Build to automatically trigger a new image build on every code change pushed to the repository and then manually deploy it.
  
 ## Cloud Source Repositories
 In order to use Cloud Source Repositories you must first set up your gcloud environment by running the command:
