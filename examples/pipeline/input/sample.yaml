@@ -13,6 +13,6 @@
 # limitations under the License.
 spec:
   global:
-    # Files and directories to exclude from the migration, in addition to M4A Defaults
+    # Files and directories to exclude from the migration, in addition to M2C Defaults
     filters:
     - '- /test/*'

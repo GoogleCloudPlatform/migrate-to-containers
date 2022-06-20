@@ -15,14 +15,14 @@
 apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
-  name: m4a-orchestration
+  name: m2c-orchestration
 spec:
   workspaces:
     - name: source
   volumes:
-    - name: m4a-manifest-templates
+    - name: m2c-manifest-templates
       configMap:
-        name: m4a-migration-cm
+        name: m2c-migration-cm
   params:
     - name: cvsFile
       type: string
@@ -31,7 +31,7 @@ spec:
     - name: planPatchPath
       type: string
       description: Path to find the plan patch files
-      default: manifests/m4a-templates/v1beta2
+      default: manifests/m2c-templates/v1beta2
     - name: manifestMountPath
       type: string
       description: Path where manifest templates are mounted
@@ -40,7 +40,7 @@ spec:
       type: string
       description: The image used to run the python steps. Requires Python 3.9 with PyYAML and jsonpatch packages and kubectl.
   steps:
-    - name: orchestrate-m4a-migrations
+    - name: orchestrate-m2c-migrations
       image: $(params.image)
       args:
         - $(params.cvsFile)
@@ -50,6 +50,6 @@ spec:
       workingDir: $(workspaces.source.path)
       script: ""
       volumeMounts:
-        - name: m4a-manifest-templates
+        - name: m2c-manifest-templates
           mountPath: "$(params.manifestMountPath)"
       timeout: 45m

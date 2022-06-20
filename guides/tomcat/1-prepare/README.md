@@ -95,18 +95,18 @@ echo http://$TOMCAT_EXTERNAL_IP:8080/petclinic/
 **Note: Don't forget to remove the firewall rule when you no longer need it**
 
 ## Install Migrate to Containers
-1. Install Migrate to Containers by running the script [install_m4a.sh](../../../scripts/install_m4a.sh). The script will do the following:  
+1. Install Migrate to Containers by running the script [install_m2c.sh](../../../scripts/install_m2c.sh). The script will do the following:  
 * Create a GKE [processing cluster](https://cloud.google.com/migrate/containers/docs/configuring-a-cluster)
 * Create a service account
 * Set the right permissions for the service account created above
 * Download the service account key file
 * Connect to the newly created cluster.
-* Install M4A on the processing cluster
+* Install M2C on the processing cluster
 ```
-curl https://raw.githubusercontent.com/GoogleCloudPlatform/migrate-to-containers/main/scripts/install_m4a.sh | bash
+curl https://raw.githubusercontent.com/GoogleCloudPlatform/migrate-to-containers/main/scripts/install_m2c.sh | bash
 ```
 
-To verify that M4A installation was sucessfull, run the `migctl doctor` command:
+To verify that M2C installation was sucessfull, run the `migctl doctor` command:
 ```
 [✓] Deployment
 [✓] Docker Registry
@@ -142,7 +142,7 @@ If you are running an older version, please refer to the [official documentation
 curl https://raw.githubusercontent.com/GoogleCloudPlatform/migrate-to-containers/main/scripts/add_ce_source.sh | bash
 ```
 
-2) To verify that M4A configuration is completed, run the `migctl doctor` command again. This time the output should show that all the components are ready:
+2) To verify that M2C configuration is completed, run the `migctl doctor` command again. This time the output should show that all the components are ready:
 ```
 $ migctl doctor
 [✓] Deployment

@@ -1,6 +1,6 @@
-# Setup cloud deploy pipeline for M4A migrated workload
+# Setup cloud deploy pipeline for M2C migrated workload
 
-In this example, you will start from a succefully migrated workload of M4A and create a deployment pipeline using cloud deploy of that migrated workload into your cluster.
+In this example, you will start from a succefully migrated workload of M2C and create a deployment pipeline using cloud deploy of that migrated workload into your cluster.
 You will run a script that will setup the following parts in a project of your choice:  
 1. Cloud Source Repository (git repository hosted on gcp)
 1. Cloud Build Trigger (will trigger automatically on pushed to master)
@@ -13,7 +13,7 @@ You will run a script that will setup the following parts in a project of your c
 1. Clone this repository and cd into this tutorial folder
 ```bash
 git clone https://github.com/GoogleCloudPlatform/migrate-to-containers
-cd migrate-for-anthos-gke/examples/cloud-deploy-pipeline
+cd migrate-to-containers/examples/cloud-deploy-pipeline
 ```
 2. Ensure gcloud is correctly configured
 ```bash

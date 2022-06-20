@@ -2,7 +2,7 @@
 Once your migrated Tomcat applications are running in GKE, you can now expose them externally by replacing the original Apache2 proxy with an Ingress configuration. By default, when configuring an Ingress on GKE, an HTTP Load Balancer is created and mapped to your Kubernetes Services. In order for the Load Balancer to connect to your Tomcats Kubernetes Services, you will need to modify your Tomcat deployments to include a readiness probe and expose the Tomcats ports using a [NodePort](https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport) type services.
 
 ## Updating your Tomcat containers
-To update the petclinic configuration you should apply the changes in bold to the file `~/m4a-apps/tomcat/tomcat-*/tomcat-petclinic/deployment_spec.yaml`:
+To update the petclinic configuration you should apply the changes in bold to the file `~/m2c-apps/tomcat/tomcat-*/tomcat-petclinic/deployment_spec.yaml`:
 <pre><code class="language-yaml">
 apiVersion: apps/v1
 kind: Deployment
@@ -64,12 +64,7 @@ status:
 </code>
 </pre>
 
-You can now apply these changes to your cluster by running the command:
-```
-sed -e "s/\${PROJECT_ID}/${PROJECT_ID}/g" -e "s/\${VERSION}/${VERSION}/g" ~/m4a-apps/tomcat/tomcat-*/tomcat-petclinic/deployment_spec.yaml | kubectl apply -f -
-```
-
-In the same manner, To update the flowcrm configuration you should apply the changes in bold to the file `~/m4a-apps/tomcat/tomcat-*/tomcat-flowcrm/deployment_spec.yaml`:
+In the same manner, To update the flowcrm configuration you should apply the changes in bold to the file `~/m2c-apps/tomcat/tomcat-*/tomcat-flowcrm/deployment_spec.yaml`:
 <pre><code class="language-yaml">
 apiVersion: apps/v1
 kind: Deployment
@@ -133,14 +128,14 @@ status:
 
 and apply these changes to your cluster by running the commands:
 ``` bash
-cd ~/m4a-apps/tomcat
+cd ~/m2c-apps/tomcat
 skaffold run -d gcr.io/${PROJECT_ID}
 ```
 
 Your Tomcat applications can now be exposed by an Ingress
 
 ## Creating an Ingress
-To create an Ingress you should create a file called `~/m4a-apps/ingress.yaml` and paste the yaml below to it:
+To create an Ingress you should create a file called `~/m2c-apps/ingress.yaml` and paste the yaml below to it:
 ``` yaml
 apiVersion: networking.k8s.io/v1
 kind: Ingress
@@ -174,7 +169,7 @@ The above yaml will create an Ingress object and map the paths `/petclinic/*` an
 
 You can now apply the Ingress configuration to your cluster by running the command:
 ``` bash
-kubectl apply -f ~/m4a-apps/ingress.yaml
+kubectl apply -f ~/m2c-apps/ingress.yaml
 ```
 
 You can monitor your Ingress configuration progress by running the command:

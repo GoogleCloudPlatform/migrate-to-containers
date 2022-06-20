@@ -14,8 +14,8 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: m4a-migration-cm
+  name: m2c-migration-cm
 data:
   migration-pipelinerun.yaml: ""
-  m4a-migration.yaml: ""
-  m4a-generateartifacts.yaml: ""
+  m2c-migration.yaml: ""
+  m2c-generateartifacts.yaml: ""

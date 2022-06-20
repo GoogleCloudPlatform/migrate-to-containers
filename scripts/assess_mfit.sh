@@ -13,8 +13,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-mkdir m4a
-cd m4a
+mkdir m2c
+cd m2c
 
 VERSION=`wget -O - https://mfit-release.storage.googleapis.com/latest`
 
@@ -28,7 +28,7 @@ chmod +x mfit
 sudo ./mfit-linux-collect.sh
 
 # Import the VM collection details to mFIT DB
-./mfit discover import m4a-collect-*-*.tar
+./mfit discover import m2c-collect-*-*.tar
 
 # Assess the discovered VMs
 ./mfit assess

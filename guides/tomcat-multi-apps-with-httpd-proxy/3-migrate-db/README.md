@@ -2,8 +2,8 @@
 
 **Note:** It is useful to create a workspace for managing the migrations plans and artifacts. To create such workspace in your cloud shell environment run the commands below:
 ``` bash
-mkdir ~/m4a-apps
-cd ~/m4a-apps
+mkdir ~/m2c-apps
+cd ~/m2c-apps
 ```
 
 Start by creating a folder for your MySQL migration artifacts:
@@ -49,7 +49,7 @@ volumes:
           storage: 10G
 ```
 
-5. Enable M4A enhanced runtime by running the below command:
+5. Enable M2C enhanced runtime by running the below command:
 ``` bash
 sed -i 's/v2kServiceManager: false/v2kServiceManager: true/g' apps-db-migration.yaml
 ```

@@ -1,7 +1,7 @@
 # Assessing your workloads for containerization 
 
 ## Assessing your MySQL VM for containerization
-Migrate to Containers comes with an assessement tool that assesses whether or not a VM is a good candidate for containerization. This tool is called [Migration Fit Assessement Tool (mFIT)](https://cloud.google.com/migrate/containers/docs/fit-assessment) and it is used to collect details about your running VM (collected output is stored on local file system) and then analyze the collected data and assess if the VM is a good candidate for containerization.
+Migrate to Containers comes with an assessment tool that assesses whether or not a VM is a good candidate for containerization. This tool is called [Migration Fit Assessment Tool (mFIT)](https://cloud.google.com/migrate/containers/docs/fit-assessment) and it is used to collect details about your running VM (collected output is stored on local file system) and then analyze the collected data and assess if the VM is a good candidate for containerization.
 
 In order to assess your VM for containerization using the mFIT, you need to ssh into your MySQL VM instance and run the following command:
 ``` bash
@@ -20,7 +20,7 @@ To assess your Tomcat VM for containerization using the mFIT, you need to ssh in
 curl -s https://raw.githubusercontent.com/GoogleCloudPlatform/migrate-to-containers/main/scripts/assess_mfit.sh | bash
 ```
 
-You can view the mFIT analysis report using the Cloud Console UI by following the instructions in the [official documentation](https://cloud.google.com/migrate/containers/docs/fit-assessment#ldt-console). Note that the JSON file should reside in ~/m4a directory.  
+You can view the mFIT analysis report using the Cloud Console UI by following the instructions in the [official documentation](https://cloud.google.com/migrate/containers/docs/fit-assessment#ldt-console). Note that the JSON file should reside in ~/m2c directory.  
 
 You are now ready to start migrating your VMs to containers, starting with [migrating your db](../3-migrate-db/README.md)
 

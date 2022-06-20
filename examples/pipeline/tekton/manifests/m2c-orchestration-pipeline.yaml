@@ -15,7 +15,7 @@
 apiVersion: tekton.dev/v1beta1
 kind: Pipeline
 metadata:
-  name: m4a-orchestration
+  name: m2c-orchestration
 spec:
   workspaces:
     - name: source
@@ -56,7 +56,7 @@ spec:
 
     - name: orchestration
       taskRef:
-        name: m4a-orchestration
+        name: m2c-orchestration
       runAfter:
         - checkout-repo
       workspaces:

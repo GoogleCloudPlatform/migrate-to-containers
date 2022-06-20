@@ -4,7 +4,7 @@ Documentation and code for the Google Migrate to Containers Pipeline. The pipeli
 
 ## Architecture
 
-![Architecture Diagram](docs/assets/m4a-pipeline-architecture.png)
+![Architecture Diagram](docs/assets/m2c-pipeline-architecture.png)
 
 This solution consists of two pipelines, one which orchestrates the process, and the other which runs the migration process for each instance. The orchestration pipeline takes in a CSV file along with supporting migration plan patch files.
 The CSV file defines an instance for each line, and the orchestration pipeline will trigger the migration pipeline for each one.
