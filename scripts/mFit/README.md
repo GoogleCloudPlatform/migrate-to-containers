@@ -1,4 +1,4 @@
-# Fit Assessment
+# Migrate Fit Assessment
 
 Collecting guest level information from multiple VMs may be automated by shell scripting the use of mfit CLI tool. The collection of guest level information can be achieved by leveraging SSH for Linux VMs and VMWare tools for both Linux and Windows VMs. The collection for each VM includes:
 * Uploading the collection script to the VM
@@ -7,7 +7,7 @@ Collecting guest level information from multiple VMs may be automated by shell s
 
 The below sample scripts can be used as a reference to get started with collection at scale and it can be enhanced and modified to satisfy your requirements. Below is a brief explanation on each of the scripts:
 
-**NOTE:** The below scripts expect the `mfit` CLI to be present in the shell PATH. Download and installation instructions can be found [here](https://cloud.google.com/migrate/containers/docs/fit-assessment#installation) and to add the `mfit` binary to the path you can run the command `export PATH=$PATH:~/m4a/mfit` assuming that the binary is placed in the `~/m4a/mfit` directory.
+**NOTE:** The below scripts expect the `mfit` CLI to be present in the shell PATH. Download and installation instructions can be found [here](https://cloud.google.com/migrate/containers/docs/fit-assessment#installation) and to add the `mfit` binary to the path you can run the command `export PATH=$PATH:~/m2c/mfit` assuming that the binary is placed in the `~/m2c/mfit` directory.
 
 1. [mfit_discovery_export_guest_tools.sh](./mfit_discovery_export_guest_tools.sh) - This scripts creates a CSV file with the following fields `NAME;PLATFORM VM ID;OS Family;IP;USERNAME;PASSWORD`. Note that USERNAME and PASSWORD will always be empty and can be modified manually to set a unique USERNAME and PASSWORD for guest collection using one of the below scripts. See a sample CSV at [sample_vms.csv](./sample_vms.csv). The output of this script can be used as an input to the script [mfit_collect_vms_guest_tools.sh](./mfit_collect_vms_guest_tools.sh)
 2. [mfit_discovery_export_ssh.sh](./mfit_discovery_export_ssh.sh) - This scripts creates a CSV file with the following fields `NAME;PLATFORM VM ID;OS Family;IP;USERNAME;PASSWORD`. Note that USERNAME and PASSWORD will always be empty and can be modified manually to set a unique USERNAME and PASSWORD for guest collection using one of the below scripts. See a sample CSV at [sample_vms.csv](./sample_vms.csv). The output of this script can be used as an input to the scripts [mfit_collect_vms_ssh_password.sh](./mfit_collect_vms_ssh_password.sh) and [mfit_collect_vms_ssh_key.sh](./mfit_collect_vms_ssh_key.sh)

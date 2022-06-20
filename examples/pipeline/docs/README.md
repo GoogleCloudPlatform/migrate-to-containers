@@ -101,11 +101,11 @@ The pipeline run should use the pre-created service account from installation, a
 apiVersion: tekton.dev/v1beta1
 kind: PipelineRun
 metadata:
-  name: m4a-run
+  name: m2c-run
 spec:
-  serviceAccountName: m4a-service-account
+  serviceAccountName: m2c-service-account
   pipelineRef:
-    name: m4a-orchestration
+    name: m2c-orchestration
   params:
     - name: gitURL
       value: # Input Git repository URL
@@ -150,7 +150,7 @@ Then we should eventually see the following output from `tkn pr list`
 NAME               STARTED      DURATION     STATUS
 frontend           1 week ago   10 minutes   Succeeded
 backend            1 week ago   9 minutes    Succeeded
-m4a-run            1 week ago   11 minutes   Succeeded
+m2c-run            1 week ago   11 minutes   Succeeded
 ```
 
 If one of the pipelines fails, then the detailed logs can be viewed with `tkn pr logs {pipeline-run-name}`. The error details will be found in the migration pipeline logs, while the orchestration logs can contain pre-validation errors and monitoring status.

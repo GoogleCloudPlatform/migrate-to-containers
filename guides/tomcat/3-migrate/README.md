@@ -2,8 +2,8 @@
 
 **Note:** It is useful to create a workspace for managing the migrations plans and artifacts. To create such workspace in your cloud shell environment run the commands below:
 ``` bash
-mkdir ~/m4a-petclinic
-cd ~/m4a-petclinic
+mkdir ~/m2c-petclinic
+cd ~/m2c-petclinic
 ```
 
 ## Migrating your MySQL VM to container
@@ -52,7 +52,7 @@ volumes:
           storage: 10G
 ```
 
-6. Enable M4A enhanced runtime by running the below command:
+6. Enable M2C enhanced runtime by running the below command:
 ``` bash
 sed -i 's/v2kServiceManager: false/v2kServiceManager: true/g' petclinic-db-migration.yaml
 ```
@@ -92,8 +92,8 @@ Then find the kubernetes service named `petclinic-mysql-mysqld` and remove the t
 ## Migrating your Tomcat VM to container
 Start by creating a folder for your Tomcat migration artifacts:
 ``` bash
-mkdir ~/m4a-petclinic/tomcat
-cd ~/m4a-petclinic/tomcat
+mkdir ~/m2c-petclinic/tomcat
+cd ~/m2c-petclinic/tomcat
 ```
 1. Before migrating a GCE VM using Migrate to Containers you must turn off the VM. Turn it off by running the command:  
 ``` bash

@@ -16,9 +16,9 @@ kind: PipelineRun
 metadata:
   name: __placeholder__
 spec:
-  serviceAccountName: m4a-service-account
+  serviceAccountName: m2c-service-account
   pipelineRef:
-    name: m4a-migration
+    name: m2c-migration
   workspaces:
     - name: source
       emptyDir: {}

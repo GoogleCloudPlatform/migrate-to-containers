@@ -14,7 +14,7 @@
 apiVersion: tekton.dev/v1beta1
 kind: Pipeline
 metadata:
-  name: m4a-migration
+  name: m2c-migration
 spec:
   workspaces:
     - name: source
@@ -38,7 +38,7 @@ spec:
     - name: planPatchConfigMapName
       type: string
       description: Path where plan patches are mounted
-      default: m4a-empty-patch-cm
+      default: m2c-empty-patch-cm
     - name: migrationDataConfigFile
       type: string
       description: The data config file name for the migration plan.
@@ -49,7 +49,7 @@ spec:
   tasks:
     - name: migration
       taskRef:
-        name: m4a-migration
+        name: m2c-migration
       workspaces:
         - name: source
           workspace: source

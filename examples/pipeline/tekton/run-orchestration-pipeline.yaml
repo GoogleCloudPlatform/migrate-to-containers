@@ -15,11 +15,11 @@
 apiVersion: tekton.dev/v1beta1
 kind: PipelineRun
 metadata:
-  name: m4a-run
+  name: m2c-run
 spec:
-  serviceAccountName: m4a-service-account
+  serviceAccountName: m2c-service-account
   pipelineRef:
-    name: m4a-orchestration
+    name: m2c-orchestration
   params:
     - name: gitURL
       value: git@github.com:GoogleCloudPlatform/migrate-to-containers.git

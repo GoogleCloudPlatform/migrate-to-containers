@@ -28,13 +28,13 @@ kubectl apply -f tekton/manifests/tekton-cluster-role-bindings.yaml
 
 echo ""
 echo "Creating ConfigMaps"
-kubectl create configmap m4a-empty-patch-cm
+kubectl create configmap m2c-empty-patch-cm
 
-TMP_YAML=m4a-migration-configmap.yaml.tmp
+TMP_YAML=m2c-migration-configmap.yaml.tmp
 
-yaml_inject_block tekton/manifests/migration-pipelinerun.yaml '.data."migration-pipelinerun.yaml"' tekton/manifests/m4a-migration-configmap.yaml > $TMP_YAML
-yaml_inject_block tekton/manifests/m4a-migration.yaml '.data."m4a-migration.yaml"' $TMP_YAML > $TMP_YAML.1
-yaml_inject_block tekton/manifests/m4a-generateartifacts.yaml '.data."m4a-generateartifacts.yaml"' $TMP_YAML.1 > $TMP_YAML.2
+yaml_inject_block tekton/manifests/migration-pipelinerun.yaml '.data."migration-pipelinerun.yaml"' tekton/manifests/m2c-migration-configmap.yaml > $TMP_YAML
+yaml_inject_block tekton/manifests/m2c-migration.yaml '.data."m2c-migration.yaml"' $TMP_YAML > $TMP_YAML.1
+yaml_inject_block tekton/manifests/m2c-generateartifacts.yaml '.data."m2c-generateartifacts.yaml"' $TMP_YAML.1 > $TMP_YAML.2
 
 kubectl apply -f $TMP_YAML.2
 rm $TMP_YAML*
@@ -43,9 +43,9 @@ echo ""
 echo "Creating Tasks"
 kubectl apply -f tekton/manifests/git-clone.yaml
 
-TMP_YAML=m4a-migration-task.yaml.tmp
+TMP_YAML=m2c-migration-task.yaml.tmp
 
-yaml_inject_block tekton/scripts/create-migration.py .spec.steps[0].script tekton/manifests/m4a-migration-task.yaml > $TMP_YAML
+yaml_inject_block tekton/scripts/create-migration.py .spec.steps[0].script tekton/manifests/m2c-migration-task.yaml > $TMP_YAML
 yaml_inject_block tekton/scripts/wait-for-migration.py .spec.steps[1].script $TMP_YAML > $TMP_YAML.1
 yaml_inject_block tekton/scripts/customize-migration-plan.py .spec.steps[2].script $TMP_YAML.1 > $TMP_YAML.2
 yaml_inject_block tekton/scripts/execute-migration.py .spec.steps[3].script $TMP_YAML.2 > $TMP_YAML.3
@@ -54,10 +54,10 @@ yaml_inject_block tekton/scripts/wait-for-migration.py .spec.steps[4].script $TM
 kubectl apply -f $TMP_YAML.4
 rm $TMP_YAML*
 
-yaml_inject_block tekton/scripts/migration-orchestration.py .spec.steps[0].script tekton/manifests/m4a-orchestration-task.yaml \
+yaml_inject_block tekton/scripts/migration-orchestration.py .spec.steps[0].script tekton/manifests/m2c-orchestration-task.yaml \
     | kubectl apply -f -
 
 echo ""
 echo "Creating Pipelines"
-kubectl apply -f tekton/manifests/m4a-migration-pipeline.yaml
-kubectl apply -f tekton/manifests/m4a-orchestration-pipeline.yaml
+kubectl apply -f tekton/manifests/m2c-migration-pipeline.yaml
+kubectl apply -f tekton/manifests/m2c-orchestration-pipeline.yaml

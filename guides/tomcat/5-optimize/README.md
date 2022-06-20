@@ -14,7 +14,7 @@ replicas: 3
 ``  
 then run the command below to apply the changes:
 ``` bash
-cd ~/m4a-petclinic/tomcat
+cd ~/m2c-petclinic/tomcat
 skaffold run -d gcr.io/${PROJECT_ID}
 ```
 

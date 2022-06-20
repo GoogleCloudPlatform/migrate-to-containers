@@ -33,4 +33,3 @@ gcloud container clusters get-credentials m2c-proc-cluster --zone ${ZONE_ID} --p
 
 # run migctl install
 migctl setup install --json-key=m2c-install.json
-

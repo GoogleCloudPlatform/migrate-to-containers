@@ -2,8 +2,8 @@
 
 **Note:** It is useful to create a workspace for managing the migrations plans and artifacts. To create such workspace in your cloud shell environment run the commands below:
 ``` bash
-mkdir ~/m4a-petclinic
-cd ~/m4a-petclinic
+mkdir ~/m2c-petclinic
+cd ~/m2c-petclinic
 ```
 
 ## Migrating your PostgreSQL VM to container
@@ -50,7 +50,7 @@ volumes:
           storage: 10G
 ```
 
-5. Enable M4A enhanced runtime by running the below command:
+5. Enable M2C enhanced runtime by running the below command:
 ``` bash
 sed -i 's/v2kServiceManager: false/v2kServiceManager: true/g' petclinic-db-migration.yaml
 ```
@@ -90,8 +90,8 @@ Then find the kubernetes service named `petclinic-postgres-postgres` and remove 
 ## Migrating your Tomcat VM to container
 Start by creating a folder for your Tomcat migration artifacts:
 ``` bash
-mkdir ~/m4a-petclinic/tomcat
-cd ~/m4a-petclinic/tomcat
+mkdir ~/m2c-petclinic/tomcat
+cd ~/m2c-petclinic/tomcat
 ```
 1. Before migrating a GCE VM using Migrate to Containers you must turn off the VM. Turn it off by running the command:  
 ``` bash
@@ -114,7 +114,7 @@ migctl migration get petclinic-migration
 ```
 It will create a file on your local file system called **petclinic-migration.yaml**. You can now open it in cloud shell editor by running the command `edit petclinic-migration.yaml`.
 
-4. Enable M4A enhanced runtime by running the below command:
+4. Enable M2C enhanced runtime by running the below command:
 ``` bash
 sed -i 's/v2kServiceManager: false/v2kServiceManager: true/g' petclinic-migration.yaml
 ```

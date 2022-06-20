@@ -1,8 +1,8 @@
 # Migrating your Tomcat Applications to containers
 Start by creating a folder for your Tomcat migration artifacts:
 ``` bash
-mkdir ~/m4a-apps/tomcat
-cd ~/m4a-apps/tomcat
+mkdir ~/m2c-apps/tomcat
+cd ~/m2c-apps/tomcat
 ```
 1. Before migrating a GCE VM using Migrate to Containers you must turn off the VM. Turn it off by running the command:  
 ``` bash

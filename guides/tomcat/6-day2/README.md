@@ -11,7 +11,7 @@ When running the command you'll be prompted with a number of question, please fo
 ### Create the repository
 In order to create a new repository you should run the command:
 ``` bash
-gcloud source repos create m4a-petclinic
+gcloud source repos create m2c-petclinic
 ``` 
 
 ### Prepare your source code
@@ -24,11 +24,11 @@ rm -rf ~/cloudshell_open/spring-petclinic/.git
 ``` bash
 cd ~/cloudshell_open/spring-petclinic/
 git init
-git remote add google https://source.developers.google.com/p/$PROJECT_ID/r/m4a-petclinic
+git remote add google https://source.developers.google.com/p/$PROJECT_ID/r/m2c-petclinic
 ```
 3. Copy the Cloud Build yaml file(tomcat/tomcat-petclinic/cloudbuild.yaml) to build and push a new docker image to your container registry
 ``` bash
-cp ~/m4a-petclinic/tomcat/tomcat-petclinic/cloudbuild.yaml .
+cp ~/m2c-petclinic/tomcat/tomcat-petclinic/cloudbuild.yaml .
 ```
 The Cloud Build yaml should look as below:
 ``` yaml
@@ -49,9 +49,9 @@ sed -i 's/apps\/petclinic.war/target\/petclinic.war/' cloudbuild.yaml
 
 5. Copy the Tomcat configuration, logging config and additional files archives that were generated during the migration:
 ``` bash
-cp ~/m4a-petclinic/tomcat/tomcat-petclinic/catalinaHome.tar.gz .
-cp ~/m4a-petclinic/tomcat/tomcat-petclinic/logConfigs.tar.gz .
-cp ~/m4a-petclinic/tomcat/tomcat-petclinic/additionalFiles.tar.gz .
+cp ~/m2c-petclinic/tomcat/tomcat-petclinic/catalinaHome.tar.gz .
+cp ~/m2c-petclinic/tomcat/tomcat-petclinic/logConfigs.tar.gz .
+cp ~/m2c-petclinic/tomcat/tomcat-petclinic/additionalFiles.tar.gz .
 ```
 ### Commit and push your changes
 1. Stage all files to be added to your git repository
@@ -70,7 +70,7 @@ git push --all google
 Create a cloud build trigger that will automatically build a new image on every push to the master branch
 ``` bash
 gcloud beta builds triggers create cloud-source-repositories \
---repo=m4a-petclinic \
+--repo=m2c-petclinic \
 --branch-pattern=master \
 --build-config=cloudbuild.yaml
 ```

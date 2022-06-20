@@ -15,7 +15,7 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: m4a-access
+  name: m2c-access
   namespace: v2k-system
 rules:
 - apiGroups:

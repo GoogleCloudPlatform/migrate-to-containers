@@ -15,7 +15,7 @@
 apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
-  name: m4a-migration
+  name: m2c-migration
 spec:
   workspaces:
     - name: source
@@ -31,7 +31,7 @@ spec:
     - name: planPatchConfigMapName
       type: string
       description: Path where plan patches are mounted
-      default: m4a-empty-patch-cm
+      default: m2c-empty-patch-cm
     - name: migrationName
       type: string
       description: Name of the migration.
@@ -56,17 +56,17 @@ spec:
       type: string
       description: The image used to run the python steps. Requires Python 3.9 with PyYAML and jsonpatch packages and kubectl.
   volumes:
-    - name: m4a-manifest-templates
+    - name: m2c-manifest-templates
       configMap:
-        name: m4a-migration-cm
-    - name: m4a-plan-patches
+        name: m2c-migration-cm
+    - name: m2c-plan-patches
       configMap:
         name: $(params.planPatchConfigMapName)
   steps:
     - name: migration-create
       image: $(params.image)
       args:
-        - $(params.manifestTemplatePath)/m4a-migration.yaml
+        - $(params.manifestTemplatePath)/m2c-migration.yaml
         - $(params.migrationName)
         - $(params.migrationVmId)
         - $(params.migrationSource)
@@ -74,7 +74,7 @@ spec:
       workingDir: "$(workspaces.source.path)"
       script: ""
       volumeMounts:
-        - name: m4a-manifest-templates
+        - name: m2c-manifest-templates
           mountPath: "$(params.manifestTemplatePath)"
 
     - name: wait-for-plan-generate
@@ -95,19 +95,19 @@ spec:
       workingDir: "$(params.planPatchPath)"
       script: ""
       volumeMounts:
-        - name: m4a-plan-patches
+        - name: m2c-plan-patches
           mountPath: "$(params.planPatchPath)"
 
     - name: execute-migration
       image: $(params.image)
       args:
-        - $(params.manifestTemplatePath)/m4a-generateartifacts.yaml
+        - $(params.manifestTemplatePath)/m2c-generateartifacts.yaml
         - $(params.migrationName)
         - $(params.migrationAppType)
       workingDir: "$(workspaces.source.path)"
       script: ""
       volumeMounts:
-        - name: m4a-manifest-templates
+        - name: m2c-manifest-templates
           mountPath: "$(params.manifestTemplatePath)"
 
     - name: monitor-execution
