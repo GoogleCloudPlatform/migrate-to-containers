@@ -33,14 +33,15 @@ read -r -p "Default username: " DEFAULT_USER
 
 echo ""
 
-while IFS=";" read -r vm_name vm_id collected_data os ip username password
+while IFS=";" read -r vm_name vm_id os ip username password
 do
    if [ -z "$username" ]
     then
       username=$DEFAULT_USER
     fi
 
-    if [ "$os" = "Linux" ]
+    shopt -s nocasematch # case insenitive match
+    if [[ "$os" == *"linux"* ]] || [[ "$os" == *"ubuntu"* ]] || [[ "$os" == *"centos"* ]];
     then
       if [ ! -z "$ip" ]
       then
