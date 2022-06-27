@@ -40,7 +40,8 @@ do
           password=$DEFAULT_PASSWORD
     fi
 
-    if [ "$os" = "Linux" ]
+    shopt -s nocasematch # case insensitive match
+    if [[ "$os" == *"linux"* ]] || [[ "$os" == *"ubuntu"* ]] || [[ "$os" == *"centos"* ]];
     then
       if [ ! -z "$ip" ]
       then
