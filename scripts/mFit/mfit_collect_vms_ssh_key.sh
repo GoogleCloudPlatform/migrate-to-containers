@@ -33,7 +33,7 @@ read -r -p "Default username: " DEFAULT_USER
 
 echo ""
 
-while IFS=";" read -r vm_name vm_id collected_data os ip username password
+while IFS=";" read -r vm_name vm_id os ip username password
 do
    if [ -z "$username" ]
     then
