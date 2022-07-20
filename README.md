@@ -11,6 +11,8 @@ This repository is split into three categories:
 
 [Scripts](./scripts) - Helper scripts to help with both migrated images and setup of processing and deployment clusters. 
 
+[CRD References](./references/crds/m2c-crds.md) - A reference to the Migrate to Containers API
+
 # Contributions
 
 Please see the [contributing guidelines](./CONTRIBUTING)
