@@ -1,6 +1,7 @@
 # Tomcat migration plan structure
 
-Following is the full Tomcat migration plan structure. the migration plan yaml file is represented by _[ExtractionConfig](#extractionconfig)_ structure:
+Following is the full Tomcat migration plan structure. 
+The migration plan yaml file is represented by _[ExtractionConfig](#extractionconfig)_ structure.
 
 ### ExtractionConfig
 | Field | Description |
@@ -17,7 +18,7 @@ _Appears in:_
 | `name` _string_ | Name of the Tomcat server |
 | `catalinaBase` _string_ | Value of CATALINA_BASE |
 | `catalinaHome` _string_ | Value of CATALINA_HOME |
-| `images` _[Image](#image) array_ | A list of container images each for a Tomcat host |
+| `images` _[Image](#image) array_ | A list of container images, each for a Tomcat host |
 
 ### ConfigResource
 _Appears in:_
@@ -26,7 +27,6 @@ _Appears in:_
 | Field | Description |
 | --- | --- |
 | `memory` _[Memory](#memory)_ | Memory configuration |
-| `catalinaOpts` _string_ | we consider this option "advanced" so it is hidden if unset |
 
 ### Image
 _Appears in:_
@@ -38,9 +38,9 @@ _Appears in:_
 | `additionalFiles` _string array_ |  External paths required for running the Tomcat server or apps. |
 | `resources` _[ConfigResource](#configresource)_ | Container resources. |
 | `logConfigPaths` _string array_ | Log Configuration paths for the Tomcat apps. |
-| `applications` _string array_ | list of application paths to migrate. |
-| `ports` _integer array_ |  tcp ports used by the host related to this image. |
-| `fromImage` _string_ | Teh detected Tomcat version. |
+| `applications` _string array_ | List of application paths to migrate. |
+| `ports` _integer array_ |  TCP ports used by the host related to this image. |
+| `fromImage` _string_ | The detected Tomcat version. |
 | `sensitiveDataPaths` _string array_ | Files and directories that will be uploaded to the artifact repository. |
 | `probes` _[Probes](#probes)_ | Health probes configuration. |
 
@@ -50,8 +50,8 @@ _Appears in:_
 
 | Field | Description |
 | --- | --- |
-| `requests` _string_ | Container initial memory request |
-| `limits` _string_ |  Container maximum memory limit |
+| `requests` _string_ | Container initial memory request size. [Memory resource unit](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/#meaning-of-memory){:target="_blank" class="external"} |
+| `limits` _string_ |  Container maximum memory limit. [Memory resource unit](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/#meaning-of-memory){:target="_blank" class="external"} |
 
 
 ### Probes
@@ -59,7 +59,7 @@ _Appears in:_ - [Image](#image)
 
 | Field | Description |
 | --- | --- |
-| `livenessProbe` _[Probe](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#probe-v1-core)_ | Periodic probe of container liveness. Container will be restarted if the probe fails. |
-| `readinessProbe` _[Probe](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#probe-v1-core)_ | Periodic probe of container service readiness. Container will be removed from service endpoints if the probe fails.  |
-| `startupProbe` _[Probe](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#probe-v1-core)_ | StartupProbe indicates that the Pod has successfully initialized. If specified, no other probes are executed until this completes successfully. |
+| `livenessProbe` _[Probe](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#probe-v1-core){:target="_blank" class="external"}_ | Periodic probe of container liveness. Container will be restarted if the probe fails. |
+| `readinessProbe` _[Probe](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#probe-v1-core){:target="_blank" class="external"}_ | Periodic probe of container service readiness. Container will be removed from service endpoints if the probe fails.  |
+| `startupProbe` _[Probe](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#probe-v1-core){:target="_blank" class="external"}_ | StartupProbe indicates that the Pod has successfully initialized. If specified, no other probes are executed until this completes successfully. |
 
