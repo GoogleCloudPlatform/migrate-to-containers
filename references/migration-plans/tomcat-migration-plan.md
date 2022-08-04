@@ -50,8 +50,8 @@ _Appears in:_
 
 | Field | Description |
 | --- | --- |
-| `requests` _string_ | Container initial memory request size. [Memory resource unit](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/#meaning-of-memory){:target="_blank" class="external"} |
-| `limits` _string_ |  Container maximum memory limit. [Memory resource unit](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/#meaning-of-memory){:target="_blank" class="external"} |
+| `requests` _string_ | Container initial memory request size. [Memory resource unit](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/#meaning-of-memory) |
+| `limits` _string_ |  Container maximum memory limit. [Memory resource unit](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/#meaning-of-memory) |
 
 
 ### Probes
@@ -59,7 +59,7 @@ _Appears in:_ - [Image](#image)
 
 | Field | Description |
 | --- | --- |
-| `livenessProbe` _[Probe](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#probe-v1-core){:target="_blank" class="external"}_ | Periodic probe of container liveness. Container will be restarted if the probe fails. |
-| `readinessProbe` _[Probe](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#probe-v1-core){:target="_blank" class="external"}_ | Periodic probe of container service readiness. Container will be removed from service endpoints if the probe fails.  |
-| `startupProbe` _[Probe](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#probe-v1-core){:target="_blank" class="external"}_ | StartupProbe indicates that the Pod has successfully initialized. If specified, no other probes are executed until this completes successfully. |
+| `livenessProbe` _[Probe](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#probe-v1-core)_ | Periodic probe of container liveness. Container will be restarted if the probe fails. |
+| `readinessProbe` _[Probe](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#probe-v1-core)_ | Periodic probe of container service readiness. Container will be removed from service endpoints if the probe fails.  |
+| `startupProbe` _[Probe](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#probe-v1-core)_ | StartupProbe indicates that the Pod has successfully initialized. If specified, no other probes are executed until this completes successfully. |
 
