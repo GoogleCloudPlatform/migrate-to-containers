@@ -15,9 +15,9 @@ _Appears in:_
 
 | Field | Description |
 | --- | --- |
-| `name` _string_ | Name of the Tomcat server |
-| `catalinaBase` _string_ | Value of CATALINA_BASE |
-| `catalinaHome` _string_ | Value of CATALINA_HOME |
+| `name` _string_ | Name of the Tomcat server. |
+| `catalinaBase` _string_ | Value of CATALINA_BASE. |
+| `catalinaHome` _string_ | Value of CATALINA_HOME .|
 | `images` _[Image](#image) array_ | A list of container images, each for a Tomcat host |
 
 ### ConfigResource
