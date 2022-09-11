@@ -22,8 +22,12 @@
 
 err=$(mktemp --tmpdir mfit-discovery-export-err-XXXX)
 
+# [START export]
+
 vms=$(mfit report --format csv | tail -n +2 | awk -F ',' '{; print $2";"$3";"$4";;;"}')
 printf "%s\n" "Name;Platform VM ID;OS Family;IP;USERNAME;PASSWORD"
 printf "%s\n" "$vms"
+
+# [END export]
 
 rm $err

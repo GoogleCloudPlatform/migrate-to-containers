@@ -20,6 +20,8 @@
 #
 err=$(mktemp --tmpdir mfit-guest-err-XXXX)
 
+# [START collect]
+
 url_regex='^https?://[-A-Za-z0-9\+&@#/%?=~_|!:,.;]*[-A-Za-z0-9\+&@#/%=~_|]\.[-A-Za-z0-9\+&@#/%?=~_|!:,.;]*[-A-Za-z0-9\+&@#/%=~_|]$'
 
 read -r -p "CSV file name: " CSV_FILE
@@ -64,5 +66,7 @@ do
       echo "Skipping VM: $vm_name because it has no VM ID"
     fi
  done < <(tail -n +1 $CSV_FILE)
+
+# [END collect]
 
 rm $err
