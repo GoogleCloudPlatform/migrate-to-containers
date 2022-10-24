@@ -580,7 +580,7 @@ _Appears in:_
 
 
 
-AppXPlugin is the Schema for the appxplugins API
+AppXPlugin describes the discovery and extraction images used for application migration.
 
 _Appears in:_
 - [AppXPluginList](#appxpluginlist)
@@ -589,9 +589,9 @@ _Appears in:_
 | --- | --- |
 | `apiVersion` _string_ | `anthos-migrate.cloud.google.com/v1beta2`
 | `kind` _string_ | `AppXPlugin`
-| `metadata` _[ObjectMeta](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#objectmeta-v1-meta)_ | Refer to Kubernetes API documentation for fields of `metadata`. |
-| `spec` _[AppXPluginSpec](#appxpluginspec)_ |  |
-| `status` _[AppXPluginStatus](#appxpluginstatus)_ |  |
+| `metadata` _[ObjectMeta](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#objectmeta-v1-meta)_ | Standard object's metadata. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadata |
+| `spec` _[AppXPluginSpec](#appxpluginspec)_ | Specification of the desired behavior of AppXPlugin. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status |
+| `status` _[AppXPluginStatus](#appxpluginstatus)_ | Most recently observed status of AppXPlugin.This data may not be up to date. Populated by the system. Read-only. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status |
 
 
 #### AppXPluginList
@@ -606,31 +606,31 @@ AppXPluginList contains a list of AppXPlugin
 | --- | --- |
 | `apiVersion` _string_ | `anthos-migrate.cloud.google.com/v1beta2`
 | `kind` _string_ | `AppXPluginList`
-| `metadata` _[ListMeta](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#listmeta-v1-meta)_ | Refer to Kubernetes API documentation for fields of `metadata`. |
-| `items` _[AppXPlugin](#appxplugin) array_ |  |
+| `metadata` _[ListMeta](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#listmeta-v1-meta)_ | Standard list metadata. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds |
+| `items` _[AppXPlugin](#appxplugin) array_ | | List of AppXPlugins. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md |
 
 
 #### AppXPluginSpec
 
 
 
-AppXPluginSpec defines the desired state of AppXPlugin
+AppXPluginSpec is a description of AppXPlugin.
 
 _Appears in:_
 - [AppXPlugin](#appxplugin)
 
 | Field | Description |
 | --- | --- |
-| `discoverImage` _string_ | INSERT ADDITIONAL SPEC FIELDS - desired state of cluster Important: Run "make" to regenerate code after modifying this file |
-| `discoverCommand` _string array_ |  |
-| `generateArtifactsImage` _string_ |  |
-| `generateArtifactsCommand` _string array_ |  |
-| `imagePullSecrets` _[LocalObjectReference](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#localobjectreference-v1-core) array_ |  |
-| `validationSchema` _string_ |  |
-| `osType` _[OsType](#ostype)_ |  |
-| `configs` _[Configs](#configs)_ |  |
-| `parameterDefs` _[ParameterDef](#parameterdef) array_ |  |
-| `defaultArguments` _[Parameter](#parameter) array_ |  |
+| `compatibleVersion` _string_ | CompatibleVersion is the minimal Migrate to Containers version that is compatible with the AppXPlugin. |
+| `discoverImage` _string_ | Name of the Discover container image. More info: https://kubernetes.io/docs/concepts/containers/images/#image-names |
+| `discoverCommand` _string array_ | Entrypoint array for the Discover container. |
+| `generateArtifactsImage` _string_ | Name of the GenerateArtifacts container image. More info: https://kubernetes.io/docs/concepts/containers/images/#image-names |
+| `generateArtifactsCommand` _string array_ | Entrypoint array for the GenerateArtifacts container. |
+| `imagePullSecrets` _[LocalObjectReference](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#localobjectreference-v1-core) array_ | ImagePullSecrets is an optional list of references to secrets in the same namespace, used for pulling any of the images used by Discover and GenerateArtifacts pods. More info: https://kubernetes.io/docs/concepts/containers/images#specifying-imagepullsecrets-on-a-pod |
+| `validationSchema` _string_ | JSON scheme used for validating the scheme of the AppXPlugin. More info: http://json-schema.org |
+| `osType` _[OsType](#ostype)_ | Specifies the OS of VMs that are suitable for migration using the AppXPlugin. Valid options are: Linux, Windows. Defaults to Linux. |
+| `parameterDefs` _[ParameterDef](#parameterdef) array_ | ParameterDef list. Defines environment variables that can be used by the Discover and GenerateArtifacts containers. |
+| `defaultArguments` _[Parameter](#parameter) array_ | Parameter list. Sets default values of environment variable defined by ParameterDefs. |
 
 
 
@@ -2311,8 +2311,8 @@ _Appears in:_
 
 | Field | Description |
 | --- | --- |
-| `name` _string_ |  |
-| `value` _string_ |  |
+| `name` _string_ | Name of the Parameter. Must contain only alphanumeric characters ([a-z0-9A-Z]) or underscores (_). Must match the name of existing ParameterDef. |
+| `value` _string_ | Default value of the environment variable. |
 
 
 #### ParameterDef
@@ -2326,9 +2326,9 @@ _Appears in:_
 
 | Field | Description |
 | --- | --- |
-| `name` _string_ |  |
-| `envVar` _string_ |  |
-| `usage` _string_ |  |
+| `name` _string_ | Name of the ParameterDef. Must contain only alphanumeric characters ([a-z0-9A-Z]) or underscores (_). |
+| `envVar` _string_ | Name of the environment variable. Seen by the Discover and GenerateArtifacts containers. Must be a C_IDENTIFIER ([A-Za-z_][A-Za-z0-9_]*). It is recommended to use a unique name, prefixed by the AppXPlugin provider domain and AppXPlugin names. |
+| `usage` _string_ | Description of the ParameterDef in plain text. |
 
 
 #### PasswordRef
