@@ -1,0 +1,20 @@
+# CRD example - create Source Provider for cloud/vmware
+# support Azure, AWS and vmware
+# [START source]
+kind: SourceProvider
+metadata:
+  name: <var>migration-source-name</var>
+spec:
+  migrateForCE:
+    management:
+      address: <var>manager-ip-address</var>
+      cloudDetails:
+        platform: <var>aws | azure | vmware</var>
+        name: <var>Name of the source, as configured in {{migrate_compute_engine_name_short}}</var>
+      cloudExtension: <var>ID or name of the {{product_name_short}} extension</var>
+      password:
+        # Password for your {{migrate_compute_engine_name_short}} management server.
+        secretRef:
+          name: <var>secret-name</var>
+          namespace: v2k-system
+# [END source]

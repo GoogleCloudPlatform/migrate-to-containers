@@ -1,0 +1,16 @@
+# CRD example - create Source Provider for Anthos clusters on AWS
+# [START anthos_aws_source]
+apiVersion: anthos-migrate.cloud.google.com/v1beta2
+kind: SourceProvider
+metadata:
+  name: <var>migration-source-name</var>
+spec:
+  localAws:
+    # Google Cloud region of cluster.
+    region: <var>google-cloud-region</var>
+    accessKeyId: <var>access-key-id</var>
+    secretAccessKey:
+      secretRef:
+        name: <var>secret-name</var>
+        namespace: v2k-system
+# [END anthos_aws_source]

@@ -1,0 +1,14 @@
+# CRD example - create Source Provider for compute engine
+# [START ce_source]
+apiVersion: anthos-migrate.cloud.google.com/v1beta2
+kind: SourceProvider
+metadata:
+  name: <var>migration-source-name</var>
+spec:
+  gce:
+    project: my-project
+    serviceAccount:
+      secretRef:
+        name: <var>secret-name</var>
+        namespace: v2k-system
+# [END ce_source]

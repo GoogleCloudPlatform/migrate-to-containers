@@ -1,0 +1,17 @@
+# CRD example - create Source Provider for anthos on local vmware
+# This used also for BareMetal
+# [START local_vmware_source]
+apiVersion: anthos-migrate.cloud.google.com/v1beta2
+kind: SourceProvider
+metadata:
+  name: <var>migration-source-name</var>
+spec:
+  localVmware:
+    address: <var>vcenter-address</var>
+    username: <var>vcenter-username</var>
+    password:
+      # Password for your vcenter.
+      secretRef:
+        name: <var>vcenter-name</var>
+        namespace: v2k-system
+# [END local_vmware_source]
