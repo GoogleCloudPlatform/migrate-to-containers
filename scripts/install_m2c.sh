@@ -26,7 +26,7 @@ gcloud iam service-accounts keys create m2c-install.json --iam-account=m2c-insta
 
 # create a GKE processing cluster
 gcloud container clusters create m2c-proc-cluster \
- --project ${PROJECT_ID} --zone=${ZONE_ID} --num-nodes 1 --machine-type "n1-standard-4" --image-type "UBUNTU" --enable-stackdriver-kubernetes
+ --project ${PROJECT_ID} --zone=${ZONE_ID} --num-nodes 1 --machine-type "n1-standard-4" --image-type "ubuntu_containerd"
 
 # connect to GKE cluster
 gcloud container clusters get-credentials m2c-proc-cluster --zone ${ZONE_ID} --project ${PROJECT_ID}
