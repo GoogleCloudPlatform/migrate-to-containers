@@ -1,0 +1,97 @@
+# Your workload seems to support the new runtime which is more compatible with various GKE services, faster on start time and enables workload deployment to GKE Autopilot and Cloud Run. To use the new runtime, please change v2kServiceManager value to true.
+v2kServiceManager: false
+global:
+  # Files and directories to exclude from the migration, in rsync format.
+  filters:
+  - '- *.swp'
+  - '- /etc/fstab'
+  - '- /boot/'
+  - '- /proc/kcore'
+  - '- /tmp/*'
+  - '- /var/log/*.log*'
+  - '- /var/log/*/*.log*'
+  - '- /var/log/faillog'
+  - '- /var/log/lastlog'
+  - '- /var/log/[wb]tmp*'
+  - '- /var/cache/*'
+  - '- /var/log/journal/'
+  - '- /var/m4a/*'
+
+    ## The data folders below are too large to be included in the docker image.
+    ## Consider uncommenting and placing them under either the global filters
+    ## or the data folder section.
+    # - '- /a' # (1.8GB, last access 2022-02-02 10:50:30, last modified 2020-02-02 10:50:30)
+    # - '- /a/c' # (1.8GB, last access 2022-02-02 10:50:30, last modified 2020-02-02 10:50:30)
+
+    ## Sparse files will fail the run of a docker image. Consider excluding the below
+    ## detected files and any other sparse files by uncommenting and placing them in
+    ## the global filters section, or export them to a persistent volume by specifying
+    ## them in the data folder section.
+    # - '- /a/b' # (1.8GB, last access 2022-02-02 10:50:30, last modified 2020-02-02 10:50:30)
+  # - '- /a/d' # (1.8GB, last access 2022-02-02 10:50:30, last modified 2020-02-02 10:50:30)
+image:
+
+  # Review and set the name for extracted non-runnable base image, if an image tag is not specified, a random tag will be auto-generated when the image is built.
+  base: centos-mini-non-runnable-base
+
+  # Review and set the name for runnable container image, if an image tag is not specified, a random tag will be auto-generated when the image is built.
+  name: centos-mini
+
+  # Disable system services that do not need to be executed at the migrated workload containers.
+  # Enable the 'probed' property to include system services in the container health checks.
+  systemServices:
+  - enabled: true
+    name: apache2
+    probed: true
+  - enabled: true
+    name: atd
+    probed: false
+deployment:
+
+  # Review and set the app-name for your StatefulSet or Deployment YAML spec.
+  appName: centos-mini
+
+  # Deploy network objects to allow easy access to open ports.
+
+  endpoints:
+  - name: centos-mini-httpd-prefork
+    port: 80
+    protocol: TCP
+  logPaths:
+  - appName: apache-acccess
+    globs:
+    - /var/log/apache*/access_log
+  - appName: apache-error
+    globs:
+    - /var/log/apache*/error_log
+
+  nfsMounts:
+  - enabled: false
+    exportedDirectory: /
+    mountOptions:
+    - ro
+    mountPoint: /mnt/test
+    nfsServer: nfs-server.default.svc.cluster.local
+  - enabled: false
+    exportedDirectory: /
+    mountOptions:
+    - rw
+    mountPoint: /mnt/test-rw
+    nfsServer: nfs-server.default.svc.cluster.local
+
+  # By default, this health probe configuration will be used. Review, chagne or remove it.
+  # see: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/
+
+  probes:
+    livenessProbe:
+      exec:
+        command:
+        - gamma
+        - /probe
+    readinessProbe:
+      exec:
+        command:
+        - gamma
+        - /probe
+      initialDelaySeconds: 60
+      periodSeconds: 5

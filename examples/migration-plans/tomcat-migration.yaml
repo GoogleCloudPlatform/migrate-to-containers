@@ -1,0 +1,121 @@
+# If set to true, sensitive data specified in sensitiveDataPaths will be uploaded to the artifacts repository.
+includeSensitiveData: false
+tomcatServers:
+- name: tomcat-latest
+  catalinaBase: /usr/local/tomcat
+  catalinaHome: /usr/local/tomcat
+  # Exclude files from migration.
+  excludeFiles:
+  - /usr/local/tomcat/keystore
+  - ssl/domain.crt
+  - ssl/domain.key
+  images:
+  - name: tomcat-latest
+    # Edit this list of application paths to define migrated applications.
+    applications:
+    - /usr/local/tomcat/webapps/ROOT
+    # Parent image for the generated container image.
+    fromImage: tomcat:8.5-jre8-openjdk
+    # External paths required for running the Tomcat server or apps.
+    additionalFiles:
+    - /lib
+    - /lib/*.jar
+    ports:
+    - 8080
+    - 8443
+    - 9443
+    # Log Configuration paths for the Tomcat apps.
+    logConfigPaths: []
+    resources:
+      # Define the container initial and maximum memory.
+      # 'limit' sets Tomcat Java initial and max heap sizes using the RAMPercentage flags shown on the generated Dockerfile artifact.
+      memory:
+        limits: ""
+        requests: ""
+      catalinaOpts: ""
+    probes:
+      livenessProbe:
+        tcpSocket:
+          port: 8080
+      readinessProbe:
+        tcpSocket:
+          port: 8080
+    # Sensitive data which will be filtered out of the container image.
+    # If includeSensitiveData is set to true the sensitive data will be mounted on the container.
+    sensitiveDataPaths:
+    - /usr/local/tomcat/keystore
+    - ssl/domain.crt
+    - ssl/domain.key
+  - name: tomcat-tomcat-host-manager-********
+    # Edit this list of application paths to define migrated applications.
+    applications:
+    - /usr/local/tomcat/webapps/host-manager
+    # Parent image for the generated container image.
+    fromImage: tomcat:8.5-jre8-openjdk
+    # External paths required for running the Tomcat server or apps.
+    additionalFiles:
+    - /lib
+    - /lib/*.jar
+    ports:
+    - 8080
+    - 8443
+    - 9443
+    # Log Configuration paths for the Tomcat apps.
+    logConfigPaths: []
+    resources:
+      # Define the container initial and maximum memory.
+      # 'limit' sets Tomcat Java initial and max heap sizes using the RAMPercentage flags shown on the generated Dockerfile artifact.
+      memory:
+        limits: ""
+        requests: ""
+      catalinaOpts: ""
+    probes:
+      livenessProbe:
+        tcpSocket:
+          port: 8080
+      readinessProbe:
+        tcpSocket:
+          port: 8080
+    # Sensitive data which will be filtered out of the container image.
+    # If includeSensitiveData is set to true the sensitive data will be mounted on the container.
+    sensitiveDataPaths:
+    - /usr/local/tomcat/keystore
+    - ssl/domain.crt
+    - ssl/domain.key
+  - name: tomcat-tomcat-********
+    # Edit this list of application paths to define migrated applications.
+    applications:
+    - /usr/local/tomcat/webapps/ROOT
+    - /usr/local/tomcat/webapps/host-manager
+    # Parent image for the generated container image.
+    fromImage: tomcat:8.5-jre8-openjdk
+    # External paths required for running the Tomcat server or apps.
+    additionalFiles:
+    - /lib
+    - /lib/*.jar
+    ports:
+    - 8080
+    - 8443
+    - 9443
+    # Log Configuration paths for the Tomcat apps.
+    logConfigPaths: []
+    resources:
+      # Define the container initial and maximum memory.
+      # 'limit' sets Tomcat Java initial and max heap sizes using the RAMPercentage flags shown on the generated Dockerfile artifact.
+      memory:
+        limits: ""
+        requests: ""
+      catalinaOpts: ""
+    probes:
+      livenessProbe:
+        tcpSocket:
+          port: 8080
+      readinessProbe:
+        tcpSocket:
+          port: 8080
+    # Sensitive data which will be filtered out of the container image.
+    # If includeSensitiveData is set to true the sensitive data will be mounted on the container.
+    sensitiveDataPaths:
+    - /usr/local/tomcat/keystore
+    - ssl/domain.crt
+    - ssl/domain.key

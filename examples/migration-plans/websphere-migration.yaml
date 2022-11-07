@@ -1,0 +1,34 @@
+applications:
+- appName: defaultapplication-ear
+  classPaths:
+  - /usr/some-path/lib/simple-classpath.jar
+  httpEndpoints:
+  - httpPort: 9080
+    httpsPort: 9443
+    id: defaulthttpendpoint
+  image:
+    name: defaultapplication-ear
+  includeFiles:
+  - /opt/IBM/WebSphere/ports.txt
+  path: /opt/IBM/WebSphere/AppServer/profiles/AppSrv01/config/cells/m4a-twas-ndNode01Cell/applications/DefaultApplication.ear
+  sharedLibraries:
+  - /opt/IBM/WebSphere/AppServer/derby/lib/derby.jar
+- appName: dal-cell-jdbc-ear
+  httpEndpoints:
+  - httpPort: 9080
+    httpsPort: 9443
+    id: defaulthttpendpoint
+  image:
+    name: dal-cell-jdbc-ear
+  path: /opt/IBM/WebSphere/AppServer/profiles/AppSrv01/config/cells/m4a-twas-ndNode01Cell/applications/dal-cell-jdbc.ear
+  sharedLibraries:
+  - /opt/IBM/WebSphere/AppServer/deploytool/itp/plugins/com.ibm.datatools.db2_2.2.200.v20150728_2354/driver/db2jcc.jar
+  - /opt/IBM/WebSphere/AppServer/universalDriver/lib/db2jcc_license_cu.jar
+  - /opt/IBM/WebSphere/AppServer/deploytool/itp/plugins/com.ibm.datatools.db2_2.2.200.v20150728_2354/driver/db2jcc_license_cisuz.jar
+  - /opt/IBM/WebSphere/AppServer/deploytool/itp/plugins/com.ibm.datatools.db2_2.2.200.v20150728_2354/driver/db2jcc.jar
+  - /opt/IBM/WebSphere/AppServer/universalDriver/lib/db2jcc_license_cu.jar
+  - /opt/IBM/WebSphere/AppServer/deploytool/itp/plugins/com.ibm.datatools.db2_2.2.200.v20150728_2354/driver/db2jcc_license_cisuz.jar
+scannerOptions:
+  # If set to true, sensitive data such as private keys will be uploaded to the artifacts repository.
+  includeSensitiveData: false
+  sourceAppServer: was90
