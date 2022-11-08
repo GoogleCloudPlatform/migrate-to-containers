@@ -3,30 +3,24 @@ v2kServiceManager: false
 global:
   # Files and directories to exclude from the migration, in rsync format.
   filters:
-  - '- *.swp'
-  - '- /etc/fstab'
-  - '- /boot/'
-  - '- /proc/kcore'
-  - '- /tmp/*'
-  - '- /var/log/*.log*'
-  - '- /var/log/*/*.log*'
-  - '- /var/log/faillog'
-  - '- /var/log/lastlog'
-  - '- /var/log/[wb]tmp*'
-  - '- /var/cache/*'
-  - '- /var/log/journal/'
-  - '- /var/m4a/*'
+    - "- *.swp"
+    - "- /etc/fstab"
+    - "- /boot/"
+    - "- /tmp/*"
+    - "- /var/log/*.log*"
+    - "- /var/log/*/*.log*"
+    - "- /var/cache/*"
 
-  ## The data folders below are too large to be included in the docker image.
-  ## Consider uncommenting and placing them under either the global filters
-  ## or the data folder section.
+    ## The data folders below are too large to be included in the docker image.
+    ## Consider uncommenting and placing them under either the global filters
+    ## or the data folder section.
     # - '- /a' # (1.8GB, last access 2022-02-02 10:50:30, last modified 2020-02-02 10:50:30)
     # - '- /a/c' # (1.8GB, last access 2022-02-02 10:50:30, last modified 2020-02-02 10:50:30)
 
-  ## Sparse files will fail the run of a docker image. Consider excluding the below
-  ## detected files and any other sparse files by uncommenting and placing them in
-  ## the global filters section, or export them to a persistent volume by specifying
-  ## them in the data folder section.
+    ## Sparse files will fail the run of a docker image. Consider excluding the below
+    ## detected files and any other sparse files by uncommenting and placing them in
+    ## the global filters section, or export them to a persistent volume by specifying
+    ## them in the data folder section.
     # - '- /a/b' # (1.8GB, last access 2022-02-02 10:50:30, last modified 2020-02-02 10:50:30)
     # - '- /a/d' # (1.8GB, last access 2022-02-02 10:50:30, last modified 2020-02-02 10:50:30)
 image:
