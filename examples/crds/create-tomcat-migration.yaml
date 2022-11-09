@@ -1,0 +1,15 @@
+# CRD example - create tomcat migration CRD
+# [START create_tomcat_migration]
+apiVersion: anthos-migrate.cloud.google.com/v1
+kind: Migration
+metadata:
+  name: my-migration
+  namespace: v2k-system
+spec:
+  type: tomcat-container
+  sourceSnapshotTemplate:
+    spec:
+      sourceProviderRef:
+        name: my-ce-src
+      sourceId: my-id
+# [END create_tomcat_migration]

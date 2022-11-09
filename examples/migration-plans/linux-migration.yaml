@@ -17,17 +17,17 @@ global:
   - '- /var/log/journal/'
   - '- /var/m4a/*'
 
-    ## The data folders below are too large to be included in the docker image.
-    ## Consider uncommenting and placing them under either the global filters
-    ## or the data folder section.
-    # - '- /a' # (1.8GB, last access 2022-02-02 10:50:30, last modified 2020-02-02 10:50:30)
-    # - '- /a/c' # (1.8GB, last access 2022-02-02 10:50:30, last modified 2020-02-02 10:50:30)
+  ## The data folders below are too large to be included in the docker image.
+  ## Consider uncommenting and placing them under either the global filters
+  ## or the data folder section.
+  # - '- /a' # (1.8GB, last access 2022-02-02 10:50:30, last modified 2020-02-02 10:50:30)
+  # - '- /a/c' # (1.8GB, last access 2022-02-02 10:50:30, last modified 2020-02-02 10:50:30)
 
-    ## Sparse files will fail the run of a docker image. Consider excluding the below
-    ## detected files and any other sparse files by uncommenting and placing them in
-    ## the global filters section, or export them to a persistent volume by specifying
-    ## them in the data folder section.
-    # - '- /a/b' # (1.8GB, last access 2022-02-02 10:50:30, last modified 2020-02-02 10:50:30)
+  ## Sparse files will fail the run of a docker image. Consider excluding the below
+  ## detected files and any other sparse files by uncommenting and placing them in
+  ## the global filters section, or export them to a persistent volume by specifying
+  ## them in the data folder section.
+  # - '- /a/b' # (1.8GB, last access 2022-02-02 10:50:30, last modified 2020-02-02 10:50:30)
   # - '- /a/d' # (1.8GB, last access 2022-02-02 10:50:30, last modified 2020-02-02 10:50:30)
 image:
 
