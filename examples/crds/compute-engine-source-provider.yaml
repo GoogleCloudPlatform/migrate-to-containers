@@ -3,12 +3,12 @@
 apiVersion: anthos-migrate.cloud.google.com/v1beta2
 kind: SourceProvider
 metadata:
-  name: <var>migration-source-name</var>
+  name: migration-source-name
 spec:
   gce:
     project: my-project
     serviceAccount:
       secretRef:
-        name: <var>secret-name</var>
+        name: secret-name
         namespace: v2k-system
 # [END ce_source]
