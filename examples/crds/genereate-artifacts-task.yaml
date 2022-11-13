@@ -7,7 +7,7 @@ metadata:
   namespace: v2k-system
 spec:
   migration:
-    name:  my-migration
+    name: my-migration
   flow:
-    name:  appx-generateartifactsflow-my-migration
+    name: appx-generateartifactsflow-my-migration
 # [END generate_artifacts]

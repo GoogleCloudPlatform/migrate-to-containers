@@ -1,5 +1,5 @@
 # CRD example - create Source Provider for compute engine
-# [START ce_source]
+# [START source]
 apiVersion: anthos-migrate.cloud.google.com/v1beta2
 kind: SourceProvider
 metadata:
@@ -9,6 +9,6 @@ spec:
     project: my-project
     serviceAccount:
       secretRef:
-        name: secret-name
+        name: my-secret
         namespace: v2k-system
-# [END ce_source]
+# [END source]
