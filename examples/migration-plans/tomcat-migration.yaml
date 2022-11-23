@@ -20,6 +20,7 @@ tomcatServers:
     additionalFiles:
     - /lib
     - /lib/*.jar
+    # Edit the list of ports that will expose this Tomcat as a Kubernetes Service
     ports:
     - 8080
     - 8443
