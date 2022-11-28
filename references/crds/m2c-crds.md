@@ -11,7 +11,6 @@ Package v1 contains API Schema definitions for the anthos-migrate.cloud.google.c
 
 ### Resource Types
 - [Migration](#migration)
-- [MigrationList](#migrationlist)
 
 
 
@@ -21,8 +20,7 @@ Package v1 contains API Schema definitions for the anthos-migrate.cloud.google.c
 
 Migration is the Schema for the migrations API
 
-_Appears in:_
-- [MigrationList](#migrationlist)
+
 
 | Field | Description |
 | --- | --- |
@@ -51,22 +49,6 @@ _Appears in:_
 | `lastTransitionTime` _[Time](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#time-v1-meta)_ |  |
 
 
-#### MigrationList
-
-
-
-MigrationList contains a list of Migration
-
-
-
-| Field | Description |
-| --- | --- |
-| `apiVersion` _string_ | `anthos-migrate.cloud.google.com/v1`
-| `kind` _string_ | `MigrationList`
-| `metadata` _[ListMeta](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#listmeta-v1-meta)_ | Refer to Kubernetes API documentation for fields of `metadata`. |
-| `items` _[Migration](#migration) array_ |  |
-
-
 #### MigrationSpec
 
 
@@ -79,6 +61,7 @@ _Appears in:_
 | Field | Description |
 | --- | --- |
 | `type` _string_ | Type describes the type of migration, available values are dependant on what AppX plugins are installed in the current cluster. |
+| `discoveryParameters` _[Parameter](#parameter) array_ | Optional configuration for this migration |
 | `sourceSnapshotTemplate` _[SourceSnapshotTemplate](#sourcesnapshottemplate)_ | Template to use when creating a source snapshot for this migration. |
 | `artifactRepositoryRef` _[LocalObjectReference](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#localobjectreference-v1-core)_ | Represents the repository to push the artifacts to during migration. |
 | `imageRepositoryRef` _[LocalObjectReference](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#localobjectreference-v1-core)_ | Image repository. |
@@ -99,6 +82,21 @@ _Appears in:_
 | `migrationPlanRef` _[TypedLocalObjectReference](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#typedlocalobjectreference-v1-core)_ | References the object containing the migration plan. |
 | `sourceSnapshotRef` _[LocalObjectReference](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#localobjectreference-v1-core)_ |  |
 | `discoveryTaskRef` _[TypedLocalObjectReference](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#typedlocalobjectreference-v1-core)_ |  |
+
+
+#### Parameter
+
+
+
+
+
+_Appears in:_
+- [MigrationSpec](#migrationspec)
+
+| Field | Description |
+| --- | --- |
+| `name` _string_ | Name of the Parameter. Must contain only alphanumeric characters ([a-z0-9A-Z]) or underscores (_). Must match the name of existing ParameterDef. |
+| `value` _string_ | Value of the parameter. |
 
 
 #### SourceSnapshotSpec
@@ -138,54 +136,12 @@ _Appears in:_
 Package v1beta2 contains API Schema definitions for the anthos-migrate.cloud.google.com v1beta2 API group
 
 ### Resource Types
-- [AppXDiscoveryFlow](#appxdiscoveryflow)
-- [AppXDiscoveryFlowList](#appxdiscoveryflowlist)
-- [AppXDiscoveryResult](#appxdiscoveryresult)
-- [AppXDiscoveryResultList](#appxdiscoveryresultlist)
-- [AppXDiscoveryTask](#appxdiscoverytask)
-- [AppXDiscoveryTaskList](#appxdiscoverytasklist)
 - [AppXGenerateArtifactsFlow](#appxgenerateartifactsflow)
-- [AppXGenerateArtifactsFlowList](#appxgenerateartifactsflowlist)
 - [AppXGenerateArtifactsTask](#appxgenerateartifactstask)
-- [AppXGenerateArtifactsTaskList](#appxgenerateartifactstasklist)
 - [AppXPlugin](#appxplugin)
-- [AppXPluginList](#appxpluginlist)
 - [ArtifactsRepository](#artifactsrepository)
-- [ArtifactsRepositoryList](#artifactsrepositorylist)
-- [DiscoveryTask](#discoverytask)
-- [DiscoveryTaskList](#discoverytasklist)
-- [GenerateArtifactsFlow](#generateartifactsflow)
-- [GenerateArtifactsFlowList](#generateartifactsflowlist)
-- [GenerateArtifactsTask](#generateartifactstask)
-- [GenerateArtifactsTaskList](#generateartifactstasklist)
 - [ImageRepository](#imagerepository)
-- [ImageRepositoryList](#imagerepositorylist)
-- [LinuxDiscoveryReport](#linuxdiscoveryreport)
-- [LinuxDiscoveryReportList](#linuxdiscoveryreportlist)
-- [Migration](#migration)
-- [MigrationList](#migrationlist)
-- [MigrationSubSteps](#migrationsubsteps)
-- [MigrationSubStepsList](#migrationsubstepslist)
-- [ReplicatingVM](#replicatingvm)
-- [ReplicatingVMList](#replicatingvmlist)
 - [SourceProvider](#sourceprovider)
-- [SourceProviderList](#sourceproviderlist)
-- [SourceSnapshot](#sourcesnapshot)
-- [SourceSnapshotList](#sourcesnapshotlist)
-- [VmGenerateArtifactsFlow](#vmgenerateartifactsflow)
-- [VmGenerateArtifactsFlowList](#vmgenerateartifactsflowlist)
-- [VmGenerateArtifactsTask](#vmgenerateartifactstask)
-- [VmGenerateArtifactsTaskList](#vmgenerateartifactstasklist)
-- [VmGenerateArtifactsTaskProgress](#vmgenerateartifactstaskprogress)
-- [VmGenerateArtifactsTaskProgressList](#vmgenerateartifactstaskprogresslist)
-- [WindowsDiscovery](#windowsdiscovery)
-- [WindowsDiscoveryList](#windowsdiscoverylist)
-- [WindowsDiscoveryResult](#windowsdiscoveryresult)
-- [WindowsDiscoveryResultList](#windowsdiscoveryresultlist)
-- [WindowsGenerateArtifacts](#windowsgenerateartifacts)
-- [WindowsGenerateArtifactsList](#windowsgenerateartifactslist)
-- [WindowsGenerateArtifactsTask](#windowsgenerateartifactstask)
-- [WindowsGenerateArtifactsTaskList](#windowsgenerateartifactstasklist)
 
 
 
@@ -201,218 +157,6 @@ _Appears in:_
 | Field | Description |
 | --- | --- |
 | `pod` _[PodStatus](#podstatus)_ |  |
-
-
-#### AppXDiscoveryFlow
-
-
-
-AppXDiscoveryFlow is the Schema for the appxdiscoveryflows API
-
-_Appears in:_
-- [AppXDiscoveryFlowList](#appxdiscoveryflowlist)
-
-| Field | Description |
-| --- | --- |
-| `apiVersion` _string_ | `anthos-migrate.cloud.google.com/v1beta2`
-| `kind` _string_ | `AppXDiscoveryFlow`
-| `metadata` _[ObjectMeta](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#objectmeta-v1-meta)_ | Refer to Kubernetes API documentation for fields of `metadata`. |
-| `spec` _[AppXDiscoveryFlowSpec](#appxdiscoveryflowspec)_ |  |
-| `status` _[AppXDiscoveryFlowStatus](#appxdiscoveryflowstatus)_ |  |
-
-
-#### AppXDiscoveryFlowList
-
-
-
-AppXDiscoveryFlowList contains a list of AppXDiscoveryFlow
-
-
-
-| Field | Description |
-| --- | --- |
-| `apiVersion` _string_ | `anthos-migrate.cloud.google.com/v1beta2`
-| `kind` _string_ | `AppXDiscoveryFlowList`
-| `metadata` _[ListMeta](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#listmeta-v1-meta)_ | Refer to Kubernetes API documentation for fields of `metadata`. |
-| `items` _[AppXDiscoveryFlow](#appxdiscoveryflow) array_ |  |
-
-
-#### AppXDiscoveryFlowSpec
-
-
-
-AppXDiscoveryFlowSpec defines the desired state of AppXDiscoveryFlow
-
-_Appears in:_
-- [AppXDiscoveryFlow](#appxdiscoveryflow)
-
-| Field | Description |
-| --- | --- |
-| `migration` _[LocalObjectReference](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#localobjectreference-v1-core)_ |  |
-| `configs` _[Configs](#configs)_ |  |
-| `warnings` _[Warning](#warning) array_ |  |
-
-
-#### AppXDiscoveryFlowStatus
-
-
-
-AppXDiscoveryFlowStatus defines the observed state of AppXDiscoveryFlow
-
-_Appears in:_
-- [AppXDiscoveryFlow](#appxdiscoveryflow)
-- [SubResourceAppXStatus](#subresourceappxstatus)
-
-| Field | Description |
-| --- | --- |
-| `task` _[LocalObjectReference](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#localobjectreference-v1-core)_ |  |
-
-
-#### AppXDiscoveryResult
-
-
-
-AppXDiscoveryResult is the Schema for the appxdiscoveryresults API
-
-_Appears in:_
-- [AppXDiscoveryResultList](#appxdiscoveryresultlist)
-
-| Field | Description |
-| --- | --- |
-| `apiVersion` _string_ | `anthos-migrate.cloud.google.com/v1beta2`
-| `kind` _string_ | `AppXDiscoveryResult`
-| `metadata` _[ObjectMeta](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#objectmeta-v1-meta)_ | Refer to Kubernetes API documentation for fields of `metadata`. |
-| `spec` _[AppXDiscoveryResultSpec](#appxdiscoveryresultspec)_ |  |
-| `status` _[AppXDiscoveryResultStatus](#appxdiscoveryresultstatus)_ |  |
-
-
-#### AppXDiscoveryResultCondition
-
-
-
-
-
-_Appears in:_
-- [AppXDiscoveryResultStatus](#appxdiscoveryresultstatus)
-
-| Field | Description |
-| --- | --- |
-| `type` _AppXDiscoveryResultConditionType_ |  |
-| `status` _[ConditionStatus](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#conditionstatus-v1-core)_ |  |
-| `reason` _string_ |  |
-| `message` _string_ |  |
-| `lastTransitionTime` _[Time](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#time-v1-meta)_ |  |
-
-
-#### AppXDiscoveryResultList
-
-
-
-AppXDiscoveryResultList contains a list of AppXDiscoveryResult
-
-
-
-| Field | Description |
-| --- | --- |
-| `apiVersion` _string_ | `anthos-migrate.cloud.google.com/v1beta2`
-| `kind` _string_ | `AppXDiscoveryResultList`
-| `metadata` _[ListMeta](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#listmeta-v1-meta)_ | Refer to Kubernetes API documentation for fields of `metadata`. |
-| `items` _[AppXDiscoveryResult](#appxdiscoveryresult) array_ |  |
-
-
-#### AppXDiscoveryResultSpec
-
-
-
-AppXDiscoveryResultSpec defines the desired state of AppXDiscoveryResult
-
-_Appears in:_
-- [AppXDiscoveryResult](#appxdiscoveryresult)
-
-| Field | Description |
-| --- | --- |
-| `task` _[LocalObjectReference](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#localobjectreference-v1-core)_ |  |
-| `appXGenerateArtifactsConfig` _string_ | Embedded YAML or CRD payload |
-| `dataConfig` _[DataConfig](#dataconfig)_ |  |
-| `warnings` _[Warning](#warning) array_ |  |
-
-
-#### AppXDiscoveryResultStatus
-
-
-
-AppXDiscoveryResultStatus defines the observed state of AppXDiscoveryResult
-
-_Appears in:_
-- [AppXDiscoveryResult](#appxdiscoveryresult)
-
-| Field | Description |
-| --- | --- |
-| `conditions` _[AppXDiscoveryResultCondition](#appxdiscoveryresultcondition) array_ |  |
-
-
-#### AppXDiscoveryTask
-
-
-
-AppXDiscoveryTask is the Schema for the appxdiscoverytasks API
-
-_Appears in:_
-- [AppXDiscoveryTaskList](#appxdiscoverytasklist)
-
-| Field | Description |
-| --- | --- |
-| `apiVersion` _string_ | `anthos-migrate.cloud.google.com/v1beta2`
-| `kind` _string_ | `AppXDiscoveryTask`
-| `metadata` _[ObjectMeta](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#objectmeta-v1-meta)_ | Refer to Kubernetes API documentation for fields of `metadata`. |
-| `spec` _[AppXDiscoveryTaskSpec](#appxdiscoverytaskspec)_ |  |
-| `status` _[AppXDiscoveryTaskStatus](#appxdiscoverytaskstatus)_ |  |
-
-
-#### AppXDiscoveryTaskList
-
-
-
-AppXDiscoveryTaskList contains a list of AppXDiscoveryTask
-
-
-
-| Field | Description |
-| --- | --- |
-| `apiVersion` _string_ | `anthos-migrate.cloud.google.com/v1beta2`
-| `kind` _string_ | `AppXDiscoveryTaskList`
-| `metadata` _[ListMeta](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#listmeta-v1-meta)_ | Refer to Kubernetes API documentation for fields of `metadata`. |
-| `items` _[AppXDiscoveryTask](#appxdiscoverytask) array_ |  |
-
-
-#### AppXDiscoveryTaskSpec
-
-
-
-AppXDiscoveryTaskSpec defines the desired state of AppXDiscoveryTask
-
-_Appears in:_
-- [AppXDiscoveryTask](#appxdiscoverytask)
-
-| Field | Description |
-| --- | --- |
-| `flow` _[LocalObjectReference](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#localobjectreference-v1-core)_ |  |
-
-
-#### AppXDiscoveryTaskStatus
-
-
-
-AppXDiscoveryTaskStatus defines the observed state of AppXDiscoveryTask
-
-_Appears in:_
-- [AppXDiscoveryTask](#appxdiscoverytask)
-
-| Field | Description |
-| --- | --- |
-| `discoveryPod` _[PodStatus](#podstatus)_ |  |
-| `discoveryItems` _[AppXRepositoryDelivery](#appxrepositorydelivery)_ |  |
-| `status` _[OperationStatus](#operationstatus)_ |  |
 
 
 #### AppXExistingPvc
@@ -436,8 +180,7 @@ _Appears in:_
 
 AppXGenerateArtifactsFlow is the Schema for the appxgenerateartifactsflows API
 
-_Appears in:_
-- [AppXGenerateArtifactsFlowList](#appxgenerateartifactsflowlist)
+
 
 | Field | Description |
 | --- | --- |
@@ -445,22 +188,6 @@ _Appears in:_
 | `kind` _string_ | `AppXGenerateArtifactsFlow`
 | `metadata` _[ObjectMeta](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#objectmeta-v1-meta)_ | Refer to Kubernetes API documentation for fields of `metadata`. |
 | `spec` _[AppXGenerateArtifactsFlowSpec](#appxgenerateartifactsflowspec)_ |  |
-
-
-#### AppXGenerateArtifactsFlowList
-
-
-
-AppXGenerateArtifactsFlowList contains a list of AppXGenerateArtifactsFlow
-
-
-
-| Field | Description |
-| --- | --- |
-| `apiVersion` _string_ | `anthos-migrate.cloud.google.com/v1beta2`
-| `kind` _string_ | `AppXGenerateArtifactsFlowList`
-| `metadata` _[ListMeta](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#listmeta-v1-meta)_ | Refer to Kubernetes API documentation for fields of `metadata`. |
-| `items` _[AppXGenerateArtifactsFlow](#appxgenerateartifactsflow) array_ |  |
 
 
 #### AppXGenerateArtifactsFlowSpec
@@ -481,18 +208,6 @@ _Appears in:_
 | `dismissDiscoveryWarnings` _boolean_ |  |
 
 
-#### AppXGenerateArtifactsFlowStatus
-
-
-
-AppXGenerateArtifactsFlowStatus defines the observed state of AppXGenerateArtifactsFlow
-
-_Appears in:_
-- [SubResourceAppXStatus](#subresourceappxstatus)
-
-| Field | Description |
-| --- | --- |
-| `task` _[LocalObjectReference](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#localobjectreference-v1-core)_ |  |
 
 
 #### AppXGenerateArtifactsTask
@@ -501,8 +216,7 @@ _Appears in:_
 
 AppXGenerateArtifactsTask is the Schema for the appxgenerateartifactstasks API
 
-_Appears in:_
-- [AppXGenerateArtifactsTaskList](#appxgenerateartifactstasklist)
+
 
 | Field | Description |
 | --- | --- |
@@ -511,22 +225,6 @@ _Appears in:_
 | `metadata` _[ObjectMeta](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#objectmeta-v1-meta)_ | Refer to Kubernetes API documentation for fields of `metadata`. |
 | `spec` _[AppXGenerateArtifactsTaskSpec](#appxgenerateartifactstaskspec)_ |  |
 | `status` _[AppXGenerateArtifactsTaskStatus](#appxgenerateartifactstaskstatus)_ |  |
-
-
-#### AppXGenerateArtifactsTaskList
-
-
-
-AppXGenerateArtifactsTaskList contains a list of AppXGenerateArtifactsTask
-
-
-
-| Field | Description |
-| --- | --- |
-| `apiVersion` _string_ | `anthos-migrate.cloud.google.com/v1beta2`
-| `kind` _string_ | `AppXGenerateArtifactsTaskList`
-| `metadata` _[ListMeta](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#listmeta-v1-meta)_ | Refer to Kubernetes API documentation for fields of `metadata`. |
-| `items` _[AppXGenerateArtifactsTask](#appxgenerateartifactstask) array_ |  |
 
 
 #### AppXGenerateArtifactsTaskSpec
@@ -582,32 +280,15 @@ _Appears in:_
 
 AppXPlugin describes the discovery and extraction images used for application migration.
 
-_Appears in:_
-- [AppXPluginList](#appxpluginlist)
+
 
 | Field | Description |
 | --- | --- |
 | `apiVersion` _string_ | `anthos-migrate.cloud.google.com/v1beta2`
 | `kind` _string_ | `AppXPlugin`
-| `metadata` _[ObjectMeta](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#objectmeta-v1-meta)_ | Standard object's metadata. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadata |
+| `metadata` _[ObjectMeta](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#objectmeta-v1-meta)_ | Refer to Kubernetes API documentation for fields of `metadata`. |
 | `spec` _[AppXPluginSpec](#appxpluginspec)_ | Specification of the desired behavior of AppXPlugin. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status |
-| `status` _[AppXPluginStatus](#appxpluginstatus)_ | Most recently observed status of AppXPlugin.This data may not be up to date. Populated by the system. Read-only. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status |
-
-
-#### AppXPluginList
-
-
-
-AppXPluginList contains a list of AppXPlugin
-
-
-
-| Field | Description |
-| --- | --- |
-| `apiVersion` _string_ | `anthos-migrate.cloud.google.com/v1beta2`
-| `kind` _string_ | `AppXPluginList`
-| `metadata` _[ListMeta](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#listmeta-v1-meta)_ | Standard list metadata. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds |
-| `items` _[AppXPlugin](#appxplugin) array_ | | List of AppXPlugins. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md |
+| `status` _[AppXPluginStatus](#appxpluginstatus)_ | Most recently observed status of AppXPlugin. This data may not be up to date. Populated by the system. Read-only. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status |
 
 
 #### AppXPluginSpec
@@ -642,7 +323,6 @@ _Appears in:_
 AppXRepositoryDelivery is not a standalone CRD, but rather a field contained in discovery and extract task statuses to describe their produced items for posterity
 
 _Appears in:_
-- [AppXDiscoveryTaskStatus](#appxdiscoverytaskstatus)
 - [AppXGenerateArtifactsTaskStatus](#appxgenerateartifactstaskstatus)
 
 | Field | Description |
@@ -670,62 +350,6 @@ _Appears in:_
 | `deploymentPvcName` _string_ | The name of the PVC that deployed pods in the target cluster (specified in the deployment spec yaml) will use to access the data in this volume |
 
 
-#### ApplicationArtifactsStatus
-
-
-
-
-
-_Appears in:_
-- [Artifacts](#artifacts)
-
-| Field | Description |
-| --- | --- |
-| `name` _string_ |  |
-| `description` _string_ |  |
-| `image` _string_ |  |
-| `imageBase` _string_ |  |
-| `deploymentYaml` _string_ |  |
-| `dockerfile` _string_ |  |
-| `windowsArtifactsFile` _string_ |  |
-
-
-#### Applications
-
-
-
-
-
-_Appears in:_
-- [MigrationPlan](#migrationplan)
-
-| Field | Description |
-| --- | --- |
-| `iis` _ConfigFile_ |  |
-| `image` _ImageInfo_ |  |
-| `useractions` _[UserActions](#useractions)_ |  |
-
-
-#### Artifacts
-
-
-
-
-
-_Appears in:_
-- [MigrationStatus](#migrationstatus)
-
-| Field | Description |
-| --- | --- |
-| `image` _string_ | TODO: Deprecated, remove when we update CRD version |
-| `imageBase` _string_ |  |
-| `deploymentFiles` _[DeploymentFiles](#deploymentfiles)_ |  |
-| `type` _string_ |  |
-| `bucket` _string_ |  |
-| `region` _string_ | Region is only set when type is s3 |
-| `artifactsManifestFile` _string_ | Path to file |
-| `migrationFile` _string_ | Path to file |
-| `applications` _[ApplicationArtifactsStatus](#applicationartifactsstatus) array_ |  |
 
 
 #### ArtifactsRepository
@@ -734,8 +358,7 @@ _Appears in:_
 
 ArtifactsRepository is the Schema for the artifactsrepositories API
 
-_Appears in:_
-- [ArtifactsRepositoryList](#artifactsrepositorylist)
+
 
 | Field | Description |
 | --- | --- |
@@ -779,22 +402,6 @@ _Appears in:_
 | `secret` _string_ |  |
 
 
-#### ArtifactsRepositoryList
-
-
-
-ArtifactsRepositoryList contains a list of ArtifactsRepository
-
-
-
-| Field | Description |
-| --- | --- |
-| `apiVersion` _string_ | `anthos-migrate.cloud.google.com/v1beta2`
-| `kind` _string_ | `ArtifactsRepositoryList`
-| `metadata` _[ListMeta](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#listmeta-v1-meta)_ | Refer to Kubernetes API documentation for fields of `metadata`. |
-| `items` _[ArtifactsRepository](#artifactsrepository) array_ |  |
-
-
 #### ArtifactsRepositoryRef
 
 
@@ -802,9 +409,7 @@ ArtifactsRepositoryList contains a list of ArtifactsRepository
 
 
 _Appears in:_
-- [Deployment](#deployment)
 - [MigrationSpec](#migrationspec)
-- [WindowsGenerateArtifactsSpec](#windowsgenerateartifactsspec)
 
 | Field | Description |
 | --- | --- |
@@ -870,21 +475,6 @@ _Appears in:_
 
 
 
-#### BigFileInfo
-
-
-
-
-
-_Appears in:_
-- [LinuxDiscoveryReportSpec](#linuxdiscoveryreportspec)
-
-| Field | Description |
-| --- | --- |
-| `path` _string_ |  |
-| `size` _string_ | Human readable size |
-| `lastModified` _string_ |  |
-| `lastAccess` _string_ |  |
 
 
 #### ComputeEngineSourceSnapshot
@@ -923,40 +513,6 @@ _Appears in:_
 | `destinationProject` _string_ |  |
 
 
-#### Configs
-
-
-
-
-
-_Appears in:_
-- [AppXDiscoveryFlowSpec](#appxdiscoveryflowspec)
-- [AppXPluginSpec](#appxpluginspec)
-- [GenerateArtifactsFlowSpec](#generateartifactsflowspec)
-- [MigrationSpec](#migrationspec)
-- [VmGenerateArtifactsFlowSpec](#vmgenerateartifactsflowspec)
-
-| Field | Description |
-| --- | --- |
-| `jobsConfig` _[LocalObjectReference](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#localobjectreference-v1-core)_ |  |
-
-
-#### CopyProgress
-
-
-
-
-
-_Appears in:_
-- [DataStatus](#datastatus)
-- [ImageExtractionStatus](#imageextractionstatus)
-
-| Field | Description |
-| --- | --- |
-| `sourceSizeBytes` _integer_ |  |
-| `copiedBytes` _integer_ |  |
-
-
 #### DataConfig
 
 
@@ -964,7 +520,6 @@ _Appears in:_
 
 
 _Appears in:_
-- [AppXDiscoveryResultSpec](#appxdiscoveryresultspec)
 - [AppXGenerateArtifactsFlowSpec](#appxgenerateartifactsflowspec)
 
 | Field | Description |
@@ -972,216 +527,18 @@ _Appears in:_
 | `volumes` _[AppXVolume](#appxvolume) array_ |  |
 
 
-#### DataStatus
 
 
 
 
 
-_Appears in:_
-- [GenerateArtifactsTaskStatus](#generateartifactstaskstatus)
-- [VmGenerateArtifactsTaskStatus](#vmgenerateartifactstaskstatus)
 
-| Field | Description |
-| --- | --- |
-| `PodStatus` _[PodStatus](#podstatus)_ |  |
-| `copyProgressByPvc` _object (keys:string, values:[CopyProgress](#copyprogress))_ |  |
 
 
-#### DataVolume
 
 
 
 
-
-_Appears in:_
-- [GenerateArtifactsFlowSpec](#generateartifactsflowspec)
-- [VmGenerateArtifactsFlowSpec](#vmgenerateartifactsflowspec)
-
-| Field | Description |
-| --- | --- |
-| `pvc` _[Pvc](#pvc)_ |  |
-| `folders` _string array_ |  |
-
-
-#### Deployment
-
-
-
-
-
-_Appears in:_
-- [LinuxMigrationCommonSpec](#linuxmigrationcommonspec)
-- [VmGenerateArtifactsFlowSpec](#vmgenerateartifactsflowspec)
-
-| Field | Description |
-| --- | --- |
-| `artifactsRepository` _[ArtifactsRepositoryRef](#artifactsrepositoryref)_ |  |
-| `folder` _string_ |  |
-| `appName` _string_ |  |
-| `endpoints` _[Endpoint](#endpoint) array_ |  |
-| `nfsMounts` _[DeploymentNfsMount](#deploymentnfsmount) array_ |  |
-| `logPaths` _[LogInfo](#loginfo) array_ |  |
-| `probes` _[Probes](#probes)_ |  |
-
-
-#### DeploymentFiles
-
-
-
-
-
-_Appears in:_
-- [Artifacts](#artifacts)
-
-| Field | Description |
-| --- | --- |
-| `type` _string_ |  |
-| `bucket` _string_ |  |
-| `region` _string_ | Region is only set when type is s3 |
-| `artifactsManifestFile` _string_ | Path to file |
-| `migrationFile` _string_ | Path to file |
-| `deploymentYaml` _string_ | Path to file |
-| `dockerfile` _string_ | Path to file |
-| `windowsArtifactsFile` _string_ | Path to file |
-
-
-#### DeploymentNfsMount
-
-
-
-
-
-_Appears in:_
-- [Deployment](#deployment)
-
-| Field | Description |
-| --- | --- |
-| `mountPoint` _string_ |  |
-| `exportedDirectory` _string_ |  |
-| `nfsServer` _string_ |  |
-| `mountOptions` _string array_ |  |
-| `enabled` _boolean_ |  |
-
-
-#### DeploymentStatus
-
-
-
-
-
-_Appears in:_
-- [GenerateArtifactsTaskStatus](#generateartifactstaskstatus)
-- [VmGenerateArtifactsTaskStatus](#vmgenerateartifactstaskstatus)
-
-| Field | Description |
-| --- | --- |
-| `repositoryLocation` _[RepositoryLocation](#repositorylocation)_ |  |
-| `repositoryBucket` _string_ | deprecated |
-| `artifactsManifestFile` _string_ |  |
-| `migrationFile` _string_ |  |
-| `deploymentYaml` _string_ |  |
-| `dockerfile` _string_ |  |
-
-
-#### DiscoveredSystemService
-
-
-
-
-
-_Appears in:_
-- [LinuxDiscoveryReportSpec](#linuxdiscoveryreportspec)
-
-| Field | Description |
-| --- | --- |
-| `SystemService` _[SystemService](#systemservice)_ |  |
-| `requiresV1runtime` _boolean_ |  |
-
-
-#### DiscoveryTask
-
-
-
-DiscoveryTask is the Schema for the discoverytasks API
-
-_Appears in:_
-- [DiscoveryTaskList](#discoverytasklist)
-
-| Field | Description |
-| --- | --- |
-| `apiVersion` _string_ | `anthos-migrate.cloud.google.com/v1beta2`
-| `kind` _string_ | `DiscoveryTask`
-| `metadata` _[ObjectMeta](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#objectmeta-v1-meta)_ | Refer to Kubernetes API documentation for fields of `metadata`. |
-| `spec` _[DiscoveryTaskSpec](#discoverytaskspec)_ |  |
-| `status` _[DiscoveryTaskStatus](#discoverytaskstatus)_ |  |
-
-
-
-
-#### DiscoveryTaskList
-
-
-
-DiscoveryTaskList contains a list of DiscoveryTask
-
-
-
-| Field | Description |
-| --- | --- |
-| `apiVersion` _string_ | `anthos-migrate.cloud.google.com/v1beta2`
-| `kind` _string_ | `DiscoveryTaskList`
-| `metadata` _[ListMeta](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#listmeta-v1-meta)_ | Refer to Kubernetes API documentation for fields of `metadata`. |
-| `items` _[DiscoveryTask](#discoverytask) array_ |  |
-
-
-#### DiscoveryTaskSpec
-
-
-
-DiscoveryTaskSpec defines the desired state of DiscoveryTask
-
-_Appears in:_
-- [DiscoveryTask](#discoverytask)
-
-| Field | Description |
-| --- | --- |
-| `type` _DiscoveryType_ |  |
-| `migration` _[LocalObjectReference](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#localobjectreference-v1-core)_ |  |
-
-
-#### DiscoveryTaskStatus
-
-
-
-DiscoveryTaskStatus defines the observed state of DiscoveryTask
-
-_Appears in:_
-- [DiscoveryTask](#discoverytask)
-- [SubResourceDiscoveryTaskStatus](#subresourcediscoverytaskstatus)
-
-| Field | Description |
-| --- | --- |
-| `discover` _[PodStatus](#podstatus)_ |  |
-| `discoveryReport` _[LocalObjectReference](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#localobjectreference-v1-core)_ |  |
-| `status` _[OperationStatus](#operationstatus)_ |  |
-| `operation` _[OperationInfo](#operationinfo)_ |  |
-| `error` _string_ |  |
-
-
-#### DiskConfig
-
-
-
-
-
-_Appears in:_
-- [VmGenerateArtifactsFlowSpec](#vmgenerateartifactsflowspec)
-
-| Field | Description |
-| --- | --- |
-| `diskFormat` _DiskFormat_ | Format to use for the target disk - one of: "raw", "qcow2". Default's to the cluster's default vm image format if DiskConfig is nil in flow object. |
-| `enableCompression` _boolean_ | Allows enabling disk compression if disk format is "qcow2". |
 
 
 #### Ec2SnapshotInfo
@@ -1193,6 +550,10 @@ _Appears in:_
 _Appears in:_
 - [Ec2VolumeStatus](#ec2volumestatus)
 
+| Field | Description |
+| --- | --- |
+| `id` _string_ |  |
+| `state` _string_ |  |
 
 
 #### Ec2VolumeInfo
@@ -1204,6 +565,10 @@ _Appears in:_
 _Appears in:_
 - [Ec2VolumeStatus](#ec2volumestatus)
 
+| Field | Description |
+| --- | --- |
+| `id` _string_ |  |
+| `state` _string_ |  |
 
 
 #### Ec2VolumeStatus
@@ -1222,20 +587,6 @@ _Appears in:_
 | `snapshot` _[Ec2SnapshotInfo](#ec2snapshotinfo)_ |  |
 
 
-#### Endpoint
-
-
-
-
-
-_Appears in:_
-- [Deployment](#deployment)
-
-| Field | Description |
-| --- | --- |
-| `port` _integer_ |  |
-| `protocol` _[Protocol](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#protocol-v1-core)_ |  |
-| `name` _string_ |  |
 
 
 #### ErrorStatus
@@ -1253,17 +604,6 @@ _Appears in:_
 | `lastError` _string_ |  |
 | `lastErrorCatalogCode` _CatalogCode_ |  |
 | `lastErrorTime` _[Time](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#time-v1-meta)_ |  |
-
-
-#### ExportProgressDiskStatus
-
-_Underlying type:_ `string`
-
-ExportProgressDiskStatus is used to indicate the download status of a disk being exported.
-
-_Appears in:_
-- [VmGenerateArtifactsTaskExportProgress](#vmgenerateartifactstaskexportprogress)
-
 
 
 
@@ -1293,6 +633,19 @@ _Appears in:_
 _Appears in:_
 - [GceVolumeStatus](#gcevolumestatus)
 
+| Field | Description |
+| --- | --- |
+| `name` _string_ |  |
+| `zone` _string_ |  |
+| `operationName` _string_ |  |
+| `operationType` _string_ |  |
+| `progress` _integer_ |  |
+| `status` _GceResourceOperationStatus_ |  |
+| `statusMessage` _string_ |  |
+| `errors` _string_ |  |
+| `warnings` _string_ |  |
+| `startTime` _string_ |  |
+| `endTime` _string_ |  |
 
 
 #### GceVolumeStatus
@@ -1354,151 +707,10 @@ _Appears in:_
 | `bucket` _string_ | GCS bucket, will be created on demand. |
 
 
-#### GenerateArtifactsFlow
 
 
 
-GenerateArtifactsFlow is the Schema for the generateartifactsflows API
 
-_Appears in:_
-- [GenerateArtifactsFlowList](#generateartifactsflowlist)
-
-| Field | Description |
-| --- | --- |
-| `apiVersion` _string_ | `anthos-migrate.cloud.google.com/v1beta2`
-| `kind` _string_ | `GenerateArtifactsFlow`
-| `metadata` _[ObjectMeta](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#objectmeta-v1-meta)_ | Refer to Kubernetes API documentation for fields of `metadata`. |
-| `spec` _[GenerateArtifactsFlowSpec](#generateartifactsflowspec)_ |  |
-| `status` _[GenerateArtifactsFlowStatus](#generateartifactsflowstatus)_ |  |
-
-
-#### GenerateArtifactsFlowList
-
-
-
-GenerateArtifactsFlowList contains a list of GenerateArtifactsFlow
-
-
-
-| Field | Description |
-| --- | --- |
-| `apiVersion` _string_ | `anthos-migrate.cloud.google.com/v1beta2`
-| `kind` _string_ | `GenerateArtifactsFlowList`
-| `metadata` _[ListMeta](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#listmeta-v1-meta)_ | Refer to Kubernetes API documentation for fields of `metadata`. |
-| `items` _[GenerateArtifactsFlow](#generateartifactsflow) array_ |  |
-
-
-#### GenerateArtifactsFlowSpec
-
-
-
-GenerateArtifactsFlowSpec defines the desired state of GenerateArtifactsFlow
-
-_Appears in:_
-- [GenerateArtifactsFlow](#generateartifactsflow)
-
-| Field | Description |
-| --- | --- |
-| `intent` _[Intent](#intent)_ |  |
-| `LinuxMigrationCommonSpec` _[LinuxMigrationCommonSpec](#linuxmigrationcommonspec)_ |  |
-| `dataVolumes` _[DataVolume](#datavolume) array_ |  |
-| `configs` _[Configs](#configs)_ |  |
-
-
-#### GenerateArtifactsFlowStatus
-
-
-
-GenerateArtifactsFlowStatus defines the observed state of GenerateArtifactsFlow
-
-_Appears in:_
-- [GenerateArtifactsFlow](#generateartifactsflow)
-
-| Field | Description |
-| --- | --- |
-| `volumesSpecs` _object (keys:string, values:[VolumeSpec](#volumespec))_ |  |
-
-
-#### GenerateArtifactsTask
-
-
-
-GenerateArtifactsTask is the Schema for the generateartifactstasks API
-
-_Appears in:_
-- [GenerateArtifactsTaskList](#generateartifactstasklist)
-
-| Field | Description |
-| --- | --- |
-| `apiVersion` _string_ | `anthos-migrate.cloud.google.com/v1beta2`
-| `kind` _string_ | `GenerateArtifactsTask`
-| `metadata` _[ObjectMeta](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#objectmeta-v1-meta)_ | Refer to Kubernetes API documentation for fields of `metadata`. |
-| `spec` _[GenerateArtifactsTaskSpec](#generateartifactstaskspec)_ |  |
-| `status` _[GenerateArtifactsTaskStatus](#generateartifactstaskstatus)_ |  |
-
-
-#### GenerateArtifactsTaskList
-
-
-
-GenerateArtifactsTaskList contains a list of GenerateArtifactsTask
-
-
-
-| Field | Description |
-| --- | --- |
-| `apiVersion` _string_ | `anthos-migrate.cloud.google.com/v1beta2`
-| `kind` _string_ | `GenerateArtifactsTaskList`
-| `metadata` _[ListMeta](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#listmeta-v1-meta)_ | Refer to Kubernetes API documentation for fields of `metadata`. |
-| `items` _[GenerateArtifactsTask](#generateartifactstask) array_ |  |
-
-
-#### GenerateArtifactsTaskSpec
-
-
-
-GenerateArtifactsTaskSpec defines the desired state of GenerateArtifactsTask
-
-_Appears in:_
-- [GenerateArtifactsTask](#generateartifactstask)
-
-| Field | Description |
-| --- | --- |
-| `migration` _[LocalObjectReference](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#localobjectreference-v1-core)_ |  |
-
-
-#### GenerateArtifactsTaskStatus
-
-
-
-GenerateArtifactsTaskStatus defines the observed state of GenerateArtifactsTask
-
-_Appears in:_
-- [GenerateArtifactsTask](#generateartifactstask)
-- [SubResourceGenerateArtifactsTaskStatus](#subresourcegenerateartifactstaskstatus)
-
-| Field | Description |
-| --- | --- |
-| `image` _[ImageStatus](#imagestatus)_ |  |
-| `data` _[DataStatus](#datastatus)_ |  |
-| `deployment` _[DeploymentStatus](#deploymentstatus)_ |  |
-| `status` _[OperationStatus](#operationstatus)_ |  |
-| `operation` _[OperationInfo](#operationinfo)_ | Note: both Operation and Status hold OperationStatus. Operation.Status is used for maintaining error state. Status is used for internal state management. |
-| `deletedOldSnapshot` _boolean_ |  |
-
-
-#### Global
-
-
-
-
-
-_Appears in:_
-- [LinuxMigrationCommonSpec](#linuxmigrationcommonspec)
-
-| Field | Description |
-| --- | --- |
-| `filters` _string array_ |  |
 
 
 #### HTTPConfigSpec
@@ -1515,36 +727,6 @@ _Appears in:_
 | `ignoreCert` _boolean_ |  |
 
 
-#### Image
-
-
-
-
-
-_Appears in:_
-- [LinuxMigrationCommonSpec](#linuxmigrationcommonspec)
-
-| Field | Description |
-| --- | --- |
-| `imageRepository` _[ImageRepositoryRef](#imagerepositoryref)_ |  |
-| `name` _string_ |  |
-| `base` _string_ |  |
-| `systemServices` _[SystemService](#systemservice) array_ |  |
-
-
-#### ImageExtractionStatus
-
-
-
-
-
-_Appears in:_
-- [ImageStatus](#imagestatus)
-
-| Field | Description |
-| --- | --- |
-| `PodStatus` _[PodStatus](#podstatus)_ |  |
-| `copyProgress` _[CopyProgress](#copyprogress)_ |  |
 
 
 #### ImageRepository
@@ -1553,8 +735,7 @@ _Appears in:_
 
 ImageRepository is the Schema for the imagerepositories API
 
-_Appears in:_
-- [ImageRepositoryList](#imagerepositorylist)
+
 
 | Field | Description |
 | --- | --- |
@@ -1577,7 +758,7 @@ _Appears in:_
 | Field | Description |
 | --- | --- |
 | `type` _[ImageRepositoryCredentialsType](#imagerepositorycredentialstype)_ |  |
-| `secret` _string_ |  |
+| `secret` _[string](#string)_ |  |
 
 
 #### ImageRepositoryCredentialsType
@@ -1589,22 +770,6 @@ _Underlying type:_ `string`
 _Appears in:_
 - [ImageRepositoryCredentials](#imagerepositorycredentials)
 
-
-
-#### ImageRepositoryList
-
-
-
-ImageRepositoryList contains a list of ImageRepository
-
-
-
-| Field | Description |
-| --- | --- |
-| `apiVersion` _string_ | `anthos-migrate.cloud.google.com/v1beta2`
-| `kind` _string_ | `ImageRepositoryList`
-| `metadata` _[ListMeta](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#listmeta-v1-meta)_ | Refer to Kubernetes API documentation for fields of `metadata`. |
-| `items` _[ImageRepository](#imagerepository) array_ |  |
 
 
 #### ImageRepositoryRef
@@ -1657,139 +822,8 @@ _Appears in:_
 
 
 
-#### ImageStatus
 
 
-
-
-
-_Appears in:_
-- [GenerateArtifactsTaskStatus](#generateartifactstaskstatus)
-- [VmGenerateArtifactsTaskStatus](#vmgenerateartifactstaskstatus)
-
-| Field | Description |
-| --- | --- |
-| `extraction` _[ImageExtractionStatus](#imageextractionstatus)_ |  |
-| `upload` _[ImageUploadStatus](#imageuploadstatus)_ |  |
-
-
-#### ImageUploadStatus
-
-
-
-
-
-_Appears in:_
-- [ImageStatus](#imagestatus)
-
-| Field | Description |
-| --- | --- |
-| `PodStatus` _[PodStatus](#podstatus)_ |  |
-| `image` _string_ |  |
-| `imageBase` _string_ |  |
-
-
-#### Intent
-
-_Underlying type:_ `string`
-
-
-
-_Appears in:_
-- [GenerateArtifactsFlowSpec](#generateartifactsflowspec)
-- [MigrationStatus](#migrationstatus)
-- [VmGenerateArtifactsFlowSpec](#vmgenerateartifactsflowspec)
-
-
-
-#### LdtDetails
-
-
-
-
-
-_Appears in:_
-- [LinuxDiscoveryReportSpec](#linuxdiscoveryreportspec)
-
-| Field | Description |
-| --- | --- |
-| `filename` _string_ |  |
-| `version` _string_ |  |
-| `collectionTime` _string_ |  |
-
-
-#### LinuxDiscoveryReport
-
-
-
-LinuxDiscoveryReport is the Schema for the linuxdiscoveryreports API
-
-_Appears in:_
-- [LinuxDiscoveryReportList](#linuxdiscoveryreportlist)
-
-| Field | Description |
-| --- | --- |
-| `apiVersion` _string_ | `anthos-migrate.cloud.google.com/v1beta2`
-| `kind` _string_ | `LinuxDiscoveryReport`
-| `metadata` _[ObjectMeta](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#objectmeta-v1-meta)_ | Refer to Kubernetes API documentation for fields of `metadata`. |
-| `spec` _[LinuxDiscoveryReportSpec](#linuxdiscoveryreportspec)_ |  |
-| `status` _[LinuxDiscoveryReportStatus](#linuxdiscoveryreportstatus)_ |  |
-
-
-#### LinuxDiscoveryReportList
-
-
-
-LinuxDiscoveryReportList contains a list of LinuxDiscoveryReport
-
-
-
-| Field | Description |
-| --- | --- |
-| `apiVersion` _string_ | `anthos-migrate.cloud.google.com/v1beta2`
-| `kind` _string_ | `LinuxDiscoveryReportList`
-| `metadata` _[ListMeta](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#listmeta-v1-meta)_ | Refer to Kubernetes API documentation for fields of `metadata`. |
-| `items` _[LinuxDiscoveryReport](#linuxdiscoveryreport) array_ |  |
-
-
-#### LinuxDiscoveryReportSpec
-
-
-
-LinuxDiscoveryReportSpec defines the desired state of LinuxDiscoveryReport
-
-_Appears in:_
-- [LinuxDiscoveryReport](#linuxdiscoveryreport)
-
-| Field | Description |
-| --- | --- |
-| `migration` _[LocalObjectReference](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#localobjectreference-v1-core)_ |  |
-| `systemServices` _[DiscoveredSystemService](#discoveredsystemservice) array_ |  |
-| `openPorts` _[OpenPort](#openport) array_ |  |
-| `nfsMounts` _[NfsMount](#nfsmount) array_ |  |
-| `logPaths` _[LogInfo](#loginfo) array_ |  |
-| `ldtDetails` _[LdtDetails](#ldtdetails)_ |  |
-| `bigFiles` _[BigFileInfo](#bigfileinfo) array_ |  |
-| `sparseFiles` _[BigFileInfo](#bigfileinfo) array_ |  |
-
-
-
-
-#### LinuxMigrationCommonSpec
-
-
-
-LinuxMigrationCommonSpec is meant to hold the fields common to the built-in linux migration, and the AppX-based Linux migration implementation during the transition, until we can fully remove the built-in implementation.
-
-_Appears in:_
-- [GenerateArtifactsFlowSpec](#generateartifactsflowspec)
-
-| Field | Description |
-| --- | --- |
-| `v2kServiceManager` _boolean_ |  |
-| `image` _[Image](#image)_ |  |
-| `global` _[Global](#global)_ |  |
-| `deployment` _[Deployment](#deployment)_ |  |
 
 
 #### LocalAwsSourceSpec
@@ -1848,9 +882,6 @@ _Appears in:_
 _Appears in:_
 - [SourceSnapshotStatus](#sourcesnapshotstatus)
 
-| Field | Description |
-| --- | --- |
-| `hardwareSpec` _[VmwareHardwareSpec](#vmwarehardwarespec)_ |  |
 
 
 #### LocalOVFSourceSpec
@@ -1897,10 +928,7 @@ _Appears in:_
 
 | Field | Description |
 | --- | --- |
-| `createSnapshot` _[VmwareTracker](#vmwaretracker)_ |  |
-| `cloneVm` _[VmwareTracker](#vmwaretracker)_ |  |
 | `createPvcs` _[PvcStatus](#pvcstatus) array_ |  |
-| `hardwareSpec` _[VmwareHardwareSpec](#vmwarehardwarespec)_ |  |
 | `accessType` _string_ |  |
 
 
@@ -1924,20 +952,6 @@ _Appears in:_
 | `dc` _string_ |  |
 
 
-#### LogInfo
-
-
-
-
-
-_Appears in:_
-- [Deployment](#deployment)
-- [LinuxDiscoveryReportSpec](#linuxdiscoveryreportspec)
-
-| Field | Description |
-| --- | --- |
-| `appName` _string_ |  |
-| `globs` _string array_ |  |
 
 
 #### MigrateForCECloudDetails
@@ -2035,214 +1049,18 @@ _Appears in:_
 | `pvc` _[PvcStatus](#pvcstatus)_ |  |
 
 
-#### Migration
 
 
 
-Migration is the Schema for the migrations API
 
-_Appears in:_
-- [MigrationList](#migrationlist)
 
-| Field | Description |
-| --- | --- |
-| `apiVersion` _string_ | `anthos-migrate.cloud.google.com/v1beta2`
-| `kind` _string_ | `Migration`
-| `metadata` _[ObjectMeta](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#objectmeta-v1-meta)_ | Refer to Kubernetes API documentation for fields of `metadata`. |
-| `spec` _[MigrationSpec](#migrationspec)_ |  |
-| `status` _[MigrationStatus](#migrationstatus)_ |  |
 
 
 
 
-#### MigrationList
 
 
 
-MigrationList contains a list of Migration
-
-
-
-| Field | Description |
-| --- | --- |
-| `apiVersion` _string_ | `anthos-migrate.cloud.google.com/v1beta2`
-| `kind` _string_ | `MigrationList`
-| `metadata` _[ListMeta](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#listmeta-v1-meta)_ | Refer to Kubernetes API documentation for fields of `metadata`. |
-| `items` _[Migration](#migration) array_ |  |
-
-
-#### MigrationPlan
-
-
-
-
-
-_Appears in:_
-- [WindowsGenerateArtifactsSpec](#windowsgenerateartifactsspec)
-
-| Field | Description |
-| --- | --- |
-| `target` _[TargetSystem](#targetsystem)_ |  |
-| `applications` _[Applications](#applications)_ |  |
-
-
-#### MigrationSpec
-
-
-
-MigrationSpec defines the desired state of Migration
-
-_Appears in:_
-- [Migration](#migration)
-
-| Field | Description |
-| --- | --- |
-| `osType` _[OsType](#ostype)_ |  |
-| `formFactor` _FormFactor_ |  |
-| `appType` _AppType_ |  |
-| `sourceSnapshot` _[SourceSnapshotSpec](#sourcesnapshotspec)_ |  |
-| `parameters` _[Parameter](#parameter) array_ | Optional configuration for this migration |
-| `artifactsRepository` _[ArtifactsRepositoryRef](#artifactsrepositoryref)_ | This should be generalized throughout all the flows, artifacts repository should be defined once per migration. This field is initially added for Delta |
-| `imageRepository` _[ImageRepositoryRef](#imagerepositoryref)_ | The image repository to which images should be uploaded, in case the extraction phase image needs to upload images. |
-| `configs` _[Configs](#configs)_ | Debug configurations for the aggregator |
-
-
-#### MigrationStatus
-
-
-
-MigrationStatus defines the observed state of Migration
-
-_Appears in:_
-- [Migration](#migration)
-
-| Field | Description |
-| --- | --- |
-| `flowId` _string_ |  |
-| `currentOperation` _Operation_ |  |
-| `status` _[OperationStatus](#operationstatus)_ | Status of the migration process |
-| `error` _string_ |  |
-| `MigrationSubStepsStatus` _[MigrationSubStepsStatus](#migrationsubstepsstatus)_ |  |
-| `reconcileOperationInfo` _[OperationInfo](#operationinfo)_ | Reconciliation loop status, e.g. if some API error is thrown while trying to reconcile |
-| `resources` _[MigrationSubResources](#migrationsubresources)_ |  |
-| `artifacts` _[Artifacts](#artifacts)_ |  |
-| `intent` _[Intent](#intent)_ |  |
-
-
-#### MigrationSubResources
-
-
-
-
-
-_Appears in:_
-- [MigrationStatus](#migrationstatus)
-
-| Field | Description |
-| --- | --- |
-| `sourceSnapshot` _[SubResourceSourceSnapshotStatus](#subresourcesourcesnapshotstatus)_ |  |
-| `generateArtifacts` _[SubResourceGenerateArtifactsStatus](#subresourcegenerateartifactsstatus)_ |  |
-| `windowsDiscovery` _[SubResourceWindowsDiscoveryStatus](#subresourcewindowsdiscoverystatus)_ |  |
-| `windowsGenerateArtifacts` _[SubResourceWindowsGenerateArtifactsStatus](#subresourcewindowsgenerateartifactsstatus)_ |  |
-| `discovery` _[SubResourceDiscoveryStatus](#subresourcediscoverystatus)_ |  |
-| `vmGenerateArtifacts` _[SubResourceVmGenerateArtifactsStatus](#subresourcevmgenerateartifactsstatus)_ |  |
-| `appX` _[SubResourceAppXStatus](#subresourceappxstatus)_ |  |
-
-
-#### MigrationSubSteps
-
-
-
-MigrationSubSteps is the Schema for the migrationsubsteps API
-
-_Appears in:_
-- [MigrationSubStepsList](#migrationsubstepslist)
-
-| Field | Description |
-| --- | --- |
-| `apiVersion` _string_ | `anthos-migrate.cloud.google.com/v1beta2`
-| `kind` _string_ | `MigrationSubSteps`
-| `metadata` _[ObjectMeta](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#objectmeta-v1-meta)_ | Refer to Kubernetes API documentation for fields of `metadata`. |
-| `spec` _[MigrationSubStepsSpec](#migrationsubstepsspec)_ |  |
-| `status` _[MigrationSubStepsStatus](#migrationsubstepsstatus)_ |  |
-
-
-#### MigrationSubStepsList
-
-
-
-MigrationSubStepsList contains a list of MigrationSubSteps
-
-
-
-| Field | Description |
-| --- | --- |
-| `apiVersion` _string_ | `anthos-migrate.cloud.google.com/v1beta2`
-| `kind` _string_ | `MigrationSubStepsList`
-| `metadata` _[ListMeta](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#listmeta-v1-meta)_ | Refer to Kubernetes API documentation for fields of `metadata`. |
-| `items` _[MigrationSubSteps](#migrationsubsteps) array_ |  |
-
-
-#### MigrationSubStepsSpec
-
-
-
-MigrationSubStepsSpec defines the desired state of MigrationSubSteps
-
-_Appears in:_
-- [MigrationSubSteps](#migrationsubsteps)
-
-| Field | Description |
-| --- | --- |
-| `foo` _string_ | Foo is an example field of MigrationSubSteps. Edit MigrationSubSteps_types.go to remove/update |
-
-
-#### MigrationSubStepsStatus
-
-
-
-MigrationSubStepsStatus defines the observed state of MigrationSubSteps
-
-_Appears in:_
-- [MigrationStatus](#migrationstatus)
-- [MigrationSubSteps](#migrationsubsteps)
-
-| Field | Description |
-| --- | --- |
-| `currentOperationSubSteps` _[StepProgress](#stepprogress) array_ |  |
-
-
-#### NfsMount
-
-
-
-
-
-_Appears in:_
-- [LinuxDiscoveryReportSpec](#linuxdiscoveryreportspec)
-
-| Field | Description |
-| --- | --- |
-| `localPath` _string_ |  |
-| `remotePath` _string_ |  |
-| `server` _string_ |  |
-| `mountOptions` _string array_ |  |
-
-
-#### OpenPort
-
-
-
-
-
-_Appears in:_
-- [LinuxDiscoveryReportSpec](#linuxdiscoveryreportspec)
-
-| Field | Description |
-| --- | --- |
-| `port` _integer_ |  |
-| `protocol` _[Protocol](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#protocol-v1-core)_ |  |
-| `programName` _string_ |  |
 
 
 #### OperationInfo
@@ -2257,8 +1075,6 @@ _Appears in:_
 - [GenerateArtifactsTaskStatus](#generateartifactstaskstatus)
 - [MigrationStatus](#migrationstatus)
 - [SourceSnapshotStatus](#sourcesnapshotstatus)
-- [VmGenerateArtifactsTaskStatus](#vmgenerateartifactstaskstatus)
-- [WindowsGenerateArtifactsTaskStatus](#windowsgenerateartifactstaskstatus)
 
 | Field | Description |
 | --- | --- |
@@ -2273,16 +1089,12 @@ _Underlying type:_ `string`
 
 
 _Appears in:_
-- [AppXDiscoveryTaskStatus](#appxdiscoverytaskstatus)
 - [AppXGenerateArtifactsTaskStatus](#appxgenerateartifactstaskstatus)
 - [DiscoveryTaskStatus](#discoverytaskstatus)
 - [GenerateArtifactsTaskStatus](#generateartifactstaskstatus)
 - [MigrationStatus](#migrationstatus)
 - [OperationInfo](#operationinfo)
 - [StepProgress](#stepprogress)
-- [VmGenerateArtifactsTaskStatus](#vmgenerateartifactstaskstatus)
-- [WindowsDiscoveryStatus](#windowsdiscoverystatus)
-- [WindowsGenerateArtifactsTaskStatus](#windowsgenerateartifactstaskstatus)
 
 
 
@@ -2312,7 +1124,7 @@ _Appears in:_
 | Field | Description |
 | --- | --- |
 | `name` _string_ | Name of the Parameter. Must contain only alphanumeric characters ([a-z0-9A-Z]) or underscores (_). Must match the name of existing ParameterDef. |
-| `value` _string_ | Default value of the environment variable. |
+| `value` _string_ | Value of the parameter. |
 
 
 #### ParameterDef
@@ -2354,14 +1166,9 @@ _Appears in:_
 
 _Appears in:_
 - [AppXDataStatus](#appxdatastatus)
-- [AppXDiscoveryTaskStatus](#appxdiscoverytaskstatus)
 - [AppXGenerateArtifactsTaskStatus](#appxgenerateartifactstaskstatus)
-- [DataStatus](#datastatus)
 - [DiscoveryTaskStatus](#discoverytaskstatus)
-- [ImageExtractionStatus](#imageextractionstatus)
 - [ImageUploadStatus](#imageuploadstatus)
-- [WindowsDiscoveryStatus](#windowsdiscoverystatus)
-- [WindowsGenerateArtifactsTaskStatus](#windowsgenerateartifactstaskstatus)
 
 | Field | Description |
 | --- | --- |
@@ -2371,35 +1178,6 @@ _Appears in:_
 | `pod_deletion_time` _[Time](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#time-v1-meta)_ |  |
 
 
-#### Probes
-
-
-
-
-
-_Appears in:_
-- [Deployment](#deployment)
-
-| Field | Description |
-| --- | --- |
-| `livenessProbe` _[Probe](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#probe-v1-core)_ |  |
-| `readinessProbe` _[Probe](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#probe-v1-core)_ |  |
-| `startupProbe` _[Probe](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#probe-v1-core)_ |  |
-
-
-#### Pvc
-
-
-
-
-
-_Appears in:_
-- [DataVolume](#datavolume)
-
-| Field | Description |
-| --- | --- |
-| `name` _string_ |  |
-| `spec` _[PersistentVolumeClaimSpec](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#persistentvolumeclaimspec-v1-core)_ |  |
 
 
 #### PvcStatus
@@ -2416,6 +1194,14 @@ _Appears in:_
 - [LocalVmwareSourceSnapshotStatus](#localvmwaresourcesnapshotstatus)
 - [MigrateForCeStatus](#migrateforcestatus)
 
+| Field | Description |
+| --- | --- |
+| `name` _string_ |  |
+| `claimPhase` _[PersistentVolumeClaimPhase](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#persistentvolumeclaimphase-v1-core)_ |  |
+| `resourcePath` _string_ | Original resource path in cloud (VMware disk path, gce disk name, pv name etc). |
+| `pvName` _string_ | PV Name. |
+| `created` _boolean_ | Was the PVC created. |
+| `csiPvc` _boolean_ | A flag indicating whether the PVC represents a V2K CSI PVC. |
 
 
 #### RemoteSourceSpec
@@ -2430,24 +1216,6 @@ _Appears in:_
 | Field | Description |
 | --- | --- |
 | `migrateForCEService` _[MigrateForCEService](#migrateforceservice)_ |  |
-
-
-#### ReplicatingVM
-
-
-
-ReplicatingVM is the Schema for the sourceproviders API
-
-_Appears in:_
-- [ReplicatingVMList](#replicatingvmlist)
-
-| Field | Description |
-| --- | --- |
-| `apiVersion` _string_ | `anthos-migrate.cloud.google.com/v1beta2`
-| `kind` _string_ | `ReplicatingVM`
-| `metadata` _[ObjectMeta](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#objectmeta-v1-meta)_ | Refer to Kubernetes API documentation for fields of `metadata`. |
-| `spec` _[ReplicatingVMSpec](#replicatingvmspec)_ |  |
-| `status` _[ReplicatingVMStatus](#replicatingvmstatus)_ |  |
 
 
 #### ReplicatingVMDefaults
@@ -2473,77 +1241,10 @@ _Appears in:_
 | `targetProject` _string_ |  |
 
 
-#### ReplicatingVMList
-
-
-
-ReplicatingVMList contains a list of ReplicatingVM
-
-
-
-| Field | Description |
-| --- | --- |
-| `apiVersion` _string_ | `anthos-migrate.cloud.google.com/v1beta2`
-| `kind` _string_ | `ReplicatingVMList`
-| `metadata` _[ListMeta](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#listmeta-v1-meta)_ | Refer to Kubernetes API documentation for fields of `metadata`. |
-| `items` _[ReplicatingVM](#replicatingvm) array_ |  |
-
-
-#### ReplicatingVMSpec
 
 
 
 
-
-_Appears in:_
-- [ReplicatingVM](#replicatingvm)
-
-| Field | Description |
-| --- | --- |
-| `migrateForCEService` _[MigrateForCEService](#migrateforceservice)_ |  |
-| `sourceID` _string_ |  |
-
-
-#### ReplicatingVMState
-
-_Underlying type:_ `string`
-
-
-
-_Appears in:_
-- [ReplicatingVMStatus](#replicatingvmstatus)
-
-
-
-#### ReplicatingVMStatus
-
-
-
-
-
-_Appears in:_
-- [ReplicatingVM](#replicatingvm)
-
-| Field | Description |
-| --- | --- |
-| `migratingVMID` _string_ |  |
-| `state` _[ReplicatingVMState](#replicatingvmstate)_ |  |
-| `lastKnownUsage` _[Time](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#time-v1-meta)_ |  |
-
-
-#### RepositoryLocation
-
-
-
-
-
-_Appears in:_
-- [DeploymentStatus](#deploymentstatus)
-
-| Field | Description |
-| --- | --- |
-| `gcs` _[GcsRepositoryLocation](#gcsrepositorylocation)_ |  |
-| `s3` _[S3RepositoryLocation](#s3repositorylocation)_ |  |
 
 
 #### S3CredentialsSpec
@@ -2597,8 +1298,7 @@ _Appears in:_
 
 SourceProvider is the Schema for the sourceproviders API
 
-_Appears in:_
-- [SourceProviderList](#sourceproviderlist)
+
 
 | Field | Description |
 | --- | --- |
@@ -2607,22 +1307,6 @@ _Appears in:_
 | `metadata` _[ObjectMeta](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#objectmeta-v1-meta)_ | Refer to Kubernetes API documentation for fields of `metadata`. |
 | `spec` _[SourceProviderSpec](#sourceproviderspec)_ |  |
 | `status` _[SourceProviderStatus](#sourceproviderstatus)_ |  |
-
-
-#### SourceProviderList
-
-
-
-SourceProviderList contains a list of SourceProvider
-
-
-
-| Field | Description |
-| --- | --- |
-| `apiVersion` _string_ | `anthos-migrate.cloud.google.com/v1beta2`
-| `kind` _string_ | `SourceProviderList`
-| `metadata` _[ListMeta](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#listmeta-v1-meta)_ | Refer to Kubernetes API documentation for fields of `metadata`. |
-| `items` _[SourceProvider](#sourceprovider) array_ |  |
 
 
 #### SourceProviderSpec
@@ -2658,40 +1342,6 @@ _Appears in:_
 | `storageClassRef` _[LocalObjectReference](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#localobjectreference-v1-core)_ |  |
 
 
-#### SourceSnapshot
-
-
-
-SourceSnapshot is the Schema for the sourcesnapshots API.
-
-_Appears in:_
-- [SourceSnapshotList](#sourcesnapshotlist)
-
-| Field | Description |
-| --- | --- |
-| `apiVersion` _string_ | `anthos-migrate.cloud.google.com/v1beta2`
-| `kind` _string_ | `SourceSnapshot`
-| `metadata` _[ObjectMeta](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#objectmeta-v1-meta)_ | Refer to Kubernetes API documentation for fields of `metadata`. |
-| `spec` _[SourceSnapshotSpec](#sourcesnapshotspec)_ |  |
-| `status` _[SourceSnapshotStatus](#sourcesnapshotstatus)_ |  |
-
-
-#### SourceSnapshotList
-
-
-
-SourceSnapshotList contains a list of SourceSnapshot.
-
-
-
-| Field | Description |
-| --- | --- |
-| `apiVersion` _string_ | `anthos-migrate.cloud.google.com/v1beta2`
-| `kind` _string_ | `SourceSnapshotList`
-| `metadata` _[ListMeta](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#listmeta-v1-meta)_ | Refer to Kubernetes API documentation for fields of `metadata`. |
-| `items` _[SourceSnapshot](#sourcesnapshot) array_ |  |
-
-
 #### SourceSnapshotSpec
 
 
@@ -2700,7 +1350,6 @@ SourceSnapshotSpec defines the desired state of SourceSnapshot.
 
 _Appears in:_
 - [MigrationSpec](#migrationspec)
-- [SourceSnapshot](#sourcesnapshot)
 
 | Field | Description |
 | --- | --- |
@@ -2712,513 +1361,14 @@ _Appears in:_
 | `remoteSourceSnapshot` _[LocalObjectReference](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#localobjectreference-v1-core)_ |  |
 
 
-#### SourceSnapshotStatus
 
 
 
-SourceSnapshotStatus defines the observed state of SourceSnapshot.
 
-_Appears in:_
-- [SourceSnapshot](#sourcesnapshot)
-- [SubResourceSourceSnapshotStatus](#subresourcesourcesnapshotstatus)
 
-| Field | Description |
-| --- | --- |
-| `computeEngine` _[ComputeEngineSourceSnapshotStatus](#computeenginesourcesnapshotstatus)_ |  |
-| `localEc2` _[LocalEc2SourceSnapshotStatus](#localec2sourcesnapshotstatus)_ |  |
-| `localVmware` _[LocalVmwareSourceSnapshotStatus](#localvmwaresourcesnapshotstatus)_ |  |
-| `localOVF` _[LocalOVFSourceSnapshotStatus](#localovfsourcesnapshotstatus)_ |  |
-| `ready` _boolean_ |  |
-| `migrateForCe` _[MigrateForCeStatus](#migrateforcestatus)_ |  |
-| `operation` _[OperationInfo](#operationinfo)_ |  |
 
 
-#### StepProgress
 
-
-
-
-
-_Appears in:_
-- [MigrationSubStepsStatus](#migrationsubstepsstatus)
-
-| Field | Description |
-| --- | --- |
-| `description` _SubStep_ |  |
-| `status` _[OperationStatus](#operationstatus)_ | Make sure to copy from controllers/api/v1beta2/migrationsubsteps_types.go TODO: Test that all supported statuses are in this list |
-| `progress` _string_ |  |
-
-
-#### SubResourceAppXStatus
-
-
-
-
-
-_Appears in:_
-- [MigrationSubResources](#migrationsubresources)
-
-| Field | Description |
-| --- | --- |
-| `LocalObjectReference` _[LocalObjectReference](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#localobjectreference-v1-core)_ |  |
-| `discoveryStatus` _[AppXDiscoveryFlowStatus](#appxdiscoveryflowstatus)_ |  |
-| `extractStatus` _[AppXGenerateArtifactsFlowStatus](#appxgenerateartifactsflowstatus)_ |  |
-
-
-#### SubResourceDiscoveryStatus
-
-
-
-
-
-_Appears in:_
-- [MigrationSubResources](#migrationsubresources)
-
-| Field | Description |
-| --- | --- |
-| `LocalObjectReference` _[LocalObjectReference](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#localobjectreference-v1-core)_ |  |
-| `task` _[SubResourceDiscoveryTaskStatus](#subresourcediscoverytaskstatus)_ |  |
-| `report` _[LocalObjectReference](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#localobjectreference-v1-core)_ |  |
-
-
-#### SubResourceDiscoveryTaskStatus
-
-
-
-
-
-_Appears in:_
-- [SubResourceDiscoveryStatus](#subresourcediscoverystatus)
-
-| Field | Description |
-| --- | --- |
-| `LocalObjectReference` _[LocalObjectReference](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#localobjectreference-v1-core)_ |  |
-| `status` _[DiscoveryTaskStatus](#discoverytaskstatus)_ |  |
-
-
-#### SubResourceGenerateArtifactsStatus
-
-
-
-
-
-_Appears in:_
-- [MigrationSubResources](#migrationsubresources)
-
-| Field | Description |
-| --- | --- |
-| `LocalObjectReference` _[LocalObjectReference](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#localobjectreference-v1-core)_ |  |
-| `task` _[SubResourceGenerateArtifactsTaskStatus](#subresourcegenerateartifactstaskstatus)_ |  |
-| `alwaysRetakeSnapshot` _boolean_ |  |
-
-
-#### SubResourceGenerateArtifactsTaskStatus
-
-
-
-
-
-_Appears in:_
-- [SubResourceGenerateArtifactsStatus](#subresourcegenerateartifactsstatus)
-
-| Field | Description |
-| --- | --- |
-| `LocalObjectReference` _[LocalObjectReference](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#localobjectreference-v1-core)_ |  |
-| `status` _[GenerateArtifactsTaskStatus](#generateartifactstaskstatus)_ |  |
-
-
-#### SubResourceSourceSnapshotStatus
-
-
-
-
-
-_Appears in:_
-- [MigrationSubResources](#migrationsubresources)
-
-| Field | Description |
-| --- | --- |
-| `LocalObjectReference` _[LocalObjectReference](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#localobjectreference-v1-core)_ |  |
-| `status` _[SourceSnapshotStatus](#sourcesnapshotstatus)_ |  |
-
-
-#### SubResourceVmGenerateArtifactsStatus
-
-
-
-
-
-_Appears in:_
-- [MigrationSubResources](#migrationsubresources)
-
-| Field | Description |
-| --- | --- |
-| `LocalObjectReference` _[LocalObjectReference](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#localobjectreference-v1-core)_ |  |
-| `task` _[SubResourceVmGenerateArtifactsTaskStatus](#subresourcevmgenerateartifactstaskstatus)_ |  |
-| `alwaysRetakeSnapshot` _boolean_ |  |
-
-
-#### SubResourceVmGenerateArtifactsTaskStatus
-
-
-
-
-
-_Appears in:_
-- [SubResourceVmGenerateArtifactsStatus](#subresourcevmgenerateartifactsstatus)
-
-| Field | Description |
-| --- | --- |
-| `LocalObjectReference` _[LocalObjectReference](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#localobjectreference-v1-core)_ |  |
-| `status` _[VmGenerateArtifactsTaskStatus](#vmgenerateartifactstaskstatus)_ | no status yet |
-
-
-#### SubResourceWindowsDiscoveryStatus
-
-
-
-
-
-_Appears in:_
-- [MigrationSubResources](#migrationsubresources)
-
-| Field | Description |
-| --- | --- |
-| `LocalObjectReference` _[LocalObjectReference](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#localobjectreference-v1-core)_ |  |
-| `status` _[WindowsDiscoveryStatus](#windowsdiscoverystatus)_ |  |
-
-
-#### SubResourceWindowsGenerateArtifactsStatus
-
-
-
-
-
-_Appears in:_
-- [MigrationSubResources](#migrationsubresources)
-
-| Field | Description |
-| --- | --- |
-| `LocalObjectReference` _[LocalObjectReference](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#localobjectreference-v1-core)_ |  |
-| `task` _[SubResourceWindowsGenerateArtifactsTaskStatus](#subresourcewindowsgenerateartifactstaskstatus)_ |  |
-
-
-#### SubResourceWindowsGenerateArtifactsTaskStatus
-
-
-
-
-
-_Appears in:_
-- [SubResourceWindowsGenerateArtifactsStatus](#subresourcewindowsgenerateartifactsstatus)
-
-| Field | Description |
-| --- | --- |
-| `LocalObjectReference` _[LocalObjectReference](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#localobjectreference-v1-core)_ |  |
-| `status` _[WindowsGenerateArtifactsTaskStatus](#windowsgenerateartifactstaskstatus)_ |  |
-
-
-#### SystemService
-
-
-
-
-
-_Appears in:_
-- [DiscoveredSystemService](#discoveredsystemservice)
-- [Image](#image)
-
-| Field | Description |
-| --- | --- |
-| `name` _string_ |  |
-| `enabled` _boolean_ |  |
-| `probed` _boolean_ |  |
-
-
-#### TargetSystem
-
-
-
-
-
-_Appears in:_
-- [MigrationPlan](#migrationplan)
-
-| Field | Description |
-| --- | --- |
-| `baseVersion` _string_ |  |
-| `requirements` _string array_ |  |
-| `warnings` _string array_ |  |
-
-
-
-
-#### VMImage
-
-
-
-
-
-_Appears in:_
-- [VmGenerateArtifactsFlowSpec](#vmgenerateartifactsflowspec)
-
-| Field | Description |
-| --- | --- |
-| `imageRepository` _[ImageRepositoryRef](#imagerepositoryref)_ |  |
-| `name` _string_ |  |
-
-
-#### VMSpec
-
-
-
-
-
-_Appears in:_
-- [VmGenerateArtifactsFlowSpec](#vmgenerateartifactsflowspec)
-
-| Field | Description |
-| --- | --- |
-| `bootLoader` _BootLoader_ |  |
-| `guestOsType` _string_ |  |
-| `numCpu` _integer_ |  |
-| `ramMb` _integer_ |  |
-
-
-#### VmGenerateArtifactsFlow
-
-
-
-VmGenerateArtifactsFlow is the Schema for the VmGenerateArtifactsFlow API.
-
-_Appears in:_
-- [VmGenerateArtifactsFlowList](#vmgenerateartifactsflowlist)
-
-| Field | Description |
-| --- | --- |
-| `apiVersion` _string_ | `anthos-migrate.cloud.google.com/v1beta2`
-| `kind` _string_ | `VmGenerateArtifactsFlow`
-| `metadata` _[ObjectMeta](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#objectmeta-v1-meta)_ | Refer to Kubernetes API documentation for fields of `metadata`. |
-| `spec` _[VmGenerateArtifactsFlowSpec](#vmgenerateartifactsflowspec)_ |  |
-| `status` _[VmGenerateArtifactsFlowStatus](#vmgenerateartifactsflowstatus)_ |  |
-
-
-#### VmGenerateArtifactsFlowList
-
-
-
-VmGenerateArtifactsFlowList contains a list of VmGenerateArtifactsFlow.
-
-
-
-| Field | Description |
-| --- | --- |
-| `apiVersion` _string_ | `anthos-migrate.cloud.google.com/v1beta2`
-| `kind` _string_ | `VmGenerateArtifactsFlowList`
-| `metadata` _[ListMeta](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#listmeta-v1-meta)_ | Refer to Kubernetes API documentation for fields of `metadata`. |
-| `items` _[VmGenerateArtifactsFlow](#vmgenerateartifactsflow) array_ |  |
-
-
-#### VmGenerateArtifactsFlowSpec
-
-
-
-VmGenerateArtifactsFlowSpec defines the desired state of VmGenerateArtifactsFlow.
-
-_Appears in:_
-- [VmGenerateArtifactsFlow](#vmgenerateartifactsflow)
-
-| Field | Description |
-| --- | --- |
-| `intent` _[Intent](#intent)_ |  |
-| `image` _[VMImage](#vmimage)_ |  |
-| `vmSpec` _[VMSpec](#vmspec)_ |  |
-| `dataVolumes` _[DataVolume](#datavolume) array_ |  |
-| `deployment` _[Deployment](#deployment)_ |  |
-| `configs` _[Configs](#configs)_ |  |
-| `diskPvcsNamespace` _string_ | Namespace in which to place the disk PVCs for data migrations. If empty "default" is used. |
-| `storageClassName` _string_ | Storage class to use for output PVCs, if omitted the default storage class is used. |
-| `targetDiskConfig` _[DiskConfig](#diskconfig)_ |  |
-
-
-
-
-#### VmGenerateArtifactsTask
-
-
-
-VmGenerateArtifactsTask is the Schema for the vmgenerateartifactstasks API.
-
-_Appears in:_
-- [VmGenerateArtifactsTaskList](#vmgenerateartifactstasklist)
-
-| Field | Description |
-| --- | --- |
-| `apiVersion` _string_ | `anthos-migrate.cloud.google.com/v1beta2`
-| `kind` _string_ | `VmGenerateArtifactsTask`
-| `metadata` _[ObjectMeta](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#objectmeta-v1-meta)_ | Refer to Kubernetes API documentation for fields of `metadata`. |
-| `spec` _[VmGenerateArtifactsTaskSpec](#vmgenerateartifactstaskspec)_ |  |
-| `status` _[VmGenerateArtifactsTaskStatus](#vmgenerateartifactstaskstatus)_ |  |
-
-
-#### VmGenerateArtifactsTaskExportProgress
-
-
-
-VmGenerateArtifactsTaskExportProgress tracks the progress of exporting the disks of a VM.
-
-_Appears in:_
-- [VmGenerateArtifactsTaskProgress](#vmgenerateartifactstaskprogress)
-
-| Field | Description |
-| --- | --- |
-| `downloadProgressPercentage` _string_ | Percentage of total disks size that has been downloaded. Since downloading uses compression, will be an underestimate. |
-| `bytesDownloadedByDisk` _object (keys:string, values:integer)_ | The number of bytes downloaded per disk. Key is index of each disk. |
-| `totalDisksSize` _integer_ | Sum of size of all disks that will be downloaded in bytes. |
-| `statusByDisk` _object (keys:string, values:[ExportProgressDiskStatus](#exportprogressdiskstatus))_ | Download status of each disk. Key is index of each disk. |
-
-
-#### VmGenerateArtifactsTaskList
-
-
-
-VmGenerateArtifactsTaskList contains a list of VmGenerateArtifactsTask.
-
-
-
-| Field | Description |
-| --- | --- |
-| `apiVersion` _string_ | `anthos-migrate.cloud.google.com/v1beta2`
-| `kind` _string_ | `VmGenerateArtifactsTaskList`
-| `metadata` _[ListMeta](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#listmeta-v1-meta)_ | Refer to Kubernetes API documentation for fields of `metadata`. |
-| `items` _[VmGenerateArtifactsTask](#vmgenerateartifactstask) array_ |  |
-
-
-#### VmGenerateArtifactsTaskProgress
-
-
-
-VmGenerateArtifactsTaskProgress tracks the progress of a VmGenerateArtifactsTask.
-
-_Appears in:_
-- [VmGenerateArtifactsTaskProgressList](#vmgenerateartifactstaskprogresslist)
-
-| Field | Description |
-| --- | --- |
-| `apiVersion` _string_ | `anthos-migrate.cloud.google.com/v1beta2`
-| `kind` _string_ | `VmGenerateArtifactsTaskProgress`
-| `metadata` _[ObjectMeta](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#objectmeta-v1-meta)_ | Refer to Kubernetes API documentation for fields of `metadata`. |
-| `export` _[VmGenerateArtifactsTaskExportProgress](#vmgenerateartifactstaskexportprogress)_ |  |
-
-
-#### VmGenerateArtifactsTaskProgressList
-
-
-
-VmGenerateArtifactsTaskProgressList contains a list of VmGenerateArtifactsTaskProgress.
-
-
-
-| Field | Description |
-| --- | --- |
-| `apiVersion` _string_ | `anthos-migrate.cloud.google.com/v1beta2`
-| `kind` _string_ | `VmGenerateArtifactsTaskProgressList`
-| `metadata` _[ListMeta](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#listmeta-v1-meta)_ | Refer to Kubernetes API documentation for fields of `metadata`. |
-| `items` _[VmGenerateArtifactsTaskProgress](#vmgenerateartifactstaskprogress) array_ |  |
-
-
-#### VmGenerateArtifactsTaskSpec
-
-
-
-VmGenerateArtifactsTaskSpec defines the desired state of VmGenerateArtifactsTask.
-
-_Appears in:_
-- [VmGenerateArtifactsTask](#vmgenerateartifactstask)
-
-| Field | Description |
-| --- | --- |
-| `migration` _[LocalObjectReference](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#localobjectreference-v1-core)_ |  |
-
-
-#### VmGenerateArtifactsTaskStatus
-
-
-
-VmGenerateArtifactsTaskStatus defines the observed state of VmGenerateArtifactsTask.
-
-_Appears in:_
-- [SubResourceVmGenerateArtifactsTaskStatus](#subresourcevmgenerateartifactstaskstatus)
-- [VmGenerateArtifactsTask](#vmgenerateartifactstask)
-
-| Field | Description |
-| --- | --- |
-| `data` _[DataStatus](#datastatus)_ |  |
-| `image` _[ImageStatus](#imagestatus)_ |  |
-| `deployment` _[DeploymentStatus](#deploymentstatus)_ |  |
-| `progress` _[LocalObjectReference](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#localobjectreference-v1-core)_ |  |
-| `status` _[OperationStatus](#operationstatus)_ |  |
-| `operation` _[OperationInfo](#operationinfo)_ |  |
-| `deletedOldSnapshot` _boolean_ |  |
-
-
-#### VmwareDiskInfo
-
-
-
-
-
-_Appears in:_
-- [VmwareHardwareSpec](#vmwarehardwarespec)
-
-
-
-#### VmwareHardwareSpec
-
-
-
-
-
-_Appears in:_
-- [LocalOVFSourceSnapshotStatus](#localovfsourcesnapshotstatus)
-- [LocalVmwareSourceSnapshotStatus](#localvmwaresourcesnapshotstatus)
-
-| Field | Description |
-| --- | --- |
-| `firmware` _string_ |  |
-| `efiSecureBoot` _boolean_ |  |
-| `guestOsId` _string_ |  |
-| `numCpu` _integer_ |  |
-| `ramMb` _integer_ |  |
-| `uuid` _string_ |  |
-| `instanceUuid` _string_ |  |
-| `disksInfo` _[VmwareDiskInfo](#vmwarediskinfo) array_ |  |
-
-
-#### VmwareTaskTracker
-
-
-
-
-
-_Appears in:_
-- [VmwareTracker](#vmwaretracker)
-
-
-
-#### VmwareTracker
-
-
-
-
-
-_Appears in:_
-- [LocalVmwareSourceSnapshotStatus](#localvmwaresourcesnapshotstatus)
-
-| Field | Description |
-| --- | --- |
-| `create` _[VmwareTaskTracker](#vmwaretasktracker)_ |  |
-| `cleanup` _[VmwareTaskTracker](#vmwaretasktracker)_ |  |
 
 
 #### Volume
@@ -3237,21 +1387,6 @@ _Appears in:_
 | `name` _string_ |  |
 
 
-#### VolumeSpec
-
-
-
-
-
-_Appears in:_
-- [GenerateArtifactsFlowStatus](#generateartifactsflowstatus)
-
-| Field | Description |
-| --- | --- |
-| `pvc` _[PersistentVolumeClaim](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#persistentvolumeclaim-v1-core)_ |  |
-| `pv` _[PersistentVolume](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#persistentvolume-v1-core)_ |  |
-
-
 #### Warning
 
 
@@ -3259,8 +1394,6 @@ _Appears in:_
 
 
 _Appears in:_
-- [AppXDiscoveryFlowSpec](#appxdiscoveryflowspec)
-- [AppXDiscoveryResultSpec](#appxdiscoveryresultspec)
 - [AppXGenerateArtifactsFlowSpec](#appxgenerateartifactsflowspec)
 
 | Field | Description |
@@ -3269,245 +1402,5 @@ _Appears in:_
 | `mitigation` _string_ | 'Mitigation' is human-readable information |
 | `reason` _string_ | 'Reason' is short and unique, UpperCamelCase |
 | `type` _string_ | 'Type' is either Normal / MigrationBlocker |
-
-
-#### WindowsArtifacts
-
-
-
-
-
-_Appears in:_
-- [WindowsGenerateArtifactsTaskStatus](#windowsgenerateartifactstaskstatus)
-
-| Field | Description |
-| --- | --- |
-| `repositoryBucket` _string_ |  |
-| `repositoryFolder` _string_ |  |
-| `artifactsZip` _string_ |  |
-
-
-#### WindowsDiscovery
-
-
-
-WindowsDiscovery is the Schema for the windowsdiscoveries API
-
-_Appears in:_
-- [WindowsDiscoveryList](#windowsdiscoverylist)
-
-| Field | Description |
-| --- | --- |
-| `apiVersion` _string_ | `anthos-migrate.cloud.google.com/v1beta2`
-| `kind` _string_ | `WindowsDiscovery`
-| `metadata` _[ObjectMeta](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#objectmeta-v1-meta)_ | Refer to Kubernetes API documentation for fields of `metadata`. |
-| `spec` _[WindowsDiscoverySpec](#windowsdiscoveryspec)_ |  |
-| `status` _[WindowsDiscoveryStatus](#windowsdiscoverystatus)_ |  |
-
-
-#### WindowsDiscoveryList
-
-
-
-WindowsDiscoveryList contains a list of WindowsDiscovery
-
-
-
-| Field | Description |
-| --- | --- |
-| `apiVersion` _string_ | `anthos-migrate.cloud.google.com/v1beta2`
-| `kind` _string_ | `WindowsDiscoveryList`
-| `metadata` _[ListMeta](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#listmeta-v1-meta)_ | Refer to Kubernetes API documentation for fields of `metadata`. |
-| `items` _[WindowsDiscovery](#windowsdiscovery) array_ |  |
-
-
-#### WindowsDiscoveryResult
-
-
-
-WindowsDiscoveryResult is the Schema for the windowsdiscoveryresults API
-
-_Appears in:_
-- [WindowsDiscoveryResultList](#windowsdiscoveryresultlist)
-
-| Field | Description |
-| --- | --- |
-| `apiVersion` _string_ | `anthos-migrate.cloud.google.com/v1beta2`
-| `kind` _string_ | `WindowsDiscoveryResult`
-| `metadata` _[ObjectMeta](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#objectmeta-v1-meta)_ | Refer to Kubernetes API documentation for fields of `metadata`. |
-| `spec` _[WindowsDiscoveryResultSpec](#windowsdiscoveryresultspec)_ |  |
-| `status` _[WindowsDiscoveryResultStatus](#windowsdiscoveryresultstatus)_ |  |
-
-
-#### WindowsDiscoveryResultList
-
-
-
-WindowsDiscoveryResultList contains a list of WindowsDiscoveryResult
-
-
-
-| Field | Description |
-| --- | --- |
-| `apiVersion` _string_ | `anthos-migrate.cloud.google.com/v1beta2`
-| `kind` _string_ | `WindowsDiscoveryResultList`
-| `metadata` _[ListMeta](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#listmeta-v1-meta)_ | Refer to Kubernetes API documentation for fields of `metadata`. |
-| `items` _[WindowsDiscoveryResult](#windowsdiscoveryresult) array_ |  |
-
-
-#### WindowsDiscoveryResultSpec
-
-
-
-WindowsDiscoveryResultSpec defines the desired state of WindowsDiscoveryResult
-
-_Appears in:_
-- [WindowsDiscoveryResult](#windowsdiscoveryresult)
-
-| Field | Description |
-| --- | --- |
-| `migrationPlanYaml` _string_ |  |
-| `error` _string_ |  |
-
-
-
-
-
-
-#### WindowsDiscoveryStatus
-
-
-
-WindowsDiscoveryStatus defines the observed state of WindowsDiscovery
-
-_Appears in:_
-- [SubResourceWindowsDiscoveryStatus](#subresourcewindowsdiscoverystatus)
-- [WindowsDiscovery](#windowsdiscovery)
-
-| Field | Description |
-| --- | --- |
-| `discover` _[PodStatus](#podstatus)_ |  |
-| `windowsDiscoveryResult` _[LocalObjectReference](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#localobjectreference-v1-core)_ |  |
-| `windowsGenerateArtifacts` _[LocalObjectReference](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#localobjectreference-v1-core)_ |  |
-| `status` _[OperationStatus](#operationstatus)_ |  |
-| `error` _string_ |  |
-
-
-#### WindowsGenerateArtifacts
-
-
-
-WindowsGenerateArtifacts is the Schema for the windowsgenerateartifacts API
-
-_Appears in:_
-- [WindowsGenerateArtifactsList](#windowsgenerateartifactslist)
-
-| Field | Description |
-| --- | --- |
-| `apiVersion` _string_ | `anthos-migrate.cloud.google.com/v1beta2`
-| `kind` _string_ | `WindowsGenerateArtifacts`
-| `metadata` _[ObjectMeta](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#objectmeta-v1-meta)_ | Refer to Kubernetes API documentation for fields of `metadata`. |
-| `spec` _[WindowsGenerateArtifactsSpec](#windowsgenerateartifactsspec)_ |  |
-| `status` _[WindowsGenerateArtifactsStatus](#windowsgenerateartifactsstatus)_ |  |
-
-
-#### WindowsGenerateArtifactsList
-
-
-
-WindowsGenerateArtifactsList contains a list of WindowsGenerateArtifacts
-
-
-
-| Field | Description |
-| --- | --- |
-| `apiVersion` _string_ | `anthos-migrate.cloud.google.com/v1beta2`
-| `kind` _string_ | `WindowsGenerateArtifactsList`
-| `metadata` _[ListMeta](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#listmeta-v1-meta)_ | Refer to Kubernetes API documentation for fields of `metadata`. |
-| `items` _[WindowsGenerateArtifacts](#windowsgenerateartifacts) array_ |  |
-
-
-#### WindowsGenerateArtifactsSpec
-
-
-
-WindowsGenerateArtifactsSpec defines the desired state of WindowsGenerateArtifacts
-
-_Appears in:_
-- [WindowsGenerateArtifacts](#windowsgenerateartifacts)
-
-| Field | Description |
-| --- | --- |
-| `migrationPlan` _[MigrationPlan](#migrationplan)_ |  |
-| `artifactsRepository` _[ArtifactsRepositoryRef](#artifactsrepositoryref)_ |  |
-| `folder` _string_ |  |
-
-
-
-
-#### WindowsGenerateArtifactsTask
-
-
-
-WindowsGenerateArtifactsTask is the Schema for the windowsgenerateartifactstasks API
-
-_Appears in:_
-- [WindowsGenerateArtifactsTaskList](#windowsgenerateartifactstasklist)
-
-| Field | Description |
-| --- | --- |
-| `apiVersion` _string_ | `anthos-migrate.cloud.google.com/v1beta2`
-| `kind` _string_ | `WindowsGenerateArtifactsTask`
-| `metadata` _[ObjectMeta](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#objectmeta-v1-meta)_ | Refer to Kubernetes API documentation for fields of `metadata`. |
-| `spec` _[WindowsGenerateArtifactsTaskSpec](#windowsgenerateartifactstaskspec)_ |  |
-| `status` _[WindowsGenerateArtifactsTaskStatus](#windowsgenerateartifactstaskstatus)_ |  |
-
-
-#### WindowsGenerateArtifactsTaskList
-
-
-
-WindowsGenerateArtifactsTaskList contains a list of WindowsGenerateArtifactsTask
-
-
-
-| Field | Description |
-| --- | --- |
-| `apiVersion` _string_ | `anthos-migrate.cloud.google.com/v1beta2`
-| `kind` _string_ | `WindowsGenerateArtifactsTaskList`
-| `metadata` _[ListMeta](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#listmeta-v1-meta)_ | Refer to Kubernetes API documentation for fields of `metadata`. |
-| `items` _[WindowsGenerateArtifactsTask](#windowsgenerateartifactstask) array_ |  |
-
-
-#### WindowsGenerateArtifactsTaskSpec
-
-
-
-WindowsGenerateArtifactsTaskSpec defines the desired state of WindowsGenerateArtifactsTask
-
-_Appears in:_
-- [WindowsGenerateArtifactsTask](#windowsgenerateartifactstask)
-
-| Field | Description |
-| --- | --- |
-| `migration` _[LocalObjectReference](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#localobjectreference-v1-core)_ |  |
-
-
-#### WindowsGenerateArtifactsTaskStatus
-
-
-
-WindowsGenerateArtifactsTaskStatus defines the observed state of WindowsGenerateArtifactsTask
-
-_Appears in:_
-- [SubResourceWindowsGenerateArtifactsTaskStatus](#subresourcewindowsgenerateartifactstaskstatus)
-- [WindowsGenerateArtifactsTask](#windowsgenerateartifactstask)
-
-| Field | Description |
-| --- | --- |
-| `extract` _[PodStatus](#podstatus)_ |  |
-| `artifacts` _[WindowsArtifacts](#windowsartifacts)_ |  |
-| `status` _[OperationStatus](#operationstatus)_ |  |
-| `operation` _[OperationInfo](#operationinfo)_ | Note: both Operation and Status hold OperationStatus. Operation.Status is used for maintaining error state. Status is used for internal state management. |
 
 
