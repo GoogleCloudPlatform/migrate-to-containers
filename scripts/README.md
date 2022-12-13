@@ -1,6 +1,6 @@
 # Migrate to Containers useful scripts and utilities
 
-The utility scripts are useful for setting up processing clusters and deployment clsuters and with migrated images. 
+The utility scripts are useful for setting up processing clusters and deployment clsuters and with migrated images.
 
 ## Table of Contents
 * [Install M2C](install_m2c.sh) - This script creates a GKE with the necessary service account and installs Migrate to Containers on this cluster.
