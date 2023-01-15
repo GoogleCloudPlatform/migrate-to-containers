@@ -30,9 +30,8 @@ sudo ./mfit-linux-collect.sh
 # Import the VM collection details to mFIT DB
 ./mfit discover import m2c-collect-*-*.tar
 
-# Assess the discovered VMs
-./mfit assess
-# Generate a detailed HTML report
+# Assess and generate a detailed HTML report
 ./mfit report --full --format html > mfit-report.html
-# Generate a JSON report
+
+# Assess and generate a JSON report
 ./mfit report --format json > mfit-report.json
