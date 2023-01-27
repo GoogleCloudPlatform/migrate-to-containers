@@ -23,7 +23,7 @@ sed -i '/<!-- Spring and Spring Boot dependencies -->/!b;n;c\\t\t<dependency>\n\
 sed -i '0,/<build>/s/<build>/<build>\n\t\t<finalName>petclinic<\/finalName>/' pom.xml
 
 # Modify the main application class to run in a provided Tomcat servlet container
-sed -i '/import org.springframework.boot.autoconfigure.SpringBootApplication;/!b;n;cimport org.springframework.boot.web.servlet.support.SpringBootServletInitializer;\n' src/main/java/org/springframework/samples/petclinic/PetClinicApplication.java
+sed -i '/import org.springframework.context.annotation.ImportRuntimeHints;/!b;n;cimport org.springframework.boot.web.servlet.support.SpringBootServletInitializer;\n' src/main/java/org/springframework/samples/petclinic/PetClinicApplication.java
 sed -i 's/public class PetClinicApplication/public class PetClinicApplication extends SpringBootServletInitializer/g' src/main/java/org/springframework/samples/petclinic/PetClinicApplication.java
 
 # Modify the MySQL server name in application-mysql.properties
