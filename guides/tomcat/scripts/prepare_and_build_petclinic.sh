@@ -13,6 +13,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# Use this version of PetClinic which is still using Spring Boot 2.x.x and doesn't require Java 17
+git checkout a5cbb8505a1df3c348c06607933a07fc8c87c222
+
 # Modify the pom.xml to package petclinic application as a war instead of the default jar packaging
 sed -i '/<name>petclinic<\/name>/!b;n;c\\t<packaging>war<\/packaging>\n' pom.xml
 
