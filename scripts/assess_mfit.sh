@@ -27,8 +27,11 @@ chmod +x mfit
 # Run collection script locally
 sudo ./mfit-linux-collect.sh
 
+# commenting the line of code to avoid this error if this is not usefull code snippet -"error importing 'm2c-collect-*-*.tar': 1 error occurred:\n\t* 
+# failed collecting 'ImportVM': could not read file 'm2c-collect-*-*.tar': 
+# open m2c-collect-*-*.tar: no such file or directory\n\n\n\n"} "
 # Import the VM collection details to mFIT DB
-./mfit discover import m2c-collect-*-*.tar
+#./mfit discover import m2c-collect-*-*.tar
 
 # Assess and generate a detailed HTML report
 ./mfit report --full --format html > mfit-report.html
