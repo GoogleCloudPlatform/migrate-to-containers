@@ -1,12 +1,12 @@
 # Tomcat migration plan structure
 
-Following is the full Tomcat migration plan structure. 
+Following is the full Tomcat migration plan structure.
 The migration plan yaml file is represented by _[ExtractionConfig](#extractionconfig)_ structure.
 
 ### ExtractionConfig
 | Field | Description |
 | --- | --- |
-| `includeSensitiveData` _string_ | If set to true, sensitive data specified in sensitiveDataPaths will be uploaded to the artifacts repository. |
+| `includeSensitiveData` _bool_ | If set to true, sensitive data specified in sensitiveDataPaths will be uploaded to the artifacts repository. |
 | `tomcatServers` _[TomcatServer](#tomcatserver) array_  | List of Tomcat server detected.  |
 
 ### TomcatServer
@@ -18,16 +18,8 @@ _Appears in:_
 | `name` _string_ | Name of the Tomcat server. |
 | `catalinaBase` _string_ | Value of CATALINA_BASE. |
 | `catalinaHome` _string_ | Value of CATALINA_HOME. |
-| `images` _[Image](#image) array_ | A list of container images, each for a Tomcat host |
-| `excludeFiles` _string_ | Exclude files from migration. |
-
-### ConfigResource
-_Appears in:_
-- [Image](#image)
-
-| Field | Description |
-| --- | --- |
-| `memory` _[Memory](#memory)_ | Memory configuration |
+| `images` _[Image](#image) array_ | A list of container images, each for a Tomcat host. |
+| `excludeFiles` _string array_ | Exclude files from migration. |
 
 ### Image
 _Appears in:_
@@ -35,7 +27,7 @@ _Appears in:_
 
 | Field | Description |
 | --- | --- |
-| `name` _string_ | Name of the container image |
+| `name` _string_ | Name of the container image. |
 | `additionalFiles` _string array_ |  External paths required for running the Tomcat server or apps. |
 | `resources` _[ConfigResource](#configresource)_ | Container resources. |
 | `logConfigPaths` _string array_ | Log Configuration paths for the Tomcat apps. |
@@ -44,6 +36,15 @@ _Appears in:_
 | `fromImage` _string_ | The detected Tomcat version. |
 | `sensitiveDataPaths` _string array_ | Files and directories that will be uploaded to the artifact repository. |
 | `probes` _[Probes](#probes)_ | Health probes configuration. |
+
+### ConfigResource
+_Appears in:_
+- [Image](#image)
+
+| Field | Description |
+| --- | --- |
+| `memory` _[Memory](#memory)_ | Memory configuration. |
+| `catalinaOpts` _string_ | Value of CATALINA_OPTS. |
 
 ### Memory
 _Appears in:_

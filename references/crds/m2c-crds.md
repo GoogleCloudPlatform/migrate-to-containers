@@ -475,8 +475,6 @@ _Appears in:_
 
 
 
-
-
 #### ComputeEngineSourceSnapshot
 
 
@@ -525,8 +523,6 @@ _Appears in:_
 | Field | Description |
 | --- | --- |
 | `volumes` _[AppXVolume](#appxvolume) array_ |  |
-
-
 
 
 
@@ -604,8 +600,6 @@ _Appears in:_
 | `lastError` _string_ |  |
 | `lastErrorCatalogCode` _CatalogCode_ |  |
 | `lastErrorTime` _[Time](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#time-v1-meta)_ |  |
-
-
 
 
 #### GceCredentialsSpec
@@ -709,10 +703,6 @@ _Appears in:_
 
 
 
-
-
-
-
 #### HTTPConfigSpec
 
 
@@ -725,8 +715,6 @@ _Appears in:_
 | Field | Description |
 | --- | --- |
 | `ignoreCert` _boolean_ |  |
-
-
 
 
 #### ImageRepository
@@ -758,7 +746,7 @@ _Appears in:_
 | Field | Description |
 | --- | --- |
 | `type` _[ImageRepositoryCredentialsType](#imagerepositorycredentialstype)_ |  |
-| `secret` _[string](#string)_ |  |
+| `secret` _string_ |  |
 
 
 #### ImageRepositoryCredentialsType
@@ -779,7 +767,6 @@ _Appears in:_
 
 
 _Appears in:_
-- [Image](#image)
 - [MigrationSpec](#migrationspec)
 - [VMImage](#vmimage)
 
@@ -818,8 +805,6 @@ _Appears in:_
 | `url` _string_ |  |
 | `ssl` _[ImageRepositorySSLConfig](#imagerepositorysslconfig)_ |  |
 | `credentials` _[ImageRepositoryCredentials](#imagerepositorycredentials)_ |  |
-
-
 
 
 
@@ -1047,12 +1032,6 @@ _Appears in:_
 | Field | Description |
 | --- | --- |
 | `pvc` _[PvcStatus](#pvcstatus)_ |  |
-
-
-
-
-
-
 
 
 
