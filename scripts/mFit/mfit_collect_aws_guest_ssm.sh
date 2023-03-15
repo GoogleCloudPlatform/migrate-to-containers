@@ -43,12 +43,26 @@ windows_escaped_windows_script="\"$(echo "$windows_script" | sed 's/\(\\*\)\"/\1
 # Convert the script into a valid json string.
 windows_json_escaped=$(echo "$windows_escaped_windows_script" | jq -Rsa .)
 
+# Find Region if provided, so we can pass it to describe-instances.
+for (( i=1; i<=$#; i++)); do
+    current=${!i}
+    if [ "$current" == "--region" ]; then
+      next=$((i+1))
+      REGION_FLAG="--region=${!next}";
+      break;
+    fi
+
+    if [[ "$current" =~ --region=* ]]; then
+      REGION_FLAG=$current;
+      break;
+    fi
+done
+
 # For all AWS instances:
 aws ssm describe-instance-information "$@" | jq -c '.InstanceInformationList | .[]' | while read instance; do
   id=$(echo $instance | jq -r '.InstanceId')
   os=$(echo $instance | jq -r '.PlatformType')
   if [ "$os" == "Linux" ]; then
-    continue
     json_escaped=$linux_json_escaped;
   elif [ "$os" == "Windows" ]; then
     json_escaped=$windows_json_escaped;
@@ -60,7 +74,7 @@ aws ssm describe-instance-information "$@" | jq -c '.InstanceInformationList | .
   echo "Collecting $os VM $id"
 
   # Run collection via ssm manager.
-  result=$(unbuffer aws ssm start-session --target $id --document AWS-StartInteractiveCommand --parameters "{ \"command\": [$json_escaped]}");
+  result=$(unbuffer aws ssm start-session "$REGION_FLAG" --target $id --document AWS-StartInteractiveCommand --parameters "{ \"command\": [$json_escaped]}");
   # Strip ansii escape codes from STDOUT.
   result=$(echo "$result" | sed -r 's/\x1B\[(([0-9]+)(;[0-9]+)*)?[m,K,H,f,J]//g')
   # Find the encoded archive between the tags <START_ARCHIVE> and <END_ARCHIVE> by stripping everything before and after those tags.
