@@ -1,0 +1,149 @@
+apacheServer:
+  # Apache configuration for directories on the system
+  # Content is the configuration as understood by apache 
+  directories:
+  - Content: |-
+      Options FollowSymLinks
+      AllowOverride None
+      Require all denied
+    Path: /
+  - Content: |-
+      AllowOverride None
+      Require all granted
+    Path: /usr/share
+  - Content: |-
+      Options Indexes FollowSymLinks
+      AllowOverride None
+      Require all granted
+    Path: /var/www/
+  - Content: "#\tOptions Indexes FollowSymLinks\n#\tAllowOverride None\n#\tRequire
+      all granted"
+    Path: /srv/
+  - Content: |-
+      #   AllowOverride None
+      #   Require all denied
+    Path: /
+  # Environment variables used by apache
+  envVars:
+  - Value: www-data
+    Var: APACHE_RUN_USER
+  - Value: www-data
+    Var: APACHE_RUN_GROUP
+  - Value: /var/run/apache2$SUFFIX/apache2.pid
+    Var: APACHE_PID_FILE
+  - Value: /var/run/apache2$SUFFIX
+    Var: APACHE_RUN_DIR
+  - Value: /var/lock/apache2$SUFFIX
+    Var: APACHE_LOCK_DIR
+  - Value: /var/log/apache2$SUFFIX
+    Var: APACHE_LOG_DIR
+  - Value: C
+    Var: LANG
+  # The port the service will listen on
+  listen:
+  - "80"
+  - "443"
+  # Apache modules to be loaded and installed
+  loadModules:
+  - Module: access_compat_module
+  - Module: alias_module
+  - Module: auth_basic_module
+  - Module: authn_core_module
+  - Module: authn_file_module
+  - Module: authz_core_module
+  - Module: authz_host_module
+  - Module: authz_user_module
+  - Module: autoindex_module
+  - Module: deflate_module
+  - Module: dir_module
+  - Module: env_module
+  - Module: filter_module
+  - Module: mime_module
+  - Module: mpm_prefork_module
+  - Module: negotiation_module
+  - Module: php7_module
+  - Module: proxy_module
+  - Module: proxy_fcgi_module
+  - Module: reqtimeout_module
+  - Module: rewrite_module
+  - Module: setenvif_module
+  - Module: socache_shmcb_module
+  - Module: ssl_module
+  - Module: status_module
+  # The sites to be extracted
+  virtualHosts:
+  - address: '*:80'
+    documentRoot: /var/www/html
+    # should the site be enabled in extracted VM
+    includeInContainerImage: true
+    originalConfig: |-
+      # The ServerName directive sets the request scheme, hostname and port that
+      # the server uses to identify itself. This is used when creating
+      # redirection URLs. In the context of virtual hosts, the ServerName
+      # specifies what hostname must appear in the request's Host: header to
+      # match this virtual host. For the default virtual host (this file) this
+      # value is not decisive as it is used as a last resort host regardless.
+      # However, you must set it for any further virtual host explicitly.
+      #ServerName www.example.com
+
+      ServerAdmin webmaster@localhost
+      DocumentRoot /var/www/html
+
+      # Available loglevels: trace8, ..., trace1, debug, info, notice, warn,
+      # error, crit, alert, emerg.
+      # It is also possible to configure the loglevel for particular
+      # modules, e.g.
+      #LogLevel info ssl:warn
+
+      ErrorLog ${APACHE_LOG_DIR}/error.log
+      CustomLog ${APACHE_LOG_DIR}/access.log combined
+
+      # For most configuration files from conf-available/, which are
+      # enabled or disabled at a global level, it is possible to
+      # include a line for only one particular virtual host. For example the
+      # following line enables the CGI configuration for this host only
+      # after it has been globally disabled with "a2disconf".
+      #Include conf-available/serve-cgi-bin.conf
+    serverName: server-0
+  - address: '*:443'
+    # The location of the site content (will be copied to the same location the extracted container)
+    documentRoot: /var/www/html
+    includeInContainerImage: false
+    originalConfig: |-
+      ServerAdmin admin@example.com
+      DocumentRoot /var/www/html
+      SSLEngine on
+      SSLCertificateFile /etc/ssl/certs/c2d-temporary-self-signed-cert.pem
+      SSLCertificateKeyFile /etc/ssl/private/c2d-temporary-self-signed-cert.key
+
+      <Directory /var/www/html>
+      Options -Indexes
+      AllowOverride FileInfo
+      </Directory>
+    serverName: server-1
+php:
+  # list of php modules to be installed in the extracted container (add/remove entries to change what will be installed)
+  modules:
+  - calendar
+  - ctype
+  - curl
+  - exif
+  - ffi
+  - fileinfo
+  - filter
+  - gd
+  - gettext
+  - iconv
+  - json
+  - mysqli
+  - pcntl
+  - pdo
+  - pdo_mysql
+  - posix
+  - shmop
+  - sockets
+  - sysvmsg
+  - sysvsem
+  - sysvshm
+  - tokenizer
+  - xsl

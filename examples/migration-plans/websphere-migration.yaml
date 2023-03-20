@@ -1,22 +1,22 @@
 # Edit this list of applications to change or remove applications to be migrated.
 applications:
 - appName: defaultapplication-ear
-  # Edit the list of classpath JARs that will be included in the migrated container image for this application
+  # Edit the list of classpath JARs that will be included in the migrated container image for this application.
   classPaths:
   - /usr/some-path/lib/simple-classpath.jar
-  # Edit the list of ports that this application will be listening on
+  # Edit the list of ports that this application will be listening on.
   httpEndpoints:
   - httpPort: 9080
     httpsPort: 9443
     id: defaulthttpendpoint
   image:
     name: defaultapplication-ear
-  # Edit the list of additional files that will be included in the migrated container image for this application
+  # Edit the list of additional files that will be included in the migrated container image for this application.
   includeFiles:
   - /opt/IBM/WebSphere/ports.txt
   # Edit the path of the application EAR
   path: /opt/IBM/WebSphere/AppServer/profiles/AppSrv01/config/cells/m4a-twas-ndNode01Cell/applications/DefaultApplication.ear
-  # Edit the list of shared libraries that will be included in the migrated container image for this application
+  # Edit the list of shared libraries that will be included in the migrated container image for this application.
   sharedLibraries:
   - /opt/IBM/WebSphere/AppServer/derby/lib/derby.jar
 - appName: dal-cell-jdbc-ear

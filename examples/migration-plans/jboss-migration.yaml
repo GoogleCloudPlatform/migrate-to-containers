@@ -1,0 +1,44 @@
+# [START Server]
+# [START Metadata]
+# Server name. Edit this to change the artifacts naming.
+serverName: jboss-server
+# JBoss home directory.
+home: /opt/jboss/wildfly
+# Parent Wildfly image for the generated container image.
+fromImage: docker.io/jboss/wildfly:10.1.0.Final
+# Configuration file path from source VM.
+configurationFile: /opt/jboss/wildfly/standalone/configuration/standalone.xml
+# [END Metadata]
+# [START PortsList]
+# Ports list to expose on the generated container image.
+ports:
+- name: management-http
+  port: 9990
+- name: management-https
+  port: 9993
+- name: http
+  port: 8080
+- name: https
+  port: 8443
+# [END PortsList]
+# [START Deployments]
+# List of deployments files to copy.
+deployments:
+  applications:
+  - web-application-1.war
+  - web-application-2.war
+  directory: /opt/jboss/wildfly/standalone/deployments
+# [END Deployments]
+# [START Modules]
+# List of modules to copy in rsync filter format.
+# Note: files under "/system/layers/base/" are JBoss/Wildfly binaries and should be copied only if they have been modified.
+modules:
+- '- system/layers/base'
+- + org/postgresql
+# [END Modules]
+# [START AdditionalFiles]
+# External paths required for running the JBoss server or apps.
+additionalFiles: 
+- "/lib/some-dir/required-external-resource.bin"
+# [END AdditionalFiles]
+# [END Server]

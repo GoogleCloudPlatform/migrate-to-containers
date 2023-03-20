@@ -79,7 +79,7 @@ deployment:
     mountPoint: /mnt/test-rw
     nfsServer: nfs-server.default.svc.cluster.local
 
-  # By default, this health probe configuration will be used. Review, chagne or remove it.
+  # By default, this health probe configuration will be used. Review, change or remove it.
   # see: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/
 
   probes:
