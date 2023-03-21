@@ -60,12 +60,14 @@ done
 
 # For all AWS instances:
 aws ssm describe-instance-information "$@" | jq -c '.InstanceInformationList | .[]' | while read instance; do
-  id=$(echo $instance | jq -r '.InstanceId')
-  os=$(echo $instance | jq -r '.PlatformType')
+  id=$(echo "$instance" | jq -r '.InstanceId')
+  os=$(echo "$instance" | jq -r '.PlatformType')
   if [ "$os" == "Linux" ]; then
     json_escaped=$linux_json_escaped;
+    document="AWS-StartInteractiveCommand"
   elif [ "$os" == "Windows" ]; then
     json_escaped=$windows_json_escaped;
+    document="AWS-StartNonInteractiveCommand"
   else
     echo "Instance $id has unsupported platform type $os" >&2;
     continue;
@@ -74,9 +76,7 @@ aws ssm describe-instance-information "$@" | jq -c '.InstanceInformationList | .
   echo "Collecting $os VM $id"
 
   # Run collection via ssm manager.
-  result=$(unbuffer aws ssm start-session "$REGION_FLAG" --target $id --document AWS-StartInteractiveCommand --parameters "{ \"command\": [$json_escaped]}");
-  # Strip ansii escape codes from STDOUT.
-  result=$(echo "$result" | sed -r 's/[\x1B\x9B][][()#;?]*(([a-zA-Z0-9;]*\x07)|([0-9;]*[0-9A-PRZcf-ntqry=><~]))//g')
+  result=$(unbuffer aws ssm start-session "$REGION_FLAG" --target $id --document $document --parameters "{ \"command\": [$json_escaped]}");
   # Find the encoded archive between the tags <START_ARCHIVE> and <END_ARCHIVE> by stripping everything before and after those tags.
   encoded=${result#*<START_ARCHIVE>}
   encoded=${encoded%<END_ARCHIVE>*}
