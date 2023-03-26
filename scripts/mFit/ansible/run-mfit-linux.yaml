@@ -1,0 +1,27 @@
+- name: Run mfit and download results
+  hosts: all
+  tasks:
+    - name: run-mfit
+      block:
+        - name: Create temporary working directory
+          ansible.builtin.tempfile:
+            state: directory
+          register: tempdir
+
+        - name: Copy script to temporary working directory
+          copy:
+            src: 'mfit-linux-collect.sh'
+            dest: '{{ tempdir.path }}/mfit-linux-collect.sh'
+
+        - name: Run script in temporary working directory
+          command: 'bash "{{ tempdir.path }}/mfit-linux-collect.sh" --output "{{ tempdir.path }}/mfit-collect.tar"'
+
+        - name: Download file from temporary working directory
+          fetch:
+            src: '{{ tempdir.path }}/mfit-collect.tar'
+            dest: './artifacts'
+      always:
+        - name: Delete temporary working directory
+          file:
+            path: '{{ tempdir.path }}'
+            state: absent

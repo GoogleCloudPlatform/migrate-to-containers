@@ -1,0 +1,44 @@
+- name: Run mfit and download results
+  hosts: all
+  tasks:
+    - name: run-mfit
+      block:
+        - name: Create temporary working directory
+          win_tempfile:
+            state: directory
+          register: tempdir
+
+        - name: Copy script to temporary working directory
+          win_copy:
+            src: 'mfit-windows-collect.ps1'
+            dest: '{{ tempdir.path }}\mfit-windows-collect.ps1'
+
+        - name: Run script in temporary working directory
+          win_command: 'powershell -File "{{ tempdir.path }}\mfit-windows-collect.ps1" "{{ tempdir.path }}\mfit-collect" --minimal'
+
+        - name: Download zip file from temporary working directory
+          fetch:
+            src: '{{ tempdir.path }}\mfit-collect.zip'
+            dest: './artifacts'
+          register: download_result
+          ignore_errors: true
+
+        - name: Download tar.gz file from temporary working directory
+          fetch:
+            src: '{{ tempdir.path }}\mfit-collect.tar.gz'
+            dest: './artifacts'
+          when: download_result is failed
+          register: download_result
+          ignore_errors: true
+
+        - name: Download tar file from temporary working directory
+          fetch:
+            src: '{{ tempdir.path }}\mfit-collect.tar'
+            dest: './artifacts'
+          when: download_result is failed
+          
+      always:
+        - name: Delete temporary working directory
+          win_file:
+            path: '{{ tempdir.path }}'
+            state: absent
