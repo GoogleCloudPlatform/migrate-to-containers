@@ -898,7 +898,7 @@ _Appears in:_
 | --- | --- |
 | `localVmware` _[LocalVmwareSourceSpec](#localvmwaresourcespec)_ |  |
 | `gce` _[LocalGceSourceSpec](#localgcesourcespec)_ |  |
-| `localAws` _[LocalAwsSourceSpec](#localawssourcespec)_ |  |
+| `localAws` _[LocalAwsSourceSpec](#localawssourcespec)_ | Deprecated. Local AWS sources are no longer supported. |
 | `localOVF` _[LocalOVFSourceSpec](#localovfsourcespec)_ |  |
 
 
@@ -1299,7 +1299,7 @@ _Appears in:_
 
 | Field | Description |
 | --- | --- |
-| `migrateForCE` _[MigrateForCESourceSpec](#migrateforcesourcespec)_ |  |
+| `migrateForCE` _[MigrateForCESourceSpec](#migrateforcesourcespec)_ | Deprecated. Migrate to Virtual Machines 4.X sources are no longer supported. |
 | `LocalSourceSpec` _[LocalSourceSpec](#localsourcespec)_ |  |
 | `remoteSourceSpec` _[RemoteSourceSpec](#remotesourcespec)_ |  |
 
