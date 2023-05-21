@@ -6,6 +6,8 @@ serverName: jboss-server
 home: /opt/jboss/wildfly
 # Parent Wildfly image for the generated container image.
 fromImage: docker.io/jboss/wildfly:10.1.0.Final
+# JBoss home directory in the target image.
+targetImageHome: /opt/jboss/wildfly
 # Configuration file path from source VM.
 configurationFile: /opt/jboss/wildfly/standalone/configuration/standalone.xml
 # [END Metadata]
@@ -38,7 +40,18 @@ modules:
 # [END Modules]
 # [START AdditionalFiles]
 # External paths required for running the JBoss server or apps.
-additionalFiles: 
+additionalFiles:
 - "/lib/some-dir/required-external-resource.bin"
 # [END AdditionalFiles]
+# [START SensitiveData]
+sensitiveData:
+  IncludeSensitiveData: false
+  sensitiveDataPaths:
+  - /opt/wildfly/standalone/configuration/application.keystore
+# [END SensitiveData]
+# [START ExcludeFiles]
+# Exclude files from migration.
+excludeFiles:
+  - /opt/wildfly/myfile
+# [END ExcludeFiles]
 # [END Server]
