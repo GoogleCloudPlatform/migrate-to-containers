@@ -45,7 +45,7 @@ do
     then
       if [ ! -z "$ip" ]
       then
-        mfit discover ssh --ssh-client embedded --user $username --password $password $ip || continue
+        mcdc discover ssh --ssh-client embedded --user $username --password $password $ip || continue
       else
         echo "Skipping VM: $vm_name because it has no IP address"
       fi

@@ -16,22 +16,22 @@
 mkdir m2c
 cd m2c
 
-VERSION=`wget -O - https://mfit-release.storage.googleapis.com/latest`
+VERSION=`wget -O - https://mcdc-release.storage.googleapis.com/latest`
 
-wget https://mfit-release.storage.googleapis.com/${VERSION}/mfit-linux-collect.sh
-chmod +x mfit-linux-collect.sh
+wget https://mcdc-release.storage.googleapis.com/${VERSION}/mcdc-linux-collect.sh
+chmod +x mcdc-linux-collect.sh
 
-wget https://mfit-release.storage.googleapis.com/${VERSION}/mfit
-chmod +x mfit
+wget https://mcdc-release.storage.googleapis.com/${VERSION}/mcdc
+chmod +x mcdc
 
 # Run collection script locally
-sudo ./mfit-linux-collect.sh
+sudo ./mcdc-linux-collect.sh
 
-# Import the VM collection details to mFIT DB
-./mfit discover import m2c-collect-*-*.tar
+# Import the VM collection details to mcdc DB
+./mcdc discover import mcdc-collect-*-*.tar
 
 # Assess and generate a detailed HTML report
-./mfit report --full --format html > mfit-report.html
+./mcdc report --full --format html > mcdc-report.html
 
 # Assess and generate a JSON report
-./mfit report --format json > mfit-report.json
+./mcdc report --format json > mcdc-report.json

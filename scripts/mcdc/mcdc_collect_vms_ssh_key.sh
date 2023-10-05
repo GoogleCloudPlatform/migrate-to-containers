@@ -16,10 +16,10 @@
 # This script reads the input CSV_FILE and iterates over all VMs, running guest
 # collection on all LINUX VMs via ssh and authenticating to the VMs using an identify-file and
 # passphrase if set. To set the identity-file path the environment variable
-# MFIT_SSH_IDENTITY_FILE must be set and if a passphrase is required then the
-# environment variable MFIT_SSH_PASSPHRASE must be set to the passphrase value
-if [[ -z "${MFIT_SSH_IDENTITY_FILE}" ]]; then
-  echo "MFIT_SSH_IDENTITY_FILE environment must be set"
+# MCDC_SSH_IDENTITY_FILE must be set and if a passphrase is required then the
+# environment variable MCDC_SSH_PASSPHRASE must be set to the passphrase value
+if [[ -z "${MCDC_SSH_IDENTITY_FILE}" ]]; then
+  echo "MCDC_SSH_IDENTITY_FILE environment must be set"
   exit
 fi
 
@@ -45,7 +45,7 @@ do
     then
       if [ ! -z "$ip" ]
       then
-        mfit discover ssh --ssh-client embedded --user $username $ip || continue
+        mcdc discover ssh --ssh-client embedded --user $username $ip || continue
       else
         echo "Skipping VM: $vm_name because it has no IP address"
       fi

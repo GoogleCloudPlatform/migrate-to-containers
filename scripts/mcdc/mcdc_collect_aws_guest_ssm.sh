@@ -13,15 +13,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-version=$(curl -s https://mfit-release.storage.googleapis.com/latest)
+version=$(curl -s https://mcdc-release.storage.googleapis.com/latest)
 
-linux_collect_script=$(curl "https://mfit-release.storage.googleapis.com/$version/mfit-linux-collect.sh")
+linux_collect_script=$(curl "https://mcdc-release.storage.googleapis.com/$version/mcdc-linux-collect.sh")
 # Create a script which runs the linux collect script and outputs the resulting archive to STDOUT.
 linux_script="
 set -e;
 script='${linux_collect_script//\'/\'\"\'\"\'}';
-sudo -n bash -c \"\$script\" collect-script --output mfit-collect.tar;
-encoded_tar=\$(base64 -w0 mfit-collect.tar);
+sudo -n bash -c \"\$script\" collect-script --output mcdc-collect.tar;
+encoded_tar=\$(base64 -w0 mcdc-collect.tar);
 echo '<START_ARCHIVE>';
 echo \"\$encoded_tar\";
 echo '<END_ARCHIVE>';
@@ -29,20 +29,19 @@ echo '<END_ARCHIVE>';
 # Convert the script into a valid json string.
 linux_json_escaped=$(echo "$linux_script" | jq -Rsa .)
 
-
-windows_collect_script=$(curl "https://mfit-release.storage.googleapis.com/$version/mfit-windows-collect.ps1")
+windows_collect_script=$(curl "https://mcdc-release.storage.googleapis.com/$version/mcdc-windows-collect.ps1")
 # Create a script which runs the windows collect script and outputs the resulting archive to STDOUT.
 windows_script="
 \$ErrorActionPreference = 'Stop'
 
 Invoke-Command {
 $windows_collect_script
-} -ArgumentList ('mfit-collect', '--minimal')
+} -ArgumentList ('mcdc-collect', '--minimal')
 
-try { \$archive = Get-Content -path 'mfit-collect.zip' -Encoding byte }
+try { \$archive = Get-Content -path 'mcdc-collect.zip' -Encoding byte }
 catch {
-	try { \$archive = Get-Content -path 'mfit-collect.tar.gz' -Encoding byte }
-	catch { \$archive = Get-Content -path 'mfit-collect.tar' -Encoding byte }
+	try { \$archive = Get-Content -path 'mcdc-collect.tar.gz' -Encoding byte }
+	catch { \$archive = Get-Content -path 'mcdc-collect.tar' -Encoding byte }
 }
 
 \$encoded = [convert]::ToBase64String(\$archive)
@@ -102,9 +101,9 @@ aws ssm describe-instance-information "$@" | jq -c '.InstanceInformationList | .
     continue;
   fi
 
-  # Decode the archive, write to a temp file, and import to mfit.
+  # Decode the archive, write to a temp file, and import to mcdc.
   tmpfile=$(mktemp)
   echo "$encoded" | base64 -di > $tmpfile
-  mfit discover import $tmpfile
+  mcdc discover import $tmpfile
   rm $tmpfile
 done

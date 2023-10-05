@@ -18,7 +18,7 @@
 # username and password. The default USER and PASSWORD arguments will be used
 # unless either of them is overriden for a specific VM.
 #
-err=$(mktemp --tmpdir mfit-guest-err-XXXX)
+err=$(mktemp --tmpdir mcdc-guest-err-XXXX)
 
 # [START collect]
 
@@ -61,7 +61,7 @@ do
       # Note that the below only works for VMWare VMs
       # vm_id after the last slash if prefixed by vSphere IP
       mod_vm_id=$(echo "$vm_id" | sed 's/.*\///')
-      mfit discover vsphere guest --url $VSPHERE_URL -u $VSPHERE_USER -p $VSPHERE_PASSWORD --vm-user $username --vm-password $password $mod_vm_id
+      mcdc discover vsphere guest --url $VSPHERE_URL -u $VSPHERE_USER -p $VSPHERE_PASSWORD --vm-user $username --vm-password $password $mod_vm_id
     else
       echo "Skipping VM: $vm_name because it has no VM ID"
     fi

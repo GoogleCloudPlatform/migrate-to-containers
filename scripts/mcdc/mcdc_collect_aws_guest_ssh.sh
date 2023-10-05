@@ -79,9 +79,9 @@ aws ec2 describe-instances "${OTHER_ARGS[@]}" | jq -c '.Reservations | .[] | .In
       continue
     fi
 
-    # Run mfit discover ssh.
+    # Run mcdc discover ssh.
     # Tee stdout/stderr so we can capture them, but also write them to console.
-    out=$(mfit discover ssh -u "$user" "$dns" -i "$ssh_key_file" "${SSH_ARGS[@]}" --connect-timeout 5 2>&1 | tee /dev/fd/2)
+    out=$(mcdc discover ssh -u "$user" "$dns" -i "$ssh_key_file" "${SSH_ARGS[@]}" --connect-timeout 5 2>&1 | tee /dev/fd/2)
     # Permission denied is usually caused by using the incorrect username.
     if [[ "$out" == *"Permission denied"* ]]; then
       message="Permission denied when connecting with username $user."

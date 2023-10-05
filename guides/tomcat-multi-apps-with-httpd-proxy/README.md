@@ -24,7 +24,7 @@ In this tutorial you’ll do the following:
 * Build and deploy FlowCRM application into Tomcat on the above GCE vm
 * Install and Configure Apache2 HTTPD server on the above GCE vm
 * Install and configure Migrate to Containers
-* Qualify the workloads for migration using the Migrate to Containers [Migrate Fit Assessment (mFIT)](https://cloud.google.com/migrate/containers/docs/fit-assessment)
+* Qualify the workloads for migration using the [Migration Center discovery client CLI (mcdc CLI)](https://cloud.google.com/migration-center/docs/discovery-client-cli-overview)
 * Migrate Petclinic and FlowCRM databases vm to a container with persistent data
 * Migrate Petclinic application to a Tomcat container
 * Migrate FlowCRM application to a Tomcat container
@@ -48,7 +48,7 @@ For this reference guide, you need a Google Cloud project. You can create a new 
 ## Begin your migration journey
 Your migration journey consist of a number of steps:  
 1. [Prepare](1-prepare/README.md) - In this step you will prepare your environment by installing MySQL and Tomcat VMs, building and deploying the application and then installing Migrate to Containers.
-2. [Assess](2-assess/README.md) - In the assess step, you will run the Migrate to Containers fit assessment and assess whether or not your MySQL and Tomcat workloads are good fit for containerization.
+2. [Assess](2-assess/README.md) - In the assess step, you will run the Migration Center discovery client CLI and assess whether or not your MySQL and Tomcat workloads are good fit for containerization.
 3. [Migrate your MySQL](3-migrate-db/README.md) - In the first migrate step you will migrate your MySQL VM into a container and generate Day2 artifacts which can later be used in modern CI/CD pipelines.
 4. [Migrate your Tomcat applications](4-migrate-tomcat/README.md) - In the second migrate step you will migrate your Tomcat applications into containers and generate Day2 artifacts which can later be used in modern CI/CD pipelines.
 5. [Deploy](5-deploy/README.md) - In the deploy step you will deploy your migrated workloads into a GKE cluster and verify that your applications are working as expected.

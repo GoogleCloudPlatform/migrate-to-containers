@@ -18,7 +18,7 @@ In this tutorial you’ll do the following:
 * Create a MySQL Ubuntu VM on GCE  and prepare the Petclinic database
 * Build and deploy Petclinic application into Tomcat on a GCE vm
 * Install and configure M2C
-* Qualify the workloads for migration using the M2C [Migrate Fit Assessment (mFIT)](https://cloud.google.com/migrate/containers/docs/fit-assessment)
+* Qualify the workloads for migration using the [Migration Center discovery client CLI (mcdc CLI)](https://cloud.google.com/migration-center/docs/discovery-client-cli-overview)
 * Migrate Petclinic database vm to a container
 * Migrate Petclinic application to a Tomcat container
 * Deploy the migrated database and application to your GKE cluster
@@ -42,7 +42,7 @@ For this reference guide, you need a Google Cloud project. You can create a new 
 ## Begin your migration journey
 Your migration journey consist of a number of steps:  
 1. [Prepare](1-prepare/README.md) - In this step you will prepare your environment by installing MySQL and Tomcat VMs, building and deploying the application and then installing Migrate to Containers.
-2. [Assess](2-assess/README.md) - In the assess step, you will run the Migrate to Containers fit assessment and assess whether or not your MySQL and Tomcat workloads are good fit for containerization.
+2. [Assess](2-assess/README.md) - In the assess step, you will run the Migration Center discovery client CLI and assess whether or not your MySQL and Tomcat workloads are good fit for containerization.
 3. [Migrate](3-migrate/README.md) - In the migrate step you will migrate both of your VMs into containers and generate Day2 artifacts which can later be used in modern CI/CD pipelines.
 4. [Deploy](4-deploy/README.md) - In the deploy step you will deploy your migrated workloads into a GKE cluster and verify that your application is working as expected.
 5. [Optimize](5-optimize/README.md) - In the optimize step you will learn how to manually and automatically scale your migrated workloads and how to roll out application updated.
