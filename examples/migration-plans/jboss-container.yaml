@@ -45,7 +45,7 @@ additionalFiles:
 # [END AdditionalFiles]
 # [START SensitiveData]
 sensitiveData:
-  IncludeSensitiveData: false
+  includeSensitiveData: false
   sensitiveDataPaths:
   - /opt/wildfly/standalone/configuration/application.keystore
 # [END SensitiveData]
