@@ -18,7 +18,7 @@
 # The USERNAME and PASSWORD fields will NOT be set by the script and can be
 # modified by the user if unique credentials are required for a VM.
 
-$tmp_vms = (./mcdc report --format csv) | select -skip 2
+$tmp_vms = (mcdc report --format csv) | select -skip 2
 
 Out-File -FilePath .\vms.csv
 # CSV fields

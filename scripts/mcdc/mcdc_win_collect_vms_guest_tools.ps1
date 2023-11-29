@@ -60,5 +60,5 @@ ForEach ($Line in $FileContents) {
     # Note that the below only works for VMWare VMs
     # vm_id after the last slash if prefixed by vSphere IP
     $mod_vm_id = Split-Path -Path $vm_id -Leaf
-    ./mcdc discover vsphere guest --url $VSPHERE_URL -u $vsphere_creds.GetNetworkCredential().Username -p $vsphere_creds.GetNetworkCredential().Password --vm-user $username --vm-password $password $mod_vm_id --proxy socks5://localhost:38004 -i
+    mcdc discover vsphere guest --url $VSPHERE_URL -u $vsphere_creds.GetNetworkCredential().Username -p $vsphere_creds.GetNetworkCredential().Password --vm-user $username --vm-password $password $mod_vm_id -i
 }
