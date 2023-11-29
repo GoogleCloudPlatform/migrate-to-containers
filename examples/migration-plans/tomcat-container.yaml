@@ -15,7 +15,8 @@ tomcatServers:
     applications:
     - /usr/local/tomcat/webapps/ROOT
     # Parent image for the generated container image.
-    fromImage: tomcat:8.5-jre8-openjdk
+    baseImage:
+      name: tomcat:8.5-jre8-openjdk
     # External paths required for running the Tomcat server or apps.
     additionalFiles:
     - /lib
@@ -52,7 +53,8 @@ tomcatServers:
     applications:
     - /usr/local/tomcat/webapps/host-manager
     # Parent image for the generated container image.
-    fromImage: tomcat:8.5-jre8-openjdk
+    baseImage:
+      name: tomcat:8.5-jre8-openjdk
     # External paths required for running the Tomcat server or apps.
     additionalFiles:
     - /lib
@@ -89,7 +91,8 @@ tomcatServers:
     - /usr/local/tomcat/webapps/ROOT
     - /usr/local/tomcat/webapps/host-manager
     # Parent image for the generated container image.
-    fromImage: tomcat:8.5-jre8-openjdk
+    baseImage:
+      name: tomcat:8.5-jre8-openjdk
     # External paths required for running the Tomcat server or apps.
     additionalFiles:
     - /lib
