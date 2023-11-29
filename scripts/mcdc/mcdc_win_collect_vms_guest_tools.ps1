@@ -32,10 +32,10 @@ if (-not ($VSPHERE_URL -match $url_regex)) {
 }
 
 $vsphere_creds = Get-Credential -Message "Please enter your VMWare username and password."
-$vsphere_creds.GetNetworkCredential().Username
+$vsphere_creds.Username
 
 $vm_creds = Get-Credential -Message "Please enter your default username and password to login to the VMs."
-$vm_creds.GetNetworkCredential().Username
+$vm_creds.Username
 
 # CSV fields
 #NAME;PLATFORM VM ID;OS;IP;USERNAME;PASSWORD
@@ -45,7 +45,7 @@ ForEach ($Line in $FileContents) {
     $vm_name, $vm_id, $os, $ip, $username, $password = $Line.Split(";")
 
     if (-not $username) {
-        $username = $vm_creds.GetNetworkCredential().Username
+        $username = $vm_creds.Username
     }
     Write-Host "Password: $password"
     if (-not $password) {
@@ -60,5 +60,5 @@ ForEach ($Line in $FileContents) {
     # Note that the below only works for VMWare VMs
     # vm_id after the last slash if prefixed by vSphere IP
     $mod_vm_id = Split-Path -Path $vm_id -Leaf
-    mcdc discover vsphere guest --url $VSPHERE_URL -u $vsphere_creds.GetNetworkCredential().Username -p $vsphere_creds.GetNetworkCredential().Password --vm-user $username --vm-password $password $mod_vm_id -i
+    mcdc discover vsphere guest --url $VSPHERE_URL -u $vsphere_creds.Username -p $vsphere_creds.GetNetworkCredential().Password --vm-user $username --vm-password $password $mod_vm_id -i
 }
