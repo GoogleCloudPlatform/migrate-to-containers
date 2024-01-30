@@ -3,6 +3,11 @@
 * Clone the [Spring Framework Petclinic Github](https://github.com/spring-petclinic/spring-framework-petclinic) repository by running the below command in cloud shell:  
 [![Open in Cloud Shell](https://gstatic.com/cloudssh/images/open-btn.svg)](https://ssh.cloud.google.com/cloudshell/editor?cloudshell_git_repo=https%3A%2F%2Fgithub.com%2Fspring-petclinic%2Fspring-framework-petclinic.git)
 
+* Change the application version
+```bash
+git checkout tags/v5.3.13
+```
+
 * Modify the pom.xml to connect to your PostgreSQL instance by running the command:
 ```
 sed -i 's/localhost\:5432/petclinic-postgres\:5432/g' pom.xml
@@ -23,7 +28,7 @@ export ZONE_ID=your_zone
 ## Install your PostgreSQL instance
 1. Create a new GCE instance to host the Petclinic PostgreSQL database
 ```
-gcloud compute instances create petclinic-postgres --zone=$ZONE_ID --image-family=ubuntu-1804-lts --image-project=ubuntu-os-cloud --machine-type=e2-medium --boot-disk-size=10GB --tags=postgres --project=$PROJECT_ID
+gcloud compute instances create petclinic-postgres --zone=$ZONE_ID --image-family=ubuntu-2204-lts --image-project=ubuntu-os-cloud --machine-type=e2-medium --boot-disk-size=10GB --tags=postgres --project=$PROJECT_ID
 ```
 
 2. SSH to the newly created VM by running the command  
@@ -35,12 +40,12 @@ gcloud compute ssh petclinic-postgres --project $PROJECT_ID --zone $ZONE_ID
 ```
 sudo ./install_postgres.sh
 ```
-**Important note:** The data folder for PostgreSQL is `/var/lib/postgresql/10/main`. We will use it when we migrate the database to container.
+**Important note:** The data folder for PostgreSQL is `/var/lib/postgresql/14/main`. We will use it when we migrate the database to container.
 
 ## Install your Tomcat VM
 1. Create a new GCE instance  
 ```
-gcloud compute instances create tomcat-petclinic --zone=$ZONE_ID --image-family=ubuntu-1804-lts --image-project=ubuntu-os-cloud --machine-type=e2-medium --boot-disk-size=10GB --tags=tomcat --project=$PROJECT_ID
+gcloud compute instances create tomcat-petclinic --zone=$ZONE_ID --image-family=ubuntu-2204-lts --image-project=ubuntu-os-cloud --machine-type=e2-medium --boot-disk-size=10GB --tags=tomcat --project=$PROJECT_ID
 ```
 
 2. Upload the application war file to tomcat instance by running the command  
@@ -55,7 +60,7 @@ gcloud compute ssh tomcat-petclinic --project $PROJECT_ID --zone $ZONE_ID
 
 4. Install tomcat by running the script [install_tomcat.sh *APP_WAR*](../scripts/install_tomcat.sh). Tomcat will install into `/opt/tomcat`, create a systemd service named **tomcat** and will deploy the war file specified as *APP_WAR* into Tomcat. Run the installation script using the below command:  
 ```
-sudo install_tomcat.sh petclinic.war
+sudo ./install_tomcat.sh petclinic.war
 ```
 
 5. You should now verify that your Tomcat had started without issues by vhecking the logfile **/opt/tomcat/logs/catalina.out**
@@ -82,37 +87,22 @@ echo http://$TOMCAT_EXTERNAL_IP:8080/petclinic/
 ```
 **Note: Don't forget to remove the firewall rule when you no longer need it**
 
-## Install Migrate to Containers
-### Install Migrate to Containers by running the script [install_m2c.sh](../../../scripts/install_m2c.sh). The script will do the following:  
-* Create a GKE [processing cluster](https://cloud.google.com/migrate/containers/docs/configuring-a-cluster)
-* Create a service account
-* Set the right permissions for the service account created above
-* Download the service account key file
-* Connect to the newly created cluster.
-* Install M2C on the processing cluster
-
-To verify that M2C installation was sucessfull, run the `migctl doctor` command:
+## Install Migrate to Containers CLI
+### Install Migrate to Containers CLI by creating a GCE instance and installing the cli on it. The CLI instance requires a large disk which will be used to copy the file system of the source VM.
+Create the GCE instance by running the command:
 ```
-$ migctl doctor
-[✓] Deployment
-[✓] Docker registry
-[✓] Artifacts repo
-[!] Source Status
+gcloud compute instances create m2c-cli --zone=$ZONE_ID --image-family=ubuntu-2204-lts --image-project=ubuntu-os-cloud --machine-type=e2-medium --boot-disk-size=200GB --tags=m2c --project=$PROJECT_ID --metadata=startup-script='#! /bin/bash
+curl -O "https://m2c-cli-release.storage.googleapis.com/$(curl -s https://m2c-cli-release.storage.googleapis.com/latest)/linux/amd64/m2c"
+chmod +x ./m2c
+mv m2c /usr/local/bin
+EOF'
 ```
 
-### Configure the GCE migration source you're migrating from by running the script [add_ce_source.sh](../../../scripts/add_ce_source.sh). The script will do the following:
-* Create a service account
-* Set the right permissions for the service account created above
-* Download the service account key file
-* Create a source for migration using the `migctl source create` command
+To verify that M2C CLI was installed properly, you can run the command:
+```
+gcloud compute ssh m2c-cli --project=$PROJECT_ID --zone=$ZONE_ID --command "m2c version"
+```
 
-To verify that M2C configuration is completed, run the `migctl doctor` command again. This time the output should show that all the components are ready:
-```
-$ migctl doctor
-[✓] Deployment
-[✓] Docker registry
-[✓] Artifacts repo
-[✓] Source Status
-```
+The output from the command should show the M2C CLI version that was installed.
 
 You are now ready to [assess](../2-assess/README.md) your workloads for containerization

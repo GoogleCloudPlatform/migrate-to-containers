@@ -15,13 +15,15 @@
 
 apt update
 
-apt install -y postgresql postgresql-contrib
+apt install -y postgresql-14 postgresql-contrib
 
 sudo -u postgres createdb petclinic
 
+echo "listen_addresses = '*'" >> /etc/postgresql/14/main/postgresql.conf
+echo "password_encryption = 'md5'" >> /etc/postgresql/14/main/postgresql.conf
+
+echo "host petclinic postgres 0.0.0.0/0 md5" >> /etc/postgresql/14/main/pg_hba.conf
+service postgresql restart
+
 sudo -u postgres psql -U postgres -d petclinic -c "alter user postgres with password 'petclinic';"
 
-echo "listen_addresses = '*'" >> /etc/postgresql/10/main/postgresql.conf
-
-echo "host petclinic postgres 0.0.0.0/0 md5" >> /etc/postgresql/10/main/pg_hba.conf
-service postgresql restart

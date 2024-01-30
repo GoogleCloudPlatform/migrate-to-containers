@@ -14,7 +14,7 @@
 # limitations under the License.
 
 apt-get update
-apt-get -y install default-jdk
+apt install -y openjdk-17-jdk openjdk-17-jre
 
 groupadd tomcat
 useradd -s /bin/false -g tomcat -d /opt/tomcat tomcat
@@ -35,13 +35,20 @@ chmod g+x conf
 
 chown -R tomcat webapps/ work/ temp/ logs/
 
+rm -rf /opt/tomcat/webapps/*
+
+mkdir /opt/tomcat/conf/Catalina
+mkdir /opt/tomcat/conf/Catalina/localhost
+
+chown -R tomcat:tomcat /opt/tomcat/conf/Catalina
+
 if [ $# -eq 1 ]
   then
     sudo chown tomcat:tomcat $pwd/$1
     sudo mv $pwd/$1 /opt/tomcat/webapps/    
 fi
 
-cat << EOF > /etc/systemd/system/tomcat.service
+cat << EOF > /usr/lib/systemd/system/tomcat.service
 [Unit]
 Description=Tomcat 8.5 servlet container
 After=network.target
@@ -52,7 +59,7 @@ Type=forking
 User=tomcat
 Group=tomcat
 
-Environment="JAVA_HOME=/usr/lib/jvm/default-java"
+Environment="JAVA_HOME=/usr/lib/jvm/java-1.17.0-openjdk-amd64"
 Environment="JAVA_OPTS=-Djava.security.egd=file:///dev/urandom"
 
 Environment="CATALINA_BASE=/opt/tomcat"
