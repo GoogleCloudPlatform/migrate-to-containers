@@ -18,7 +18,7 @@ export ZONE_ID=your_zone
 ## Install your MySQL instance
 1. Create a new GCE instance to host the Petclinic MySQL database
 ```
-gcloud compute instances create petclinic-mysql --zone=$ZONE_ID --image-family=ubuntu-1804-lts --image-project=ubuntu-os-cloud --machine-type=e2-medium --boot-disk-size=10GB --tags=mysql --project=$PROJECT_ID
+gcloud compute instances create petclinic-mysql --zone=$ZONE_ID --image-family=ubuntu-2204-lts --image-project=ubuntu-os-cloud --machine-type=e2-medium --boot-disk-size=10GB --tags=mysql --project=$PROJECT_ID
 ```
 
 2. SSH to the newly created VM by running the command  
@@ -43,7 +43,7 @@ exit
 
 1. Create a new GCE instance  
 ```
-gcloud compute instances create tomcat-petclinic --zone=$ZONE_ID --image-family=ubuntu-1804-lts --image-project=ubuntu-os-cloud --machine-type=e2-medium --boot-disk-size=10GB --tags=tomcat --project=$PROJECT_ID
+gcloud compute instances create tomcat-petclinic --zone=$ZONE_ID --image-family=ubuntu-2204-lts --image-project=ubuntu-os-cloud --machine-type=e2-medium --boot-disk-size=10GB --tags=tomcat --project=$PROJECT_ID
 ```
 
 2. Upload the application war file to tomcat instance by running the command  
@@ -94,61 +94,22 @@ echo http://$TOMCAT_EXTERNAL_IP:8080/petclinic/
 ```
 **Note: Don't forget to remove the firewall rule when you no longer need it**
 
-## Install Migrate to Containers
-1. Install Migrate to Containers by running the script [install_m2c.sh](../../../scripts/install_m2c.sh). The script will do the following:  
-* Create a GKE [processing cluster](https://cloud.google.com/migrate/containers/docs/configuring-a-cluster)
-* Create a service account
-* Set the right permissions for the service account created above
-* Download the service account key file
-* Connect to the newly created cluster.
-* Install M2C on the processing cluster
+## Install Migrate to Containers CLI
+### Install Migrate to Containers CLI by creating a GCE instance and installing the cli on it. The CLI instance requires a large disk which will be used to copy the file system of the source VM.
+Create the GCE instance by running the command:
 ```
-curl https://raw.githubusercontent.com/GoogleCloudPlatform/migrate-to-containers/main/scripts/install_m2c.sh | bash
-```
-
-To verify that M2C installation was sucessfull, run the `migctl doctor` command:
-```
-[✓] Deployment
-[✓] Docker Registry
-[✓] Artifacts Repository
-[✗] Source Status
-    No source was configured. Use 'migctl source create' to define one.
-[!] Default storage class
-    Warning: the default storage class is: standard.
-    - We recommend to use one of the following storage classes instead: premium-rwo, standard-rwo.
+gcloud compute instances create m2c-cli --zone=$ZONE_ID --image-family=ubuntu-2204-lts --image-project=ubuntu-os-cloud --machine-type=e2-medium --boot-disk-size=200GB --tags=m2c --project=$PROJECT_ID --metadata=startup-script='#! /bin/bash
+curl -O "https://m2c-cli-release.storage.googleapis.com/$(curl -s https://m2c-cli-release.storage.googleapis.com/latest)/linux/amd64/m2c"
+chmod +x ./m2c
+mv m2c /usr/local/bin
+EOF'
 ```
 
-**Note:** You can safely ignore the last two warnings. You will add a source in the subsequent step, and for a demo environment the standard storage class is fine. 
-
-Check that you are running Migrate to Containers version 1.11.1 or newer by running the command:
+To verify that M2C CLI was installed properly, you can run the command:
 ```
-migctl version
-```
-and the output should look like:
-```
-migctl version: 1.11.1
-Migrate to Containers version: 1.11.1
-```
-If you are running an older version, please refer to the [official documentation](https://cloud.google.com/migrate/containers/docs/installing-migrate-components) in-order to install the latest version.
-
-### Configure the GCE migration source you're migrating from by running the script [add_ce_source.sh](../../../scripts/add_ce_source.sh). The script will do the following:
-* Create a service account
-* Set the right permissions for the service account created above
-* Download the service account key file
-* Create a source for migration using the `migctl source create` command
-
-1) Download and run the script
-```
-curl https://raw.githubusercontent.com/GoogleCloudPlatform/migrate-to-containers/main/scripts/add_ce_source.sh | bash
+gcloud compute ssh m2c-cli --project=$PROJECT_ID --zone=$ZONE_ID --command "m2c version"
 ```
 
-2) To verify that M2C configuration is completed, run the `migctl doctor` command again. This time the output should show that all the components are ready:
-```
-$ migctl doctor
-[✓] Deployment
-[✓] Docker registry
-[✓] Artifacts repo
-[✓] Source Status
-```
+The output from the command should show the M2C CLI version that was installed.
 
 You are now ready to [assess](../2-assess/README.md) your workloads for containerization

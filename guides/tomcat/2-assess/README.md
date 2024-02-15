@@ -12,13 +12,8 @@ curl -s https://raw.githubusercontent.com/GoogleCloudPlatform/migrate-to-contain
 
 **Note:** The collection script must run as root user using sudo to allow successful collection of the running VM.
 
-The collection script will leave a file on the running VM, in the directory /var/m4a which will be used be Migrate to Containers during the migration phase and will allow automated discovery of services, network ports, etc...  
-For the MySQL VM the discovery tool will discover the running MySQL instance and the port that it is using.
+3) You can view the mcdc CLI analysis report by openning the file ~/m2c/mcdc-report.html in your browser.  
 
-3) Verify that the mcdc CLI output file exists
-```
-ls /var/m4a
-```
 4) Log out of the MySQL VM
 ```
 exit
@@ -37,17 +32,12 @@ gcloud compute ssh tomcat-petclinic --project $PROJECT_ID --zone $ZONE_ID
 curl -s https://raw.githubusercontent.com/GoogleCloudPlatform/migrate-to-containers/main/scripts/assess_mcdc.sh | bash
 ```
 
-3) Verify that the mcdc CLI output file exists
-```
-ls m2c
-```
+3) You can view the mcdc CLI analysis report by openning the file ~/m2c/mcdc-report.html in your browser.  
 
 4) Log out of the Tomcat VM
 ```
 exit
 ```
-
-You can view the mcdc CLI analysis report by openning the file ~/m2c/mcdc-report.html in your browser.  
 
 You are now ready to start [migrating](../3-migrate/README.md) your VMs to containers
 
