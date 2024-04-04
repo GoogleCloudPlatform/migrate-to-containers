@@ -14,7 +14,7 @@
 # limitations under the License.
 
 apt-get update
-apt-get -y install default-jdk
+apt install -y openjdk-17-jdk openjdk-17-jre
 
 groupadd tomcat
 useradd -s /bin/false -g tomcat -d /opt/tomcat tomcat
@@ -66,7 +66,7 @@ Type=forking
 User=tomcat
 Group=tomcat
 
-Environment="JAVA_HOME=/usr/lib/jvm/default-java"
+Environment="JAVA_HOME=/usr/lib/jvm/java-1.17.0-openjdk-amd64"
 Environment="JAVA_OPTS=-Djava.security.egd=file:///dev/urandom"
 
 Environment="CATALINA_BASE=/opt/tomcat"

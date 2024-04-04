@@ -1,189 +1,88 @@
-# Configure an Ingress to expose your Tomcat applications
-Once your migrated Tomcat applications are running in GKE, you can now expose them externally by replacing the original Apache2 proxy with an Ingress configuration. By default, when configuring an Ingress on GKE, an HTTP Load Balancer is created and mapped to your Kubernetes Services. In order for the Load Balancer to connect to your Tomcats Kubernetes Services, you will need to modify your Tomcat deployments to include a readiness probe and expose the Tomcats ports using a [NodePort](https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport) type services.
+# Configure a Kubernetes [Gateway](https://gateway-api.sigs.k8s.io/) to expose your Tomcat applications
+Once your migrated Tomcat applications are running in GKE, you can now expose them externally by replacing the original Apache2 proxy with a Kubernetes Gateway API. By default, when configuring a Gateway on GKE, a Load Balancer is created and then HTTPRoutes map to your Kubernetes Services.
 
-## Updating your Tomcat containers
-To update the petclinic configuration you should apply the changes in bold to the file `~/m2c-apps/tomcat/tomcat-*/tomcat-petclinic/deployment_spec.yaml`:
-<pre><code class="language-yaml">
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  creationTimestamp: null
-  labels:
-    app: tomcat-petclinic
-    migrate-for-anthos-optimization: "true"
-    migrate-for-anthos-version: v1.11.1
-  name: tomcat-petclinic
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: tomcat-petclinic
-      migrate-for-anthos-optimization: "true"
-      migrate-for-anthos-version: v1.11.1
-  strategy: {}
-  template:
-    metadata:
-      creationTimestamp: null
-      labels:
-        app: tomcat-petclinic
-        migrate-for-anthos-optimization: "true"
-        migrate-for-anthos-version: v1.11.1
-    spec:
-      containers:
-      - image: tomcat-petclinic-image
-        name: tomcat-petclinic
-        <b>ports:
-        - containerPort: 8080
-        readinessProbe:
-          httpGet:
-            port: 8080
-            path: /petclinic/</b>
-        resources: {}
-status: {}
-
----
-apiVersion: v1
-kind: Service
-metadata:
-  creationTimestamp: null
-  labels:
-    migrate-for-anthos-optimization: "true"
-    migrate-for-anthos-version: v1.11.1
-  name: tomcat-petclinic
-spec:
-  <b>type: NodePort</b>
-  ports:
-  - name: tomcat-petclinic-8080
-    <b>port: 8082</b>
-    protocol: TCP
-    targetPort: 8080
-  selector:
-    app: tomcat-petclinic
-status:
-  loadBalancer: {}
-</code>
-</pre>
-
-In the same manner, To update the flowcrm configuration you should apply the changes in bold to the file `~/m2c-apps/tomcat/tomcat-*/tomcat-flowcrm/deployment_spec.yaml`:
-<pre><code class="language-yaml">
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  creationTimestamp: null
-  labels:
-    app: tomcat-flowcrm
-    migrate-for-anthos-optimization: "true"
-    migrate-for-anthos-version: v1.11.1
-  name: tomcat-flowcrm
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: tomcat-flowcrm
-      migrate-for-anthos-optimization: "true"
-      migrate-for-anthos-version: v1.11.1
-  strategy: {}
-  template:
-    metadata:
-      creationTimestamp: null
-      labels:
-        app: tomcat-flowcrm
-        migrate-for-anthos-optimization: "true"
-        migrate-for-anthos-version: v1.11.1
-    spec:
-      containers:
-      - image: tomcat-flowcrm-image
-        name: tomcat-flowcrm
-        <b>ports:
-        - containerPort: 8080
-        readinessProbe:
-          httpGet:
-            port: 8080
-            path: /flowcrm/login</b>
-        resources: {}
-status: {}
-
----
-apiVersion: v1
-kind: Service
-metadata:
-  creationTimestamp: null
-  labels:
-    migrate-for-anthos-optimization: "true"
-    migrate-for-anthos-version: v1.11.1
-  name: tomcat-flowcrm
-spec:
-  <b>type: NodePort</b>
-  ports:
-  - name: tomcat-flowcrm-8080
-    <b>port: 8081</b>
-    protocol: TCP
-    targetPort: 8080
-  selector:
-    app: tomcat-flowcrm
-status:
-  loadBalancer: {}
-</code>
-</pre>
-
-and apply these changes to your cluster by running the commands:
-``` bash
-cd ~/m2c-apps/tomcat
-skaffold run -d gcr.io/${PROJECT_ID}
-```
-
-Your Tomcat applications can now be exposed by an Ingress
-
-## Creating an Ingress
-To create an Ingress you should create a file called `~/m2c-apps/ingress.yaml` and paste the yaml below to it:
+## Creating a Gateway
+To create a Gateway you should create a file called `~/m2c-apps/gateway.yaml` and paste the yaml below to it:
 ``` yaml
-apiVersion: networking.k8s.io/v1
-kind: Ingress
+apiVersion: gateway.networking.k8s.io/v1beta1
+kind: Gateway
 metadata:
-  name: tomcat-ingress
-  annotations:
-    # If the class annotation is not specified it defaults to "gce".
-    kubernetes.io/ingress.class: "gce"
+  name: apps-gateway
 spec:
-  rules:
-  - http:
-      paths:
-      - path: /petclinic/*
-        pathType: ImplementationSpecific
-        backend:
-          service:
-            name: tomcat-petclinic
-            port:
-              number: 8082
-      - path: /flowcrm/*
-        pathType: ImplementationSpecific
-        backend:
-          service:
-            name: tomcat-flowcrm
-            port:
-              number: 8081
-
+  gatewayClassName: gke-l7-gxlb
+  listeners:
+  - name: http
+    protocol: HTTP
+    port: 80
+    allowedRoutes:
+      kinds:
+      - kind: HTTPRoute
 ```
 
-The above yaml will create an Ingress object and map the paths `/petclinic/*` and `/flowcrm/*` to their respective Kubernetes services.
+The above yaml will create a Gateway and provision a [Global external Application Load Balancer](https://cloud.google.com/load-balancing/docs/https). object and map the paths `/petclinic/*` and `/flowcrm/*` to their respective Kubernetes services.
 
-You can now apply the Ingress configuration to your cluster by running the command:
+You can now apply the Gateway configuration to your cluster by running the command:
 ``` bash
-kubectl apply -f ~/m2c-apps/ingress.yaml
+kubectl apply -f ~/m2c-apps/gateway.yaml
 ```
 
-You can monitor your Ingress configuration progress by running the command:
+You can monitor your Gateway configuration progress by running the command:
 ``` bash
-kubectl get ingress tomcat-ingress
+kubectl get gateway apps-gateway
 ```
 and wait until the output from the command looks like below:
-```
-NAME             CLASS    HOSTS   ADDRESS          PORTS   AGE
-tomcat-ingress   <none>   *       xxx.xxx.xxx.xxx   80      19h
+``` bash
+NAME           CLASS         ADDRESS          PROGRAMMED   AGE
+apps-gateway   gke-l7-gxlb   xx.xxx.xxx.xxx   True         44h
 ```
 
-## Verify your Ingress configuration
-To verify your Ingress configuration you can make sure that both applications are accessible in your browser by using the external IP address of your Ingress.
+## Creating the HTTPRoutes
+In order to map the load balancer to the applications Kubernetes services. You'll need to create an HTTPRoute for each of the applications. 
+
+To create the HTTPRoutes you should create a file called `~/m2c-apps/httproutes.yaml` and paste the yaml below to it:
+``` yaml
+apiVersion: gateway.networking.k8s.io/v1beta1
+kind: HTTPRoute
+metadata:
+  name: petclinic
+spec:
+  parentRefs:
+    - kind: Gateway
+      name: apps-gateway
+  rules:
+  - matches:
+    - path:
+        type: PathPrefix
+        value: /petclinic
+    backendRefs:
+    - name: tomcat-petclinic
+      port: 8080
+---
+apiVersion: gateway.networking.k8s.io/v1beta1
+kind: HTTPRoute
+metadata:
+  name: flowcrm
+spec:
+  parentRefs:
+    - kind: Gateway
+      name: apps-gateway
+  rules:
+  - matches:
+    - path:
+        type: PathPrefix
+        value: /flowcrm
+    backendRefs:
+    - name: tomcat-flowcrm
+      port: 8080
+```
+
+You can now apply the routes configuration to your cluster by running the command:
+``` bash
+kubectl apply -f ~/m2c-apps/httproutes.yaml
+```
+
+## Verify your Gateway configuration
+To verify your Gateway and HTTPRoutes configuration you can make sure that both applications are accessible in your browser by using the external IP address of your Gateway.
 To verify Petclinic open the below url in the your browser:
 ```
 http://xxx.xxx.xxx.xxx/petclinic/
@@ -196,4 +95,4 @@ http://xxx.xxx.xxx.xxx/flowcrm/
 **The credentials to login to flowcrm are user/userpass**
 
 ## What's next
-You may want to improve the security of your migrated Tomcat applications by offloading SSL and certificates management to Google Cloud. To do so, you can follow the instructions at [Using Google-managed SSL certificates](https://cloud.google.com/kubernetes-engine/docs/how-to/managed-certs) and make the neccessary changes to the Ingress configuration above to enable SSL for your migrated Tomcat applications.
+You may want to improve the security of your migrated Tomcat applications by offloading SSL and certificates management to Google Cloud. To do so, you can follow the instructions at [Using Google-managed SSL certificates](https://cloud.google.com/kubernetes-engine/docs/how-to/managed-certs) and make the neccessary changes to the Gateway configuration above to enable SSL for your migrated Tomcat applications.
