@@ -1,5 +1,38 @@
 # Migrating your MySQL VM to container
+## Prepare your GKE environment
+Migrating the database will consist of 2 parts. The first would be to migrate the data folder into a persistent volume and the second will be migrating the database runtime into a StatefulSet.
 
+In-order to migrate the data, you will need to connect to the GKE cluster that will be running the application. You can create the cluster and connect to it by following these steps:
+1. Enable the API and create the cluster by running the commands:
+``` bash
+# Follow the instructions on your terminal to complete the authentication after running the command below
+gcloud auth login
+
+# Enable the API
+gcloud services enable container.googleapis.com
+```
+
+You can now create the cluster by running the following gcloud command:
+``` bash
+
+# Set environment variables to have your GCP project id and zone
+export PROJECT_ID=your_project_id
+export ZONE_ID=your_zone
+
+gcloud container clusters create m2c-guide --release-channel stable --zone $ZONE_ID --node-locations $ZONE_ID --enable-dataplane-v2 --gateway-api=standard
+```
+
+2. Install Kubectl, [Skaffold](https://skaffold.dev/) and the `gke-gcloud-auth-plugin` in order to authenticate and interact with the Kubernetes cluster that you've just created by running the script [install_container_tools.sh](../../../scripts/install_container_tools.sh):
+```bash
+./install_container_tools.sh
+```
+
+3. Connect to your GKE cluster
+```bash
+gcloud container clusters get-credentials m2c-guide --zone=$ZONE_ID --project=$PROJECT_ID
+```
+
+## Prepare your m2c cli workspace
 Firstly, you'll need to ssh into the `m2c-cli` VM by using the command:
 ``` bash
 gcloud compute ssh m2c-cli --project $PROJECT_ID --zone $ZONE_ID
@@ -38,39 +71,6 @@ cat > ~/filters.txt << EOF
 - /var/cache/*
 - /var/backups/*
 EOF
-```
-
-## Prepare your GKE environment
-Migrating the database will consist of 2 parts. The first would be to migrate the data folder into a persistent volume and the second will be migrating the database runtime into a StatefulSet.
-
-In-order to migrate the data, you will need to connect to the GKE cluster that will be running the application. You can create the cluster and connect to it by following these steps:
-1. Enable the API and create the cluster by running the commands:
-``` bash
-# Follow the instructions on your terminal to complete the authentication after running the command below
-gcloud auth login
-
-# Enable the API
-gcloud services enable container.googleapis.com
-```
-
-You can now create the cluster by running the following gcloud command:
-``` bash
-
-# Set environment variables to have your GCP project id and region
-export PROJECT_ID=your_project_id
-export ZONE_ID=your_zone
-
-gcloud container clusters create m2c-guide --release-channel stable --zone $ZONE_ID --node-locations $ZONE_ID --enable-dataplane-v2 --gateway-api=standard
-```
-
-2. Install Kubectl, [Skaffold](https://skaffold.dev/) and the `gke-gcloud-auth-plugin` in order to authenticate and interact with the Kubernetes cluster that you've just created by running the script [install_container_tools.sh](../../../scripts/install_container_tools.sh):
-```bash
-./install_container_tools.sh
-```
-
-3. Connect to your GKE cluster
-```bash
-gcloud container clusters get-credentials m2c-guide --zone=$ZONE_ID --project=$PROJECT_ID
 ```
 
 ## Migrate the MySQL VM
