@@ -1,11 +1,9 @@
 # Migrate to Containers useful scripts and utilities
 
-The utility scripts are useful for setting up processing clusters and deployment clsuters and with migrated images.
+The utility scripts are useful for installing common utilities and running assessments.
 
 ## Table of Contents
-* [Install M2C](install_m2c.sh) - This script creates a GKE with the necessary service account and installs Migrate to Containers on this cluster.
-
-* [Add Compute Engine Source](add_ce_source.sh) - This script adds Google Compute Engine as a migration source and creates the necessary service account with required permissions.
+* [Install M2C CLI container tools](install_container_tools.sh) - This script installs Google Cloud CLI packages which are needed to run M2C CLI on a Google Compute VM.
 
 * [Migration Center Discovery Client CLI](assess_mcdc.sh) - The script downloads and runs the migration center discovery client CLI(mcdc) on a Linux vm.
 

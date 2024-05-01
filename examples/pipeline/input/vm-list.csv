@@ -1,7 +1,0 @@
-Name,VM ID,Source,AppType,DataConfig,Template
-mysql-server,mysql-vm,my-ce-src,linux-system-container,mysql-data-config.yaml
-apache-server,apache-vm,my-ce-src,linux-system-container
-wordpress-server,wordpress-vm,my-ce-src,linux-system-container,sample.yaml
-nginx-server,nginx-vm,my-ce-src,linux-system-container,sample.json
-iis-server,win-iis-vm,my-ce-src,windows-iis-container
-tomcat-server,tomcat-vm,my-ce-src,tomcat,tomcat-sample.json
