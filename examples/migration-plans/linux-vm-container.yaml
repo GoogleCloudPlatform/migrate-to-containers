@@ -1,5 +1,3 @@
-# Your workload seems to support the new runtime which is more compatible with various GKE services, faster on start time and enables workload deployment to GKE Autopilot and Cloud Run. To use the new runtime, please change v2kServiceManager value to true.
-v2kServiceManager: false
 global:
   # Files and directories to exclude from the migration, in rsync format.
   filters:
@@ -13,6 +11,7 @@ global:
   - '- /var/log/faillog'
   - '- /var/log/lastlog'
   - '- /var/log/[wb]tmp*'
+  - + /var/cache/*/
   - '- /var/cache/*'
   - '- /var/log/journal/'
   - '- /var/m4a/*'
@@ -30,13 +29,9 @@ global:
   # - '- /a/b' # (1.8GB, last access 2022-02-02 10:50:30, last modified 2020-02-02 10:50:30)
   # - '- /a/d' # (1.8GB, last access 2022-02-02 10:50:30, last modified 2020-02-02 10:50:30)
 image:
-
-  # Review and set the name for extracted non-runnable base image, if an image tag is not specified, a random tag will be auto-generated when the image is built.
-  base: centos-mini-non-runnable-base
-
+  
   # Review and set the name for runnable container image, if an image tag is not specified, a random tag will be auto-generated when the image is built.
-  name: centos-mini
-
+  name: linux-system
   # Disable system services that do not need to be executed at the migrated workload containers.
   # Enable the 'probed' property to include system services in the container health checks.
   systemServices:
@@ -47,12 +42,10 @@ image:
     name: atd
     probed: false
 deployment:
-
+  
   # Review and set the app-name for your StatefulSet or Deployment YAML spec.
-  appName: centos-mini
-
-  # Deploy network objects to allow easy access to open ports.
-
+  appName: linux-system
+  
   endpoints:
   - name: centos-mini-httpd-prefork
     port: 80
@@ -81,17 +74,17 @@ deployment:
 
   # By default, this health probe configuration will be used. Review, change or remove it.
   # see: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/
-
   probes:
     livenessProbe:
       exec:
         command:
-        - gamma
-        - /probe
+        - /ko-app/service-manager-runtime
+        - probe
+      timeoutSeconds: 10
     readinessProbe:
       exec:
         command:
-        - gamma
-        - /probe
-      initialDelaySeconds: 60
-      periodSeconds: 5
+        - /ko-app/service-manager-runtime
+        - probe
+      timeoutSeconds: 10
+
