@@ -289,10 +289,6 @@ apiVersion: v1
 kind: Service
 metadata:
   creationTimestamp: null
-  labels:
-    anthos-migrate.cloud.google.com/type: tomcat-container
-    migrate-for-anthos-optimization: "true"
-    migrate-for-anthos-version: m2c-cli-1.2.2
   name: tomcat-petclinic
 spec:
   ports:

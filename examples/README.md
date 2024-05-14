@@ -1,6 +1,6 @@
 # Migrate to Containers integrations
 
-There are many integrations with other GCP/GKE/Anthos components which are common for many migrated workloads. This will be a collection of such comon patterns and allow you to quickly configure such integrations. 
+There are many integrations with other GCP/GKE components which are common for many migrated workloads. This is a collection of such common patterns and allows you to quickly configure such integrations. 
 
 ## Table of Contents
 * [Cloud SQL Auth Proxy](./cloudsql-proxy) - Connecting your migrated workload to [Cloud SQL](https://cloud.google.com/sql) using the [Cloud SQL Auth Proxy](https://cloud.google.com/sql/docs/mysql/sql-proxy)
